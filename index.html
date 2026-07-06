@@ -263,6 +263,9 @@ main{
   border-radius:20px;font-size:12px;font-weight:500;
   background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-2);
 }
+.hero-chip.refresh-chip{
+  width:28px; height:28px; padding:0; justify-content:center; border-radius:50%; aspect-ratio:1;
+}
 .hero-chip strong{color:var(--text-1)}
 .spin-icon{display:inline-block;animation:spin 1.5s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -774,7 +777,7 @@ footer{
       <div class="hero-meta">
         <div class="hero-chip">⏰ อัปเดต: <strong id="heroTime">--:--:--</strong></div>
         <div class="hero-chip">📊 การวัด: <strong id="heroCount">0</strong> ครั้ง</div>
-        <div class="hero-chip"><span class="spin-icon">↻</span>&nbsp;<span id="heroInterval">ทุก 3 วินาที</span></div>
+        <div class="hero-chip refresh-chip" title="อัปเดตข้อมูลอัตโนมัติ"><span class="spin-icon">↻</span><span id="heroInterval" style="display: none;">ทุก 3 วินาที</span></div>
       </div>
     </div>
     <div class="gauge-wrap">
@@ -2223,16 +2226,27 @@ async function fetchData() {
   try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    if (data && !data.error) { DataStore.add(data); updateDashboard(data); }
+    if (data && !data.error) {
+      DataStore.add(data);
+      updateDashboard(data);
+      STATE.errCount = 0;
+    }
   } catch (e) {
     STATE.errCount++;
     document.getElementById('statusDot').className = 'status-dot err';
     document.getElementById('statusLabel').textContent = `ไม่มีสัญญาณ (${STATE.errCount})`;
     if (STATE.errCount >= 3) document.getElementById('errsBadge').classList.add('show');
     console.warn('Fetch error:', e);
+  } finally {
+    if (spin) {
+      spin.style.animationPlayState = 'paused';
+      setTimeout(() => { spin.style.animationPlayState = 'running'; }, 200);
+    }
+    // Schedule next fetch and start countdown
+    startCountdown(CONFIG.refreshInterval);
+    clearTimeout(STATE.refreshTimer);
+    STATE.refreshTimer = setTimeout(fetchData, CONFIG.refreshInterval);
   }
-  startCountdown(CONFIG.refreshInterval);
-  if (spin) { spin.style.animationPlayState='paused'; setTimeout(()=>spin.style.animationPlayState='running',200); }
 }
 
 /* ============================================================
@@ -2265,9 +2279,10 @@ function applyAccent(a, btn) {
 
 function applyRefreshInterval(v) {
   CONFIG.refreshInterval = +v;
-  document.getElementById('heroInterval').textContent = `ทุก ${+v >= 60000 ? '1 นาที' : (+v/1000) + ' วินาที'}`;
-  clearInterval(STATE.refreshTimer);
-  STATE.refreshTimer = setInterval(fetchData, CONFIG.refreshInterval);
+  const heroInt = document.getElementById('heroInterval');
+  if (heroInt) heroInt.textContent = `ทุก ${+v >= 60000 ? '1 นาที' : (+v/1000) + ' วินาที'}`;
+  clearTimeout(STATE.refreshTimer);
+  STATE.refreshTimer = setTimeout(fetchData, CONFIG.refreshInterval);
   startCountdown(CONFIG.refreshInterval);
   saveConfig();
 }
@@ -2426,8 +2441,6 @@ function applyConfigToUI() {
 loadConfig();
 applyConfigToUI();
 fetchData();
-STATE.refreshTimer = setInterval(fetchData, CONFIG.refreshInterval);
-startCountdown(CONFIG.refreshInterval);
 
 // Re-render chart on resize
 let resizeTimer;
