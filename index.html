@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark" data-accent="amber">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">UV Monitor | โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</title>
+  <meta name="description" content="ระบบตรวจวัดสภาพแวดล้อม UV PM2.5 อุณหภูมิ ความชื้น โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   CSS VARIABLES & THEMING
+   ========================================================= */
+:root {
+  --bg-primary:#0d1117; --bg-secondary:#161b22; --bg-card:#1c2128; --bg-card-h:#21262d;
+  --border:rgba(255,255,255,0.08); --border-h:rgba(255,255,255,0.16);
+  --text-1:#e6edf3; --text-2:#8b949e; --text-3:#484f58;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.5); --shadow-md:0 4px 20px rgba(0,0,0,0.6); --shadow-lg:0 8px 40px rgba(0,0,0,0.7);
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px;
+  /* accent */
+  --accent:#f59e0b; --accent-s:rgba(245,158,11,0.12); --accent-g:rgba(245,158,11,0.25);
+}
+[data-accent="sky"]    { --accent:#38bdf8; --accent-s:rgba(56,189,248,0.12);  --accent-g:rgba(56,189,248,0.25); }
+[data-accent="emerald"]{ --accent:#34d399; --accent-s:rgba(52,211,153,0.12);  --accent-g:rgba(52,211,153,0.25); }
+[data-accent="violet"] { --accent:#a78bfa; --accent-s:rgba(167,139,250,0.12); --accent-g:rgba(167,139,250,0.25); }
+[data-accent="rose"]   { --accent:#fb7185; --accent-s:rgba(251,113,133,0.12); --accent-g:rgba(251,113,133,0.25); }
+[data-theme="light"] {
+  --bg-primary:#f0f4f8; --bg-secondary:#e2e8f0; --bg-card:#ffffff; --bg-card-h:#f8fafc;
+  --border:rgba(0,0,0,0.08); --border-h:rgba(0,0,0,0.16);
+  --text-1:#0f172a; --text-2:#475569; --text-3:#94a3b8;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.07); --shadow-md:0 4px 20px rgba(0,0,0,0.1); --shadow-lg:0 8px 40px rgba(0,0,0,0.14);
+}
+
+/* =========================================================
+   BASE
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Sarabun','Inter',sans-serif;
+  background:var(--bg-primary); color:var(--text-1);
+  min-height:100vh; overflow-x:hidden;
+  transition:background .3s,color .3s;
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%, color-mix(in srgb,var(--accent) 8%,transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(56,189,248,0.06) 0%, transparent 60%);
+}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+nav{
+  position:sticky; top:0; z-index:200;
+  background:rgba(13,17,23,0.88); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border); padding:0 24px;
+}
+[data-theme="light"] nav{background:rgba(255,255,255,0.88)}
+.nav-inner{
+  max-width:1280px; margin:0 auto; height:64px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.nav-brand{display:flex;align-items:center;gap:12px;min-width:0}
+.nav-logo{
+  width:42px; height:42px; border-radius:13px; flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),#38bdf8);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:12px;color:#000;line-height:1.2;text-align:center;
+  box-shadow:0 0 0 3px var(--accent-s);
+}
+.nav-text h1{font-size:13px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px}
+.nav-text p{font-size:10px;color:var(--text-2);letter-spacing:.05em;white-space:nowrap}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.nav-btn{
+  width:36px;height:36px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-card);color:var(--text-2);font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s; position:relative;
+}
+.nav-btn:hover{background:var(--bg-card-h);border-color:var(--border-h);color:var(--text-1)}
+.notif-badge{
+  position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;
+  background:#ef4444;border-radius:8px;border:2px solid var(--bg-primary);
+  font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;
+  padding:0 3px; display:none;
+}
+.status-row{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--bg-secondary);border:1px solid var(--border)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#34d399;animation:pulseDot 2s infinite}
+.status-dot.err{background:#fb7185;animation:none}
+.status-dot.warn{background:#f59e0b}
+.status-label{font-size:11px;font-weight:500;color:var(--text-2)}
+@keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.4)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+
+/* =========================================================
+   ALERT BANNER
+   ========================================================= */
+.alert-bar{
+  position:sticky; top:64px; z-index:190;
+  transform:translateY(-100%); opacity:0; pointer-events:none;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+  display:flex; flex-direction:column; gap:2px;
+}
+.alert-bar.visible{transform:translateY(0);opacity:1;pointer-events:auto}
+.alert-item{
+  display:flex;align-items:center;gap:12px;padding:10px 24px;
+  font-size:13px;font-weight:600;
+}
+.alert-item.lv-high{background:linear-gradient(90deg,#9333ea22,#9333ea11);border-bottom:1px solid #9333ea44;color:#c084fc}
+.alert-item.lv-danger{background:linear-gradient(90deg,#ef444422,#ef444411);border-bottom:1px solid #ef444444;color:#fca5a5}
+.alert-item.lv-warn{background:linear-gradient(90deg,#f5780022,#f5780011);border-bottom:1px solid #f5780044;color:#fdba74}
+.alert-item.lv-med{background:linear-gradient(90deg,#fbbf2422,#fbbf2411);border-bottom:1px solid #fbbf2444;color:#fde68a}
+.alert-icon{font-size:16px;flex-shrink:0}
+.alert-msg{flex:1}
+.alert-close{margin-left:auto;font-size:18px;opacity:.6;line-height:1;padding:0 4px}
+.alert-close:hover{opacity:1}
+
+/* =========================================================
+   SETTINGS OVERLAY + SIDEBAR
+   ========================================================= */
+.settings-overlay{
+  position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5);
+  opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);
+}
+.settings-overlay.open{opacity:1;pointer-events:auto}
+.settings-sidebar{
+  position:fixed;top:0;right:0;bottom:0;z-index:301;
+  width:380px;max-width:100vw;
+  background:var(--bg-secondary);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .4s cubic-bezier(.22,1,.36,1);
+  box-shadow:var(--shadow-lg);
+}
+.settings-sidebar.open{transform:translateX(0)}
+.settings-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.settings-hdr h2{font-size:16px;font-weight:700;color:var(--text-1)}
+.settings-close{
+  width:32px;height:32px;border-radius:8px;background:var(--bg-card);
+  border:1px solid var(--border);color:var(--text-2);font-size:18px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.settings-close:hover{background:var(--bg-card-h);color:var(--text-1)}
+.settings-body{flex:1;overflow-y:auto;padding:12px 0}
+.settings-body::-webkit-scrollbar{width:4px}
+.settings-body::-webkit-scrollbar-track{background:transparent}
+.settings-body::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+.s-section{padding:16px 24px;border-bottom:1px solid var(--border)}
+.s-section:last-child{border-bottom:none}
+.s-section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px}
+.s-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.s-row:last-child{margin-bottom:0}
+.s-row.col{flex-direction:column;align-items:flex-start}
+.s-label{font-size:13px;color:var(--text-2);font-weight:500;flex-shrink:0}
+/* Segment Control */
+.seg-ctrl{display:flex;background:var(--bg-primary);border-radius:10px;padding:3px;gap:2px;border:1px solid var(--border)}
+.seg-btn{
+  flex:1;padding:6px 10px;border-radius:8px;background:transparent;color:var(--text-2);
+  font-size:12px;font-weight:500;transition:all .2s;white-space:nowrap;font-family:inherit;
+}
+.seg-btn.active{background:var(--bg-card);color:var(--text-1);box-shadow:var(--shadow-sm)}
+.seg-btn:hover:not(.active){color:var(--text-1)}
+/* Color Picker */
+.color-dots{display:flex;gap:8px}
+.c-dot{
+  width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;
+  transition:transform .2s,border-color .2s;
+}
+.c-dot:hover{transform:scale(1.15)}
+.c-dot.active{border-color:var(--text-1);transform:scale(1.1)}
+.c-dot.amber{background:#f59e0b}.c-dot.sky{background:#38bdf8}.c-dot.emerald{background:#34d399}.c-dot.violet{background:#a78bfa}.c-dot.rose{background:#fb7185}
+/* Toggle Switch */
+.toggle{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.t-slider{
+  position:absolute;cursor:pointer;inset:0;border-radius:24px;
+  background:var(--bg-primary);border:1px solid var(--border-h);transition:.3s;
+}
+.t-slider::before{
+  content:'';position:absolute;width:18px;height:18px;left:2px;bottom:2px;
+  background:var(--text-3);border-radius:50%;transition:.3s;
+}
+.toggle input:checked + .t-slider{background:var(--accent);border-color:var(--accent)}
+.toggle input:checked + .t-slider::before{transform:translateX(20px);background:#fff}
+/* Select & Input */
+.s-select,.s-input{
+  background:var(--bg-primary);border:1px solid var(--border-h);color:var(--text-1);
+  border-radius:8px;padding:7px 10px;font-size:12px;font-family:inherit;
+  outline:none;transition:border-color .2s;width:100%;
+}
+.s-select:focus,.s-input:focus{border-color:var(--accent)}
+.s-select{cursor:pointer}
+.thresh-row{display:flex;align-items:center;gap:8px}
+.thresh-input{
+  width:80px;background:var(--bg-primary);border:1px solid var(--border-h);
+  color:var(--text-1);border-radius:8px;padding:6px 8px;font-size:13px;font-family:inherit;
+  font-weight:600;text-align:center;outline:none;transition:border-color .2s;
+}
+.thresh-input:focus{border-color:var(--accent)}
+/* Buttons */
+.btn-export{
+  width:100%;padding:10px;border-radius:10px;background:var(--accent-s);border:1px solid var(--accent-g);
+  color:var(--accent);font-size:13px;font-weight:700;font-family:inherit;
+  transition:all .2s;margin-bottom:8px;
+}
+.btn-export:hover{background:var(--accent);color:#000}
+.btn-reset{
+  width:100%;padding:10px;border-radius:10px;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.2);
+  color:#fb7185;font-size:13px;font-weight:600;font-family:inherit;transition:all .2s;
+}
+.btn-reset:hover{background:#fb7185;color:#fff}
+
+/* =========================================================
+   MAIN LAYOUT
+   ========================================================= */
+main{
+  max-width:1280px;margin:0 auto;
+  padding:28px 24px 56px;position:relative;z-index:1;
+  display:flex;flex-direction:column;gap:20px;
+}
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;border-radius:var(--r-xl);pointer-events:none;
+  background:radial-gradient(ellipse 60% 80% at 80% 50%, color-mix(in srgb,var(--accent) 6%,transparent) 0%, transparent 70%);
+}
+.hero-sub{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.hero h2{font-size:clamp(18px,2.5vw,26px);font-weight:800;color:var(--text-1);margin-bottom:4px;line-height:1.2}
+.hero-desc{font-size:13px;color:var(--text-2);margin-bottom:18px}
+.hero-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hero-chip{
+  display:flex;align-items:center;gap:6px;padding:5px 12px;
+  border-radius:20px;font-size:12px;font-weight:500;
+  background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-2);
+}
+.hero-chip strong{color:var(--text-1)}
+.spin-icon{display:inline-block;animation:spin 1.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* UV Gauge */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
+.gauge-outer{position:relative;width:160px;height:160px;flex-shrink:0}
+.gauge-glow{
+  position:absolute;inset:-12px;border-radius:50%;
+  background:radial-gradient(circle,var(--gauge-color,#34d399) 0%,transparent 70%);
+  opacity:0;transition:opacity .8s;filter:blur(12px);
+}
+.gauge-outer:hover .gauge-glow,.gauge-glow.active{opacity:.3}
+.gauge-svg{width:100%;height:100%}
+.gauge-ring-bg{stroke:var(--border);fill:none;stroke-width:10;stroke-linecap:round}
+.gauge-ring{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.34,1.56,.64,1),stroke .5s}
+.gauge-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.gauge-value{
+  font-size:52px;font-weight:900;line-height:1;
+  transition:color .5s;font-variant-numeric:tabular-nums;
+}
+.gauge-unit{font-size:11px;color:var(--text-2);font-weight:500;margin-top:2px}
+.uv-badge{
+  padding:6px 20px;border-radius:20px;font-size:13px;font-weight:700;
+  color:#000;transition:background .5s,box-shadow .5s;
+  box-shadow:0 0 16px var(--accent-g);
+}
+
+/* =========================================================
+   STATS STRIP
+   ========================================================= */
+.stats-strip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;
+}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:16px;display:flex;flex-direction:column;gap:6px;transition:all .3s;
+}
+.stat-card:hover{transform:translateY(-2px);border-color:var(--border-h);box-shadow:var(--shadow-sm)}
+.stat-metric-name{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.stat-row{display:flex;justify-content:space-between;align-items:baseline;gap:4px}
+.stat-key{font-size:11px;color:var(--text-2)}
+.stat-val{font-size:14px;font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums}
+.stat-val.accent{color:var(--accent)}
+.stat-divider{height:1px;background:var(--border);margin:2px 0}
+
+/* =========================================================
+   SENSOR GRID
+   ========================================================= */
+.sensor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.sensor-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:22px;display:flex;flex-direction:column;gap:10px;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.sensor-card:hover{transform:translateY(-3px);border-color:var(--border-h);box-shadow:var(--shadow-md)}
+.sensor-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;background:var(--sc-color,#38bdf8);
+}
+.sc-uv{--sc-color:#f59e0b}.sc-pm{--sc-color:#a78bfa}.sc-temp{--sc-color:#fb7185}.sc-hum{--sc-color:#34d399}
+.s-top{display:flex;justify-content:space-between;align-items:flex-start}
+.s-icon{
+  width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;background:var(--sc-s,rgba(56,189,248,0.1));
+}
+.sc-uv .s-icon{background:rgba(245,158,11,0.12)}.sc-pm .s-icon{background:rgba(167,139,250,0.12)}
+.sc-temp .s-icon{background:rgba(251,113,133,0.12)}.sc-hum .s-icon{background:rgba(52,211,153,0.12)}
+.s-status{
+  padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;
+  transition:background .4s,color .4s;
+}
+.s-name{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.s-val{
+  font-size:40px;font-weight:900;line-height:1;color:var(--text-1);
+  font-variant-numeric:tabular-nums;transition:all .3s;
+}
+.s-val .unit{font-size:15px;font-weight:500;color:var(--text-2);margin-left:2px}
+/* Progress bar */
+.s-bar-wrap{height:4px;background:var(--bg-secondary);border-radius:4px;overflow:hidden}
+.s-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.34,1.56,.64,1),background .5s;min-width:4px}
+
+/* =========================================================
+   TREND CHART
+   ========================================================= */
+.chart-section{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:24px;box-shadow:var(--shadow-sm);
+}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.chart-hdr h3{font-size:16px;font-weight:700;color:var(--text-1)}
+.chart-toggles{display:flex;gap:6px;flex-wrap:wrap}
+.ct-btn{
+  display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--border);background:var(--bg-secondary);
+  color:var(--text-2);font-size:12px;font-weight:600;font-family:inherit;transition:all .2s;
+}
+.ct-btn .ct-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ct-btn.active{border-color:var(--ct-color,#fff);background:color-mix(in srgb,var(--ct-color,#fff) 12%,var(--bg-secondary));color:var(--text-1)}
+.ct-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
+.chart-wrap{position:relative;border-radius:var(--r-md);overflow:hidden;background:var(--bg-secondary);border:1px solid var(--border)}
+#chartSvg{width:100%;display:block;height:300px}
+/* Tooltip */
+.chart-tooltip{
+  position:absolute;pointer-events:none;display:none;
+  background:var(--bg-card);border:1px solid var(--border-h);border-radius:var(--r-sm);
+  padding:10px 14px;box-shadow:var(--shadow-md);min-width:140px;z-index:50;
+}
+.tt-time{font-size:11px;color:var(--text-2);font-weight:500;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.tt-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:4px;align-items:center}
+.tt-row:last-child{margin-bottom:0}
+.tt-label{color:var(--text-2);display:flex;align-items:center;gap:5px}
+.tt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tt-val{font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums}
+/* Vertical cursor line */
+.chart-cursor{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.15);pointer-events:none;display:none;z-index:10}
+
+/* =========================================================
+   UV SCALE
+   ========================================================= */
+.scale-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm)}
+.scale-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.scale-hdr h3{font-size:16px;font-weight:700;color:var(--text-1)}
+.scale-cur{font-size:13px;color:var(--text-2)}
+.scale-cur span{font-weight:700;color:var(--text-1)}
+.uv-bar{
+  height:18px;border-radius:9px;position:relative;overflow:visible;
+  background:linear-gradient(to right,#34d399 0%,#34d399 17%,#fbbf24 17%,#fbbf24 45%,#f97316 45%,#f97316 63%,#ef4444 63%,#ef4444 90%,#9333ea 90%);
+  box-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+.uv-pointer{
+  position:absolute;top:-10px;bottom:-10px;width:3px;border-radius:3px;
+  background:#fff;box-shadow:0 0 12px rgba(255,255,255,.9);
+  transform:translateX(-50%);transition:left .9s cubic-bezier(.34,1.56,.64,1);
+}
+.uv-pointer::after{
+  content:attr(data-v);position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+  font-size:10px;font-weight:700;color:#fff;white-space:nowrap;
+  background:rgba(0,0,0,.65);padding:2px 7px;border-radius:5px;
+}
+.uv-bar-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:10px;color:var(--text-3);font-weight:500}
+.uv-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2)}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* =========================================================
+   RECOMMENDATIONS
+   ========================================================= */
+.reco-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm)}
+.reco-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.reco-hdr h3{font-size:16px;font-weight:700;color:var(--text-1);margin-bottom:2px}
+.reco-headline{font-size:13px;color:var(--text-2)}
+.reco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.reco-item{
+  display:flex;align-items:flex-start;gap:10px;padding:13px;
+  border-radius:var(--r-md);background:var(--bg-secondary);border:1px solid var(--border);transition:all .3s;
+}
+.reco-item.active{border-color:var(--ri-c,#34d399);background:color-mix(in srgb,var(--ri-c,#34d399) 8%,var(--bg-secondary))}
+.reco-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.reco-body{font-size:12px;color:var(--text-2);line-height:1.5}
+.reco-body strong{display:block;color:var(--text-1);font-weight:700;font-size:13px;margin-bottom:2px}
+
+/* =========================================================
+   INFO CARDS
+   ========================================================= */
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.info-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:18px;box-shadow:var(--shadow-sm);transition:all .3s;
+}
+.info-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-h)}
+.info-card h4{font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.info-card p{font-size:12px;color:var(--text-2);line-height:1.65}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+footer{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;flex-wrap:wrap;box-shadow:var(--shadow-sm);
+}
+.footer-l{font-size:12px;color:var(--text-2);line-height:1.7}
+.footer-r{display:flex;align-items:center;gap:12px}
+.countdown-wrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2)}
+.c-ring{width:38px;height:38px;position:relative}
+.c-ring svg{transform:rotate(-90deg)}
+.c-ring circle{fill:none;stroke-width:3;stroke-linecap:round}
+.c-ring .c-track{stroke:var(--border-h)}
+.c-ring .c-prog{stroke:var(--accent);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1s linear}
+.c-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
+.errs-badge{
+  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
+  background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.2);color:#fb7185;
+  display:none;
+}
+.errs-badge.show{display:block}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .4s ease forwards}
+
+@keyframes flash{0%{opacity:.4;transform:scale(.96)}50%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
+.flash{animation:flash .35s ease}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media(max-width:900px){
+  main{padding:20px 16px 40px;gap:16px}
+  .hero{grid-template-columns:1fr;text-align:center}
+  .hero-meta{justify-content:center}
+  .gauge-wrap{flex-direction:row;align-items:center;gap:20px;justify-content:center}
+  nav{padding:0 16px}
+  .nav-text h1{max-width:200px;font-size:12px}
+}
+@media(max-width:600px){
+  .sensor-grid{grid-template-columns:repeat(2,1fr)}
+  .settings-sidebar{width:100vw}
+  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .chart-toggles{justify-content:flex-start}
+}
+@media(max-width:400px){
+  .sensor-grid{grid-template-columns:1fr}
+  .stats-strip{grid-template-columns:1fr}
+}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
+
+/* Fullscreen */
+:fullscreen body,:fullscreen main{background:var(--bg-primary)}
+
+/* =========================================================
+   PERIOD TABS
+   ========================================================= */
+.period-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.period-btn{
+  padding:7px 16px;border-radius:10px;border:1px solid var(--border);
+  background:var(--bg-secondary);color:var(--text-2);font-size:13px;font-weight:600;
+  font-family:inherit;transition:all .2s;cursor:pointer;display:flex;align-items:center;gap:5px;
+}
+.period-btn.active{background:var(--accent);border-color:var(--accent);color:#000;box-shadow:0 0 12px var(--accent-g)}
+.period-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
+.period-info{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;
+  padding:10px 14px;border-radius:var(--r-sm);background:var(--bg-secondary);
+  border:1px solid var(--border);font-size:12px;color:var(--text-2);
+}
+.period-info strong{color:var(--text-1)}
+.period-stat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.p-chip{
+  display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
+  background:var(--bg-secondary);border:1px solid var(--border);font-size:11px;font-weight:600;
+}
+.p-chip .pc-dot{width:7px;height:7px;border-radius:50%}
+/* No data state */
+.chart-no-data{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  height:300px;gap:10px;color:var(--text-3);
+}
+.chart-no-data .no-icon{font-size:40px;opacity:.5}
+.chart-no-data p{font-size:13px;text-align:center;line-height:1.6}
+
+/* Skin Modal Styling */
+.skin-overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+  opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+}
+.skin-overlay.open { opacity: 1; pointer-events: auto; }
+.skin-modal {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%) scale(0.95);
+  width: 90%; max-width: 520px; z-index: 2001;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 24px; display: flex; flex-direction: column; gap: 20px;
+}
+.skin-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.skin-modal-hdr h2 { font-size: 20px; font-weight: 800; color: var(--text-1); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;}
+.skin-modal-hdr p { font-size: 13px; color: var(--text-2); }
+.skin-modal-body { display: flex; flex-direction: column; gap: 10px; }
+.skin-opt-card {
+  display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+  border-radius: var(--r-md); border: 1px solid var(--border);
+  background: var(--bg-secondary); cursor: pointer; transition: all 0.2s ease;
+}
+.skin-opt-card:hover {
+  border-color: var(--accent); background: var(--bg-card-h);
+  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.skin-opt-card .skin-emoji { font-size: 28px; }
+.skin-opt-card .skin-info { display: flex; flex-direction: column; gap: 2px; }
+.skin-opt-card .skin-info strong { font-size: 14px; color: var(--text-1); }
+.skin-opt-card .skin-info span { font-size: 11px; color: var(--text-2); line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo" id="navLogo">UV<br>PL</div>
+      <div class="nav-text">
+        <h1 id="navSchoolName">โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
+        <p id="navSubtitle">PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <div class="status-row">
+        <div class="status-dot" id="statusDot"></div>
+        <span class="status-label" id="statusLabel">กำลังเชื่อมต่อ</span>
+      </div>
+      <button class="nav-btn" id="alertBtn" title="การแจ้งเตือน" onclick="toggleAlertPanel()">
+        🔔
+        <span class="notif-badge" id="notifBadge">0</span>
+      </button>
+      <button class="nav-btn" id="fsBtn" title="เต็มจอ (F)" onclick="toggleFullscreen()">⛶</button>
+      <button class="nav-btn" id="settingsBtn" title="การตั้งค่า" onclick="openSettings()">⚙️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== ALERT BANNER ===== -->
+<div class="alert-bar" id="alertBar"></div>
+
+<!-- ===== SKIN SELECTION ===== -->
+<div class="skin-overlay" id="skinOverlay"></div>
+<div class="skin-modal" id="skinModal">
+  <div class="skin-modal-hdr">
+    <h2>👤 เลือกประเภทสีผิวของคุณ</h2>
+    <p>เพื่อคำนวณและปรับเปลี่ยนคำแนะนำความปลอดภัย UV รายบุคคล</p>
+  </div>
+  <div class="skin-modal-body">
+    <div class="skin-opt-card" onclick="selectSkinType('type1')">
+      <div class="skin-emoji">🧑🏻</div>
+      <div class="skin-info">
+        <strong>ผิวขาวมาก / ผิวเผือก (Type I-II)</strong>
+        <span>เกิดผิวไหม้แดดได้ง่ายมาก (มักไม่เปลี่ยนเป็นผิวคล้ำ) มีความไวต่อรังสี UV สูงสุด</span>
+      </div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type2')">
+      <div class="skin-emoji">🧑🏼</div>
+      <div class="skin-info">
+        <strong>ผิวขาวเหลือง (Type III)</strong>
+        <span>เกิดผิวไหม้แดดได้ปานกลาง คล้ำแดดได้ง่ายปานกลาง ไวต่อรังสี UV ปานกลาง</span>
+      </div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type3')">
+      <div class="skin-emoji">🧑🏽</div>
+      <div class="skin-info">
+        <strong>ผิวสองสี / ผิวน้ำผึ้ง (Type IV)</strong>
+        <span>เกิดผิวไหม้แดดได้น้อย คล้ำแดดได้ง่ายมาก มีความต้านทานรังสี UV ปานกลาง-สูง</span>
+      </div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type4')">
+      <div class="skin-emoji">🧑🏾</div>
+      <div class="skin-info">
+        <strong>ผิวเข้ม / ผิวคล้ำ (Type V-VI)</strong>
+        <span>แทบจะไม่ไหม้แดดเลย คล้ำแดดง่ายมาก ต้านทานต่อรังสี UV สูงที่สุด</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SETTINGS ===== -->
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+<div class="settings-sidebar" id="settingsSidebar">
+  <div class="settings-hdr">
+    <h2>⚙️ การตั้งค่าระบบ</h2>
+    <button class="settings-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="settings-body">
+
+    <!-- Display -->
+    <div class="s-section">
+      <div class="s-section-title">🎨 การแสดงผล</div>
+      <div class="s-row">
+        <span class="s-label">ธีม</span>
+        <div class="seg-ctrl">
+          <button class="seg-btn active" onclick="applyTheme('dark',this)">🌙 มืด</button>
+          <button class="seg-btn" onclick="applyTheme('light',this)">☀️ สว่าง</button>
+          <button class="seg-btn" onclick="applyTheme('auto',this)">🖥️ อัตโนมัติ</button>
+        </div>
+      </div>
+      <div class="s-row">
+        <span class="s-label">สีหลัก</span>
+        <div class="color-dots">
+          <button class="c-dot amber active" title="Amber" onclick="applyAccent('amber',this)"></button>
+          <button class="c-dot sky" title="Sky" onclick="applyAccent('sky',this)"></button>
+          <button class="c-dot emerald" title="Emerald" onclick="applyAccent('emerald',this)"></button>
+          <button class="c-dot violet" title="Violet" onclick="applyAccent('violet',this)"></button>
+          <button class="c-dot rose" title="Rose" onclick="applyAccent('rose',this)"></button>
+        </div>
+      </div>
+      <div class="s-row">
+        <span class="s-label">Animation</span>
+        <label class="toggle"><input type="checkbox" id="animToggle" checked onchange="CONFIG.animations=this.checked;saveConfig()"><span class="t-slider"></span></label>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <div class="s-section">
+      <div class="s-section-title">📡 ข้อมูล & กราฟ</div>
+      <div class="s-row">
+        <span class="s-label">อัปเดตทุก</span>
+        <select class="s-select" id="refreshSel" onchange="applyRefreshInterval(this.value)" style="width:auto">
+          <option value="3000">3 วินาที</option>
+          <option value="5000">5 วินาที</option>
+          <option value="10000">10 วินาที</option>
+          <option value="30000">30 วินาที</option>
+          <option value="60000">1 นาที</option>
+        </select>
+      </div>
+      <div class="s-row">
+        <span class="s-label">จุดในกราฟ</span>
+        <select class="s-select" id="histSel" onchange="CONFIG.historyMax=+this.value;saveConfig()" style="width:auto">
+          <option value="10">10 จุด</option>
+          <option value="20" selected>20 จุด</option>
+          <option value="30">30 จุด</option>
+          <option value="50">50 จุด</option>
+        </select>
+      </div>
+      <div class="s-row">
+        <span class="s-label">🔮 พยากรณ์แนวโน้ม</span>
+        <label class="toggle"><input type="checkbox" id="forecastToggle" onchange="CONFIG.forecastEnabled=this.checked;saveConfig();renderChart();"><span class="t-slider"></span></label>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="s-section">
+      <div class="s-section-title">🔔 การแจ้งเตือน</div>
+      <div class="s-row">
+        <span class="s-label">เปิดการแจ้งเตือน</span>
+        <label class="toggle"><input type="checkbox" id="alertMaster" checked onchange="CONFIG.alertsEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+      </div>
+      <div class="s-row">
+        <span class="s-label">UV เกิน</span>
+        <div class="thresh-row">
+          <input type="number" class="thresh-input" id="uvThresh" value="6" min="1" max="12" step="1" onchange="CONFIG.alerts.uv.threshold=+this.value;saveConfig()">
+          <label class="toggle"><input type="checkbox" id="uvAlertOn" checked onchange="CONFIG.alerts.uv.enabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+        </div>
+      </div>
+      <div class="s-row">
+        <span class="s-label">PM2.5 เกิน (µg/m³)</span>
+        <div class="thresh-row">
+          <input type="number" class="thresh-input" id="pmThresh" value="50" min="5" max="300" step="5" onchange="CONFIG.alerts.pm.threshold=+this.value;saveConfig()">
+          <label class="toggle"><input type="checkbox" id="pmAlertOn" checked onchange="CONFIG.alerts.pm.enabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+        </div>
+      </div>
+      <div class="s-row">
+        <span class="s-label">อุณหภูมิ เกิน (°C)</span>
+        <div class="thresh-row">
+          <input type="number" class="thresh-input" id="tempThresh" value="35" min="20" max="60" step="1" onchange="CONFIG.alerts.temp.threshold=+this.value;saveConfig()">
+          <label class="toggle"><input type="checkbox" id="tempAlertOn" checked onchange="CONFIG.alerts.temp.enabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+        </div>
+      </div>
+      <div class="s-row">
+        <span class="s-label">ความชื้น เกิน (%)</span>
+        <div class="thresh-row">
+          <input type="number" class="thresh-input" id="humThresh" value="90" min="50" max="100" step="5" onchange="CONFIG.alerts.hum.threshold=+this.value;saveConfig()">
+          <label class="toggle"><input type="checkbox" id="humAlertOn" onchange="CONFIG.alerts.hum.enabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skin Tone Profile -->
+    <div class="s-section">
+      <div class="s-section-title">👤 โปรไฟล์สีผิวของคุณ</div>
+      <div class="s-row col" style="gap:8px">
+        <div id="settingsSkinDisplay" style="font-size:13px; font-weight:600; padding:6px 10px; border-radius:8px; background:var(--bg-secondary); border:1px solid var(--border); text-align:center">
+          ผิวของคุณ: --
+        </div>
+        <button class="btn-export" style="background:var(--accent); color:#000; font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="s-section">
+      <div class="s-section-title">💾 ส่งออกข้อมูล</div>
+      <button class="btn-export" onclick="exportCSV()">⬇️ ดาวน์โหลด CSV (Session)</button>
+      <button class="btn-export" style="margin-top:4px" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
+      <button class="btn-reset" onclick="resetSession()">🗑️ ล้างข้อมูล Session</button>
+      <button class="btn-reset" style="margin-top:4px" onclick="clearHistoryData()">🗑️ ลบประวัติทั้งหมด (DB)</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="heroSection">
+    <div class="hero-info">
+      <p class="hero-sub">☀️ ค่า UV Index ปัจจุบัน</p>
+      <h2>ตรวจวัดสภาพแวดล้อมภายในโรงเรียน</h2>
+      <p class="hero-desc">ข้อมูลเซนเซอร์แบบเรียลไทม์เพื่อความปลอดภัยของนักเรียนและบุคลากร</p>
+      <div class="hero-meta">
+        <div class="hero-chip">⏰ อัปเดต: <strong id="heroTime">--:--:--</strong></div>
+        <div class="hero-chip">📊 การวัด: <strong id="heroCount">0</strong> ครั้ง</div>
+        <div class="hero-chip"><span class="spin-icon">↻</span>&nbsp;<span id="heroInterval">ทุก 3 วินาที</span></div>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <div class="gauge-outer">
+        <div class="gauge-glow" id="gaugeGlow" style="--gauge-color:#34d399"></div>
+        <svg class="gauge-svg" viewBox="0 0 120 120">
+          <circle class="gauge-ring-bg" cx="60" cy="60" r="50" transform="rotate(-90 60 60)"/>
+          <circle class="gauge-ring" id="gaugeRing" cx="60" cy="60" r="50"
+            stroke="#34d399" stroke-dasharray="314.16" stroke-dashoffset="300"
+            transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-value" id="gaugeVal" style="color:#34d399">--</div>
+          <div class="gauge-unit">UV Index</div>
+        </div>
+      </div>
+      <div class="uv-badge" id="uvBadge" style="background:#34d399">กำลังโหลด</div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <section>
+    <div class="section-label">📊 สถิติ Session ปัจจุบัน</div>
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-metric-name">☀️ UV Index</div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statUvMin">--</span></div>
+        <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statUvMax">--</span></div>
+        <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statUvAvg">--</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-metric-name">🌫️ PM2.5 (µg/m³)</div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statPmMin">--</span></div>
+        <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statPmMax">--</span></div>
+        <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statPmAvg">--</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-metric-name">🌡️ อุณหภูมิ (°C)</div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statTempMin">--</span></div>
+        <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statTempMax">--</span></div>
+        <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statTempAvg">--</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-metric-name">💧 ความชื้น (%)</div>
+        <div class="stat-divider"></div>
+        <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statHumMin">--</span></div>
+        <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statHumMax">--</span></div>
+        <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statHumAvg">--</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SENSOR GRID -->
+  <section>
+    <div class="section-label">📡 ค่าเซนเซอร์ปัจจุบัน</div>
+    <div class="sensor-grid">
+      <div class="sensor-card sc-uv">
+        <div class="s-top">
+          <div class="s-icon">☀️</div>
+          <div class="s-status" id="uvStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+        </div>
+        <div class="s-name">UV Radiation Index</div>
+        <div class="s-val" id="uvVal">--</div>
+        <div class="s-bar-wrap"><div class="s-bar" id="uvBar" style="width:1%;background:#f59e0b"></div></div>
+        <div style="font-size:11px;color:var(--text-3)">ดัชนีรังสี UV · มาตรฐาน WHO</div>
+      </div>
+      <div class="sensor-card sc-pm">
+        <div class="s-top">
+          <div class="s-icon">🌫️</div>
+          <div class="s-status" id="pmStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+        </div>
+        <div class="s-name">PM2.5 ฝุ่นละออง</div>
+        <div class="s-val" id="pmVal">-- <span class="unit">µg/m³</span></div>
+        <div class="s-bar-wrap"><div class="s-bar" id="pmBar" style="width:1%;background:#a78bfa"></div></div>
+        <div style="font-size:11px;color:var(--text-3)">ฝุ่นละอองขนาด &lt; 2.5 ไมครอน</div>
+      </div>
+      <div class="sensor-card sc-temp">
+        <div class="s-top">
+          <div class="s-icon">🌡️</div>
+          <div class="s-status" id="tempStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+        </div>
+        <div class="s-name">อุณหภูมิอากาศ</div>
+        <div class="s-val" id="tempVal">-- <span class="unit">°C</span></div>
+        <div class="s-bar-wrap"><div class="s-bar" id="tempBar" style="width:1%;background:#fb7185"></div></div>
+        <div style="font-size:11px;color:var(--text-3)">อุณหภูมิในพื้นที่ตรวจวัด</div>
+      </div>
+      <div class="sensor-card sc-hum">
+        <div class="s-top">
+          <div class="s-icon">💧</div>
+          <div class="s-status" id="humStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+        </div>
+        <div class="s-name">ความชื้นสัมพัทธ์</div>
+        <div class="s-val" id="humVal">-- <span class="unit">%</span></div>
+        <div class="s-bar-wrap"><div class="s-bar" id="humBar" style="width:1%;background:#34d399"></div></div>
+        <div style="font-size:11px;color:var(--text-3)">ปริมาณไอน้ำในอากาศ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TREND CHART -->
+  <section class="chart-section">
+    <div class="chart-hdr">
+      <div>
+        <div class="section-label" style="margin-bottom:4px">📈 กราฟแนวโน้ม</div>
+        <h3 id="chartTitle">Trend Chart — เรียลไทม์</h3>
+      </div>
+      <div class="chart-toggles">
+        <button class="ct-btn active" id="ctUV" style="--ct-color:#f59e0b" onclick="toggleChart('uv',this)">
+          <span class="ct-dot" style="background:#f59e0b"></span>UV Index
+        </button>
+        <button class="ct-btn active" id="ctPM" style="--ct-color:#a78bfa" onclick="toggleChart('pm',this)">
+          <span class="ct-dot" style="background:#a78bfa"></span>PM2.5
+        </button>
+        <button class="ct-btn" id="ctTemp" style="--ct-color:#fb7185" onclick="toggleChart('temp',this)">
+          <span class="ct-dot" style="background:#fb7185"></span>อุณหภูมิ
+        </button>
+        <button class="ct-btn" id="ctHum" style="--ct-color:#34d399" onclick="toggleChart('hum',this)">
+          <span class="ct-dot" style="background:#34d399"></span>ความชื้น
+        </button>
+      </div>
+    </div>
+    <!-- Period Tabs -->
+    <div class="period-tabs">
+      <button class="period-btn active" id="pBtn-rt" onclick="setPeriod('realtime',this)">⚡ เรียลไทม์</button>
+      <button class="period-btn" id="pBtn-day" onclick="setPeriod('today',this)">📅 วันนี้ (รายชั่วโมง)</button>
+      <button class="period-btn" id="pBtn-month" onclick="setPeriod('month',this)">📆 เดือนนี้ (รายวัน)</button>
+      <button class="period-btn" id="pBtn-year" onclick="setPeriod('year',this)">📊 ปีนี้ (รายเดือน)</button>
+      <button class="period-btn" id="pBtn-fc" onclick="toggleForecast(this)" style="margin-left:auto;border-color:rgba(167,139,250,0.3);color:var(--text-1)">🔮 พยากรณ์อนาคต: ปิด</button>
+    </div>
+    <div class="period-info" id="periodInfo">
+      <span id="periodInfoText">⚡ กำลังแสดงข้อมูลเรียลไทม์ · อัปเดตอัตโนมัติ</span>
+      <span style="margin-left:auto;font-size:11px" id="periodDataCount"></span>
+    </div>
+    <div class="chart-wrap" id="chartWrap">
+      <svg id="chartSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="chart-cursor" id="chartCursor"></div>
+      <div class="chart-tooltip" id="chartTooltip"></div>
+    </div>
+    <div class="period-stat-chips" id="periodChips"></div>
+    <div style="margin-top:10px;font-size:11px;color:var(--text-3)">
+      <span id="chartHint">ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด</span>
+    </div>
+  </section>
+
+  <!-- UV SCALE -->
+  <section class="scale-section">
+    <div class="scale-hdr">
+      <h3>📊 สเกล UV Index</h3>
+      <div class="scale-cur">ค่าปัจจุบัน: <span id="scaleCurVal">--</span></div>
+    </div>
+    <div style="position:relative;padding:16px 0 8px">
+      <div class="uv-bar">
+        <div class="uv-pointer" id="uvPointer" style="left:5%" data-v="--"></div>
+      </div>
+      <div class="uv-bar-labels">
+        <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+        <span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11+</span>
+      </div>
+    </div>
+    <div class="uv-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>0–2 ต่ำ (ปลอดภัย)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>3–5 ปานกลาง</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>6–7 สูง</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>8–10 สูงมาก</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#9333ea"></div>11+ อันตราย</div>
+    </div>
+  </section>
+
+  <!-- RECOMMENDATIONS -->
+  <section class="reco-section">
+    <div class="reco-hdr">
+      <div>
+        <h3>💡 คำแนะนำสุขภาพ</h3>
+        <p class="reco-headline" id="recoHeadline">กำลังวิเคราะห์ข้อมูล...</p>
+      </div>
+    </div>
+    <div class="reco-grid" id="recoGrid">
+      <div class="reco-item"><div class="reco-icon">⏳</div><div class="reco-body"><strong>รอข้อมูล</strong>กำลังดึงข้อมูลจากเซนเซอร์</div></div>
+    </div>
+  </section>
+
+  <!-- INFO CARDS -->
+  <section>
+    <div class="section-label">📚 ความรู้ด้านสิ่งแวดล้อม</div>
+    <div class="info-grid">
+      <div class="info-card"><h4>☀️ UV Index คืออะไร?</h4><p>ดัชนีรังสี UV มาตรฐาน WHO วัดความเข้มรังสีอัลตราไวโอเลตจากดวงอาทิตย์ ยิ่งสูงยิ่งอันตรายต่อผิวและดวงตา</p></div>
+      <div class="info-card"><h4>🛡️ ป้องกัน UV อย่างไร?</h4><p>UV ≥ 3: ทาครีม SPF 30+ · UV ≥ 6: สวมหมวก แว่ด UV · UV ≥ 8: หลีกเลี่ยงกลางแจ้ง 10:00–16:00</p></div>
+      <div class="info-card"><h4>🌫️ PM2.5 อันตรายแค่ไหน?</h4><p>≤25 µg/m³ ปลอดภัย · 25–50 ปานกลาง · 50–100 เริ่มมีผล · &gt;100 อันตราย ควรสวม N95</p></div>
+      <div class="info-card"><h4>🌡️ อุณหภูมิที่เหมาะสม</h4><p>22–26°C สบายที่สุด · &gt;32°C ควรลดกิจกรรมกลางแจ้ง · &gt;37°C เสี่ยง Heat Stroke</p></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-l">
+      <strong style="color:var(--text-1)">🏫 โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</strong><br>
+      ระบบตรวจวัดสภาพแวดล้อม · Arduino → Google Sheets → Web Dashboard
+      <span class="errs-badge" id="errsBadge">⚠ การเชื่อมต่อล้มเหลว</span>
+    </div>
+    <div class="footer-r">
+      <div class="countdown-wrap">
+        <span>อัปเดตใน</span>
+        <div class="c-ring">
+          <svg viewBox="0 0 36 36" width="38" height="38">
+            <circle class="c-track" cx="18" cy="18" r="15.9"/>
+            <circle class="c-prog" id="cProg" cx="18" cy="18" r="15.9"/>
+          </svg>
+          <div class="c-num" id="cNum">3</div>
+        </div>
+        <span id="cSec">วินาที</span>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ===== JAVASCRIPT ===== -->
+<script>
+'use strict';
+
+/* ============================================================
+   CONFIG & STATE
+   ============================================================ */
+const DEFAULT_CONFIG = {
+  theme: 'dark', accent: 'amber',
+  refreshInterval: 3000, historyMax: 20,
+  schoolName: 'โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก',
+  schoolSubtitle: 'PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม',
+  animations: true, alertsEnabled: true, forecastEnabled: false, skinType: '',
+  alerts: { uv:{enabled:true,threshold:6}, pm:{enabled:true,threshold:50}, temp:{enabled:true,threshold:35}, hum:{enabled:false,threshold:90} },
+  chart: { uv:true, pm:true, temp:false, hum:false }
+};
+
+let CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+
+function loadConfig() {
+  try {
+    const s = localStorage.getItem('uvdash_cfg');
+    if (s) {
+      const p = JSON.parse(s);
+      CONFIG = { ...DEFAULT_CONFIG, ...p };
+      CONFIG.alerts = { ...DEFAULT_CONFIG.alerts, ...p.alerts };
+      CONFIG.chart  = { ...DEFAULT_CONFIG.chart,  ...p.chart  };
+      CONFIG.forecastEnabled = p.forecastEnabled !== undefined ? p.forecastEnabled : false;
+      CONFIG.skinType = p.skinType || '';
+    }
+  } catch(e) {}
+}
+
+function saveConfig() {
+  try { localStorage.setItem('uvdash_cfg', JSON.stringify(CONFIG)); } catch(e) {}
+}
+
+const STATE = {
+  h: { uv:[], pm:[], temp:[], hum:[], time:[] },   // history
+  stats: {
+    uv:  {min:Infinity,max:-Infinity,sum:0,n:0},
+    pm:  {min:Infinity,max:-Infinity,sum:0,n:0},
+    temp:{min:Infinity,max:-Infinity,sum:0,n:0},
+    hum: {min:Infinity,max:-Infinity,sum:0,n:0},
+  },
+  count: 0,
+  sessionStart: new Date(),
+  activeAlerts: new Map(),   // key -> alert info
+  refreshTimer: null,
+  cTimer: null,
+  countdown: 3,
+  errCount: 0,
+  lastData: null,
+};
+
+/* ============================================================
+   FORECAST ENGINE & SKIN TYPES
+   ============================================================ */
+const SKIN_TYPES = {
+  type1: { label: 'ผิวขาวมาก / ผิวเผือก 🧑🏻', threshold: 3, burnTime: '10-15 นาที', spf: 'SPF 50+' },
+  type2: { label: 'ผิวขาวเหลือง 🧑🏼', threshold: 4, burnTime: '20-25 นาที', spf: 'SPF 30+' },
+  type3: { label: 'ผิวสองสี / ผิวน้ำผึ้ง 🧑🏽', threshold: 5, burnTime: '30-40 นาที', spf: 'SPF 30+' },
+  type4: { label: 'ผิวเข้ม / ผิวคล้ำ 🧑🏾', threshold: 6, burnTime: '50-60 นาที', spf: 'SPF 15-30' },
+};
+
+function showSkinModal() {
+  document.getElementById('skinOverlay').classList.add('open');
+  document.getElementById('skinModal').classList.add('open');
+}
+
+function hideSkinModal() {
+  document.getElementById('skinOverlay').classList.remove('open');
+  document.getElementById('skinModal').classList.remove('open');
+}
+
+function selectSkinType(type) {
+  CONFIG.skinType = type;
+  saveConfig();
+  hideSkinModal();
+  updateSkinDisplay();
+  if (STATE.lastData) {
+    updateDashboard(STATE.lastData);
+  }
+}
+
+function updateSkinDisplay() {
+  const el = document.getElementById('settingsSkinDisplay');
+  if (el) {
+    const skin = SKIN_TYPES[CONFIG.skinType];
+    el.textContent = skin ? `ผิวของคุณ: ${skin.label}` : 'ผิวของคุณ: ยังไม่เลือก 👤';
+  }
+}
+
+const Forecast = {
+  linearRegression(data) {
+    const n = data.length;
+    if (n < 2) return null;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    for (let i = 0; i < n; i++) {
+      sumX += i;
+      sumY += data[i];
+      sumXY += i * data[i];
+      sumXX += i * i;
+    }
+    const denom = n * sumXX - sumX * sumX;
+    if (denom === 0) return { slope: 0, intercept: data[0] };
+    const slope = (n * sumXY - sumX * sumY) / denom;
+    const intercept = (sumY - slope * sumX) / n;
+    return { slope, intercept };
+  },
+
+  predict(data, steps = 5) {
+    if (data.length < 2) return Array(steps).fill(data[0] || 0);
+    const subset = data.slice(-12); // focus on recent history for trend
+    const lr = this.linearRegression(subset);
+    if (!lr) return Array(steps).fill(data[data.length - 1]);
+
+    const predictions = [];
+    const lastIdx = subset.length - 1;
+    const lastActual = data[data.length - 1];
+    const connectionOffset = lastActual - (lr.slope * lastIdx + lr.intercept);
+
+    for (let step = 1; step <= steps; step++) {
+      const predX = lastIdx + step;
+      const val = lr.slope * predX + lr.intercept + connectionOffset;
+      predictions.push(Math.max(0, val));
+    }
+    return predictions;
+  }
+};
+
+function toggleForecast(btn) {
+  CONFIG.forecastEnabled = !CONFIG.forecastEnabled;
+  saveConfig();
+  const toggleInSettings = document.getElementById('forecastToggle');
+  if (toggleInSettings) toggleInSettings.checked = CONFIG.forecastEnabled;
+  
+  if (CONFIG.forecastEnabled) {
+    btn.style.borderColor = 'var(--accent)';
+    btn.style.color = '#000';
+    btn.style.backgroundColor = 'var(--accent)';
+    btn.textContent = '🔮 พยากรณ์อนาคต: เปิด';
+  } else {
+    btn.style.borderColor = 'var(--border)';
+    btn.style.color = 'var(--text-1)';
+    btn.style.backgroundColor = 'var(--bg-secondary)';
+    btn.textContent = '🔮 พยากรณ์อนาคต: ปิด';
+  }
+  renderChart();
+}
+
+function formatRelativeTime(steps) {
+  const intervalMs = CONFIG.refreshInterval;
+  const totalSec = Math.round((intervalMs * steps) / 1000);
+  if (totalSec >= 60) {
+    const min = Math.floor(totalSec / 60);
+    const sec = totalSec % 60;
+    return `+${min}น${sec > 0 ? sec + 'ว' : ''}`;
+  }
+  return `+${totalSec}ว`;
+}
+
+/* ============================================================
+   LEVEL CLASSIFIERS
+   ============================================================ */
+const API_URL = "https://script.google.com/macros/s/AKfycbyIOBAP3YxbKodSwoghGu3PClItvsDr3EilubqBPFHrdvtiOHW6WokH-ZnuyPWG1u0/exec";
+
+function uvLevel(v) {
+  const n = parseFloat(v);
+  if (isNaN(n)) return {label:'--',color:'#8b949e',badge:'ไม่ทราบ',pct:0};
+  if (n <= 2)  return {label:'ต่ำ',color:'#34d399',badge:'ต่ำ 🟢',pct:(n/12)*100};
+  if (n <= 5)  return {label:'ปานกลาง',color:'#fbbf24',badge:'ปานกลาง 🟡',pct:(n/12)*100};
+  if (n <= 7)  return {label:'สูง',color:'#f97316',badge:'สูง 🟠',pct:(n/12)*100};
+  if (n <= 10) return {label:'สูงมาก',color:'#ef4444',badge:'สูงมาก 🔴',pct:(n/12)*100};
+  return {label:'อันตราย',color:'#9333ea',badge:'อันตราย 🟣',pct:100};
+}
+
+function pmLevel(v)   {
+  const n=parseFloat(v);
+  if(isNaN(n)) return {label:'--',color:'#8b949e'};
+  if(n<=25)  return {label:'ดี',color:'#34d399'};
+  if(n<=50)  return {label:'ปานกลาง',color:'#fbbf24'};
+  if(n<=100) return {label:'เริ่มมีผล',color:'#f97316'};
+  return {label:'อันตราย',color:'#ef4444'};
+}
+function tempLevel(v) {
+  const n=parseFloat(v);
+  if(isNaN(n)) return {label:'--',color:'#8b949e'};
+  if(n<=22)  return {label:'เย็น',color:'#38bdf8'};
+  if(n<=28)  return {label:'สบาย',color:'#34d399'};
+  if(n<=35)  return {label:'ร้อน',color:'#f97316'};
+  return {label:'ร้อนมาก',color:'#ef4444'};
+}
+function humLevel(v) {
+  const n=parseFloat(v);
+  if(isNaN(n)) return {label:'--',color:'#8b949e'};
+  if(n<30)   return {label:'แห้ง',color:'#f97316'};
+  if(n<=60)  return {label:'เหมาะสม',color:'#34d399'};
+  if(n<=80)  return {label:'ชื้น',color:'#fbbf24'};
+  return {label:'ชื้นมาก',color:'#38bdf8'};
+}
+
+/* ============================================================
+   RECOMMENDATIONS
+   ============================================================ */
+function buildRecos(uv, pm, temp) {
+  const u=parseFloat(uv)||0, p=parseFloat(pm)||0, t=parseFloat(temp)||0;
+  const items=[];
+  const skin = SKIN_TYPES[CONFIG.skinType] || SKIN_TYPES.type2;
+
+  // UV
+  if(u>=11) {
+    items.push({icon:'⛔',title:'ห้ามออกกลางแจ้งโดยเด็ดขาด',body:`สำหรับผิวคุณ: จะเกิดอาการเบิร์นสะสมอย่างรวดเร็ว (ภายในไม่กี่นาที)`,c:'#9333ea'});
+    items.push({icon:'🕶️',title:'สวมแว่นกรองแสง UV 100% และครีมแดด',body:`ควรใช้ครีมกันแดดที่แรงที่สุด (${skin.spf})`,c:'#9333ea'});
+  } else if(u>=skin.threshold) {
+    const urgencyColor = u>=8?'#ef4444':'#f97316';
+    items.push({icon:'🧴',title:`ต้องทาครีมกันแดด ${skin.spf}`,body:`สีผิวของคุณไวต่อแดดสูง มีโอกาสไหม้เกรียมใน ${skin.burnTime} หากไม่ป้องกัน`,c:urgencyColor});
+    items.push({icon:'🧢',title:'สวมหมวกและกางร่ม',body:'ควรหลีกเลี่ยงแสงแดดช่วงเที่ยงหรือช่วงที่ดัชนี UV ขึ้นสูง',c:urgencyColor});
+  } else if(u>=3) {
+    items.push({icon:'☂️',title:'ใช้ร่มหรือเดินในที่ร่ม',body:'UV ปานกลาง สำหรับผิวคุณควรเริ่มระมัดระวัง',c:'#fbbf24'});
+  } else {
+    items.push({icon:'✅',title:'ความเข้มแสงแดดปลอดภัย',body:'ออกกำลังกายหรือทำกิจกรรมกลางแจ้งได้ตามปกติ',c:'#34d399'});
+  }
+
+  // PM2.5
+  if(p>=100) items.push({icon:'😷',title:'สวมหน้ากาก N95 ทันที',body:'ฝุ่น PM2.5 อันตราย งดกิจกรรมกลางแจ้ง',c:'#ef4444'});
+  else if(p>=50) items.push({icon:'😷',title:'แนะนำสวมหน้ากากอนามัย',body:'ฝุ่นเริ่มส่งผลต่อระบบทางเดินหายใจ',c:'#f97316'});
+  else if(p>=25) items.push({icon:'🌬️',title:'ระวังฝุ่นละอองปานกลาง',body:'ผู้มีโรคทางเดินหายใจควรระมัดระวัง',c:'#fbbf24'});
+
+  // Temperature
+  if(t>=37) items.push({icon:'💧',title:'ดื่มน้ำให้มาก! เสี่ยง Heat Stroke',body:'อากาศร้อนจัด งดกิจกรรมกลางแจ้งทุกประเภท',c:'#ef4444'});
+  else if(t>=32) items.push({icon:'💦',title:'ดื่มน้ำทุก 30 นาที',body:'อากาศร้อน ระวังการขาดน้ำขณะทำกิจกรรม',c:'#f97316'});
+
+  return items;
+}
+
+/* ============================================================
+   ALERT SYSTEM
+   ============================================================ */
+function checkAlerts(data) {
+  if (!CONFIG.alertsEnabled) { clearAllAlerts(); return; }
+
+  const checks = [
+    { key:'uv',   val:parseFloat(data.uv),  cfg:CONFIG.alerts.uv,   lvFn:uvLevel,   icon:'☀️', name:'UV Index' },
+    { key:'pm',   val:parseFloat(data.pm),  cfg:CONFIG.alerts.pm,   lvFn:pmLevel,   icon:'🌫️', name:'PM2.5' },
+    { key:'temp', val:parseFloat(data.temp),cfg:CONFIG.alerts.temp, lvFn:tempLevel, icon:'🌡️', name:'อุณหภูมิ' },
+    { key:'hum',  val:parseFloat(data.hum), cfg:CONFIG.alerts.hum,  lvFn:humLevel,  icon:'💧', name:'ความชื้น' },
+  ];
+
+  let changed = false;
+  checks.forEach(c => {
+    if (!c.cfg.enabled || isNaN(c.val)) { STATE.activeAlerts.delete(c.key); changed=true; return; }
+    if (c.val > c.cfg.threshold) {
+      const lv = c.lvFn(c.val);
+      const severity = c.val > c.cfg.threshold * 1.5 ? 'danger' : (c.val > c.cfg.threshold * 1.2 ? 'high' : (c.val > c.cfg.threshold * 1.05 ? 'warn' : 'med'));
+      STATE.activeAlerts.set(c.key, { icon:c.icon, name:c.name, val:c.val, threshold:c.cfg.threshold, color:lv.color, severity });
+      changed = true;
+    } else {
+      if (STATE.activeAlerts.has(c.key)) { STATE.activeAlerts.delete(c.key); changed=true; }
+    }
+  });
+
+  if (changed) renderAlertBar();
+  const badge = document.getElementById('notifBadge');
+  badge.style.display = STATE.activeAlerts.size > 0 ? 'flex' : 'none';
+  badge.textContent = STATE.activeAlerts.size;
+}
+
+function renderAlertBar() {
+  const bar = document.getElementById('alertBar');
+  if (STATE.activeAlerts.size === 0) { bar.classList.remove('visible'); bar.innerHTML=''; return; }
+  bar.innerHTML = [...STATE.activeAlerts.values()].map(a => `
+    <div class="alert-item lv-${a.severity}">
+      <span class="alert-icon">${a.icon}</span>
+      <span class="alert-msg"><strong>${a.name}</strong> = ${a.val} (เกินค่าที่กำหนด ${a.threshold})</span>
+      <button class="alert-close" onclick="this.parentElement.remove();checkAlertBarVis()">✕</button>
+    </div>`).join('');
+  bar.classList.add('visible');
+}
+
+function clearAllAlerts() {
+  STATE.activeAlerts.clear();
+  document.getElementById('alertBar').classList.remove('visible');
+  document.getElementById('notifBadge').style.display='none';
+}
+function checkAlertBarVis() {
+  if (!document.querySelector('.alert-item')) document.getElementById('alertBar').classList.remove('visible');
+}
+function toggleAlertPanel() { document.getElementById('alertBar').classList.toggle('visible'); }
+
+/* ============================================================
+   STATS UPDATE
+   ============================================================ */
+function updateStats(key, val) {
+  const s = STATE.stats[key], n = parseFloat(val);
+  if (isNaN(n)) return;
+  s.min = Math.min(s.min, n);
+  s.max = Math.max(s.max, n);
+  s.sum += n; s.n++;
+}
+
+function renderStats() {
+  const fmt = (v, d=1) => isFinite(v) ? v.toFixed(d) : '--';
+  const avg = k => STATE.stats[k].n > 0 ? STATE.stats[k].sum / STATE.stats[k].n : NaN;
+
+  ['uv','pm','temp','hum'].forEach(k => {
+    const s = STATE.stats[k];
+    const id = k.charAt(0).toUpperCase() + k.slice(1);
+    document.getElementById(`stat${id}Min`).textContent = fmt(s.min);
+    document.getElementById(`stat${id}Max`).textContent = fmt(s.max);
+    document.getElementById(`stat${id}Avg`).textContent = fmt(avg(k));
+  });
+}
+
+/* ============================================================
+   SENSOR CARD UPDATE
+   ============================================================ */
+function flashEl(el) {
+  if (!CONFIG.animations) return;
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+}
+
+function setStatusBadge(el, label, color) {
+  el.textContent = label;
+  el.style.background = color + '22';
+  el.style.color = color;
+}
+
+function animateNumber(el, target, decimals=1) {
+  if (!CONFIG.animations) { el.textContent = isNaN(target) ? '--' : target.toFixed(decimals); return; }
+  const start = parseFloat(el.textContent) || 0;
+  const dur = 400, t0 = performance.now();
+  function step(t) {
+    const p = Math.min(1, (t-t0)/dur);
+    const cur = start + (target-start) * (1 - Math.pow(1-p,3));
+    el.textContent = cur.toFixed(decimals);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   MAIN DASHBOARD UPDATE
+   ============================================================ */
+function updateDashboard(data) {
+  const uv=data.uv, pm=data.pm, temp=data.temp, hum=data.hum, time=data.time;
+  STATE.count++; STATE.lastData = data;
+
+  // History
+  const h = STATE.h;
+  ['uv','pm','temp','hum'].forEach(k => {
+    h[k].push(parseFloat(data[k])||0);
+    if(h[k].length > CONFIG.historyMax) h[k].shift();
+  });
+  h.time.push(time);
+  if(h.time.length > CONFIG.historyMax) h.time.shift();
+
+  // Stats
+  updateStats('uv', uv); updateStats('pm', pm);
+  updateStats('temp', temp); updateStats('hum', hum);
+  renderStats();
+
+  // Hero
+  document.getElementById('heroTime').textContent = time;
+  document.getElementById('heroCount').textContent = STATE.count;
+
+  // Gauge
+  const uvL = uvLevel(uv);
+  const uvNum = parseFloat(uv)||0;
+  const circumf = 314.16;
+  const offset = circumf * (1 - Math.min(1, uvNum/12));
+  const ring = document.getElementById('gaugeRing');
+  ring.style.stroke = uvL.color;
+  ring.style.strokeDashoffset = offset;
+  const gaugeVal = document.getElementById('gaugeVal');
+  gaugeVal.style.color = uvL.color;
+  animateNumber(gaugeVal, uvNum, uvNum >= 10 ? 0 : 1);
+  document.getElementById('uvBadge').textContent = uvL.badge;
+  document.getElementById('uvBadge').style.background = uvL.color;
+  document.getElementById('uvBadge').style.boxShadow = `0 0 20px ${uvL.color}66`;
+  document.getElementById('gaugeGlow').style.setProperty('--gauge-color', uvL.color);
+  document.getElementById('gaugeGlow').classList.add('active');
+
+  // Sensor cards
+  const pmL=pmLevel(pm), tL=tempLevel(temp), hL=humLevel(hum);
+
+  document.getElementById('uvVal').innerHTML  = `${uvNum.toFixed(1)}`;
+  document.getElementById('pmVal').innerHTML  = `${parseFloat(pm)||0} <span class="unit">µg/m³</span>`;
+  document.getElementById('tempVal').innerHTML= `${parseFloat(temp)||0} <span class="unit">°C</span>`;
+  document.getElementById('humVal').innerHTML = `${parseFloat(hum)||0} <span class="unit">%</span>`;
+
+  setStatusBadge(document.getElementById('uvStat'),  uvL.label, uvL.color);
+  setStatusBadge(document.getElementById('pmStat'),  pmL.label, pmL.color);
+  setStatusBadge(document.getElementById('tempStat'),tL.label,  tL.color);
+  setStatusBadge(document.getElementById('humStat'), hL.label,  hL.color);
+
+  // Progress bars
+  setBar('uvBar',  (uvNum/12)*100,   '#f59e0b');
+  setBar('pmBar',  (Math.min(150,parseFloat(pm)||0)/150)*100, '#a78bfa');
+  setBar('tempBar',(Math.max(0,(parseFloat(temp)||0)-10)/50)*100,'#fb7185');
+  setBar('humBar', (parseFloat(hum)||0), '#34d399');
+
+  // UV Scale pointer
+  const pct = Math.max(1, Math.min(99, (uvNum/12)*100));
+  document.getElementById('uvPointer').style.left = pct + '%';
+  document.getElementById('uvPointer').setAttribute('data-v', 'UV ' + uvNum.toFixed(1));
+  document.getElementById('scaleCurVal').textContent = uvNum.toFixed(1);
+
+  // Recommendations
+  const recos = buildRecos(uv, pm, temp);
+  const skin = SKIN_TYPES[CONFIG.skinType] || SKIN_TYPES.type2;
+  const headlines = ['✅ แสงแดดปลอดภัย','⚠️ เริ่มมีความเสี่ยงต่อผิวคุณ','🟠 แดดจัด — ผิวบอบบางเกิดอาการไหม้ได้ง่าย','🔴 แดดแรงจัด — โอกาสไหม้แดดสูงสุด','⛔ รังสีอันตรายถึงขีดสุด — หลีกเลี่ยงเด็ดขาด'];
+  let hi = 0;
+  if (uvNum >= 11) hi = 4;
+  else if (uvNum >= 8) hi = 3;
+  else if (uvNum >= 6) hi = 2;
+  else if (uvNum >= skin.threshold) hi = 1;
+  else hi = 0;
+  document.getElementById('recoHeadline').textContent = headlines[hi];
+  document.getElementById('recoGrid').innerHTML = recos.map(r=>`
+    <div class="reco-item active" style="--ri-c:${r.c}">
+      <div class="reco-icon">${r.icon}</div>
+      <div class="reco-body"><strong>${r.title}</strong>${r.body}</div>
+    </div>`).join('');
+
+  // Chart
+  renderChart();
+
+  // Alerts
+  checkAlerts(data);
+
+  // Status
+  document.getElementById('statusDot').className='status-dot';
+  document.getElementById('statusLabel').textContent='เชื่อมต่อแล้ว';
+  document.getElementById('errsBadge').classList.remove('show');
+  STATE.errCount = 0;
+}
+
+function setBar(id, pct, color) {
+  const el = document.getElementById(id);
+  el.style.width = Math.max(2, Math.min(100, pct)) + '%';
+  el.style.background = color;
+}
+
+/* ============================================================
+   DATA STORE — localStorage persistence for historical data
+   ============================================================ */
+const DataStore = {
+  KEY: 'uvdash_history',
+  MIN_GAP_MS: 60 * 1000,   // store at most 1 reading per minute
+  MAX_DAYS: 366,
+
+  load() {
+    try { return JSON.parse(localStorage.getItem(this.KEY)) || { r:[] }; }
+    catch(e) { return { r:[] }; }
+  },
+
+  save(store) {
+    try { localStorage.setItem(this.KEY, JSON.stringify(store)); } catch(e) {}
+  },
+
+  add(data) {
+    const store = this.load();
+    const now = Date.now();
+    const last = store.r[store.r.length - 1];
+    if (last && now - last.t < this.MIN_GAP_MS) return;
+    store.r.push({
+      t: now,
+      uv: parseFloat(data.uv)||0,
+      pm: parseFloat(data.pm)||0,
+      temp: parseFloat(data.temp)||0,
+      hum: parseFloat(data.hum)||0,
+    });
+    // Keep only last 366 days worth
+    const cutoff = now - this.MAX_DAYS * 86400 * 1000;
+    store.r = store.r.filter(r => r.t >= cutoff);
+    this.save(store);
+  },
+
+  getToday()   { const d=this.load().r, s=startOfDay(); return d.filter(r=>r.t>=s); },
+  getMonth()   { const d=this.load().r, s=startOfMonth(); return d.filter(r=>r.t>=s); },
+  getYear()    { const d=this.load().r, s=startOfYear(); return d.filter(r=>r.t>=s); },
+  getAll()     { return this.load().r; },
+
+  groupByHour(rr) {
+    const g = Array.from({length:24}, ()=>[]);
+    rr.forEach(r => g[new Date(r.t).getHours()].push(r));
+    return g;
+  },
+  groupByDay(rr) {
+    const now = new Date();
+    const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
+    const g = Array.from({length:days}, ()=>[]);
+    rr.forEach(r => {
+      const d = new Date(r.t).getDate()-1;
+      if (d >= 0 && d < days) g[d].push(r);
+    });
+    return g;
+  },
+  groupByMonth(rr) {
+    const g = Array.from({length:12}, ()=>[]);
+    rr.forEach(r => g[new Date(r.t).getMonth()].push(r));
+    return g;
+  },
+  avg(arr, key) {
+    if (!arr || !arr.length) return null;
+    return arr.reduce((s,r) => s + (r[key]||0), 0) / arr.length;
+  },
+  clearAll() { localStorage.removeItem(this.KEY); },
+};
+
+function startOfDay()   { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); }
+function startOfMonth() { const d=new Date(); d.setDate(1); d.setHours(0,0,0,0); return d.getTime(); }
+function startOfYear()  { const d=new Date(); d.setMonth(0,1); d.setHours(0,0,0,0); return d.getTime(); }
+
+/* ============================================================
+   PERIOD STATE
+   ============================================================ */
+let CURRENT_PERIOD = 'realtime';
+const PERIOD_TITLES = {
+  realtime: 'Trend Chart — เรียลไทม์',
+  today:    'กราฟรายชั่วโมง — วันนี้',
+  month:    'กราฟรายวัน — เดือนนี้',
+  year:     'กราฟรายเดือน — ปีนี้',
+};
+const PERIOD_HINTS = {
+  realtime: 'ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด',
+  today:    'แสดงค่าเฉลี่ยรายชั่วโมงของวันนี้ · ข้อมูลถูกบันทึกทุก 1 นาที',
+  month:    'แสดงค่าเฉลี่ยรายวันของเดือนนี้ · แต่ละแท่งคือค่าเฉลี่ยตลอดวันนั้น',
+  year:     'แสดงค่าเฉลี่ยรายเดือนของปีนี้ · แต่ละแท่งคือค่าเฉลี่ยตลอดเดือนนั้น',
+};
+
+function setPeriod(p, btn) {
+  CURRENT_PERIOD = p;
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('chartTitle').textContent = PERIOD_TITLES[p];
+  document.getElementById('chartHint').textContent  = PERIOD_HINTS[p];
+  renderChart();
+}
+
+/* ============================================================
+   SVG TREND CHART
+   ============================================================ */
+const CHART_METRICS = {
+  uv:   { label:'UV Index', color:'#f59e0b', max:12,  min:0 },
+  pm:   { label:'PM2.5',    color:'#a78bfa', max:150, min:0 },
+  temp: { label:'Temp°C',   color:'#fb7185', max:50,  min:10 },
+  hum:  { label:'Hum%',     color:'#34d399', max:100, min:0 },
+};
+
+const TH_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+function catmullPath(pts) {
+  if (pts.length < 2) return `M${pts[0].x},${pts[0].y}`;
+  let d = `M${pts[0].x},${pts[0].y}`;
+  for (let i=0; i<pts.length-1; i++) {
+    const p0=pts[Math.max(0,i-1)], p1=pts[i], p2=pts[i+1], p3=pts[Math.min(pts.length-1,i+2)];
+    const cp1x=p1.x+(p2.x-p0.x)/6, cp1y=p1.y+(p2.y-p0.y)/6;
+    const cp2x=p2.x-(p3.x-p1.x)/6, cp2y=p2.y-(p3.y-p1.y)/6;
+    d+=` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+  }
+  return d;
+}
+
+/* -- Bar Chart for aggregated periods -- */
+/* ── CANDLESTICK CHART for aggregated periods ── */
+function renderCandleChart(groups, labels, periodKey) {
+  const svgEl = document.getElementById('chartSvg');
+  const wrap  = document.getElementById('chartWrap');
+  const W = wrap.clientWidth || 800;
+  const H = 320;
+  const PAD = { t:30, r:56, b:46, l:56 };
+  const cW = W - PAD.l - PAD.r;
+  const cH = H - PAD.t - PAD.b;
+  const n = groups.length;
+
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)';
+  const textColor  = isDark ? 'rgba(255,255,255,0.32)' : 'rgba(0,0,0,0.38)';
+  const bgColor    = isDark ? '#0d1117' : '#f8fafc';
+  const borderC    = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+
+  const activeKeys = Object.keys(CHART_METRICS).filter(k => CONFIG.chart[k]);
+  const primaryKey = activeKeys[0];
+  if (!primaryKey) {
+    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="${textColor}" font-family="Sarabun,sans-serif">เลือก metric ที่ต้องการแสดง</text>`;
+    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    return;
+  }
+  const m = CHART_METRICS[primaryKey];
+
+  // Compute per-group OHLC
+  const candles = groups.map((g, i) => {
+    if (!g.length) return null;
+    const vals = g.map(r => r[primaryKey]).filter(v => !isNaN(v));
+    if (!vals.length) return null;
+    const hi  = Math.max(...vals);
+    const lo  = Math.min(...vals);
+    const op  = vals[0];
+    const cl  = vals[vals.length - 1];
+    const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
+    return { i, hi, lo, op, cl, avg, n: g.length };
+  });
+
+  const averages = candles.filter(Boolean).map(c => c.avg);
+  const spreads = candles.filter(Boolean).map(c => c.hi - c.lo);
+  const hasEnoughData = averages.length >= 2;
+
+  // Add 3 forecast candles if enabled
+  const predCandles = [];
+  if (CONFIG.forecastEnabled && hasEnoughData) {
+    const predAvgs = Forecast.predict(averages, 3);
+    const avgSpread = spreads.reduce((a,b)=>a+b,0)/spreads.length || 1;
+    for (let j = 1; j <= 3; j++) {
+      const Close = predAvgs[j - 1];
+      const Open = j === 1 ? averages[averages.length - 1] : predAvgs[j - 2];
+      const High = Math.max(Open, Close) + avgSpread * 0.45;
+      const Low = Math.max(0, Math.min(Open, Close) - avgSpread * 0.45);
+      predCandles.push({ hi: High, lo: Low, op: Open, cl: Close, avg: Close, isForecast: true, n: 0 });
+    }
+  }
+
+  // Y scale: use actual data range with 10% padding
+  const allHi = [...candles, ...predCandles].filter(Boolean).map(c=>c.hi);
+  const allLo = [...candles, ...predCandles].filter(Boolean).map(c=>c.lo);
+  if (!allHi.length) {
+    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="${textColor}" font-family="Sarabun,sans-serif">ยังไม่มีข้อมูลในช่วงนี้ · ข้อมูลจะสะสมเมื่อเวลาผ่านไป</text>`;
+    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svgEl.setAttribute('width', W); svgEl.setAttribute('height', H);
+    updatePeriodMeta(periodKey, 0, groups, activeKeys);
+    wrap.onmousemove = null;
+    return;
+  }
+  const dataHi  = Math.max(...allHi);
+  const dataLo  = Math.min(...allLo);
+  const spread  = dataHi - dataLo || 1;
+  const yMax    = dataHi + spread * 0.12;
+  const yMin    = Math.max(0, dataLo - spread * 0.08);
+  const yRange  = yMax - yMin;
+
+  const toY = v => PAD.t + (1 - (v - yMin) / yRange) * cH;
+
+  let svg = `<defs>`;
+  svg += `<linearGradient id="cand_bg" x1="0" y1="0" x2="0" y2="1">`
+       + `<stop offset="0%" stop-color="${m.color}" stop-opacity="0.07"/>`
+       + `<stop offset="100%" stop-color="${m.color}" stop-opacity="0"/>`
+       + `</linearGradient>`;
+  svg += `</defs>`;
+  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="${bgColor}"/>`;
+  
+  // Layout actual width vs forecast width
+  const actualW = CONFIG.forecastEnabled && hasEnoughData ? cW * 0.82 : cW;
+  const forecastW = cW - actualW;
+  
+  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${actualW}" height="${cH}" fill="url(#cand_bg)"/>`;
+
+  // Draw forecast zone background
+  if (CONFIG.forecastEnabled && hasEnoughData) {
+    svg += `<rect x="${PAD.l + actualW}" y="${PAD.t}" width="${forecastW}" height="${cH}" fill="${m.color}" fill-opacity="0.02"/>`;
+  }
+
+  // Horizontal grid lines with Y-axis labels
+  const gLines = 6;
+  for (let i=0; i<=gLines; i++) {
+    const val = yMin + (yRange * (1 - i/gLines));
+    const y   = toY(val);
+    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridColor}" stroke-width="1"/>`;
+    svg += `<text x="${PAD.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="${textColor}" font-family="Inter,sans-serif">${val.toFixed(1)}</text>`;
+  }
+
+  // Candlesticks (Actual)
+  const slotW  = actualW / n;
+  const bodyW  = Math.max(3, Math.min(slotW * 0.55, 18));
+  const wickW  = Math.max(1, bodyW * 0.18);
+
+  let totalReadings = 0;
+  candles.forEach((c, i) => {
+    const slotX   = PAD.l + i * slotW;
+    const centerX = slotX + slotW / 2;
+
+    const showLabel = n <= 12 || i % Math.max(1, Math.floor(n / 10)) === 0;
+    if (showLabel) {
+      svg += `<text x="${centerX}" y="${H - 8}" text-anchor="middle" font-size="${n > 20 ? 8 : 10}" fill="${textColor}" font-family="Inter,sans-serif">${labels[i]}</text>`;
+    }
+
+    if (!c) {
+      svg += `<line x1="${centerX}" y1="${PAD.t + cH - 2}" x2="${centerX}" y2="${PAD.t + cH}" stroke="${gridColor}" stroke-width="2"/>`;
+      return;
+    }
+    totalReadings += c.n;
+
+    const bullish = c.cl >= c.op;
+    const colUp   = '#22c55e';
+    const colDn   = '#ef4444';
+    const col     = bullish ? colUp : colDn;
+    const colDim  = bullish ? 'rgba(34,197,94,0.20)' : 'rgba(239,68,68,0.20)';
+
+    const hiY  = toY(c.hi);
+    const loY  = toY(c.lo);
+    const opY  = toY(c.op);
+    const clY  = toY(c.cl);
+    const bodyTop = Math.min(opY, clY);
+    const bodyH   = Math.max(2, Math.abs(clY - opY));
+
+    svg += `<rect x="${centerX - bodyW/2 - 2}" y="${bodyTop - 2}" width="${bodyW + 4}" height="${bodyH + 4}" fill="${colDim}" rx="3"/>`;
+    svg += `<line x1="${centerX}" y1="${hiY}" x2="${centerX}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-linecap="round"/>`;
+    svg += `<rect x="${centerX - bodyW/2}" y="${bodyTop}" width="${bodyW}" height="${bodyH}" fill="${col}" rx="2"/>`;
+
+    const avgY = toY(c.avg);
+    svg += `<circle cx="${centerX}" cy="${avgY}" r="2" fill="${m.color}" fill-opacity="0.6"/>`;
+  });
+
+  // Candlesticks (Forecast)
+  if (CONFIG.forecastEnabled && hasEnoughData) {
+    const fSlotW = forecastW / 3;
+    
+    // Draw vertical divider
+    svg += `<line x1="${PAD.l + actualW}" y1="${PAD.t}" x2="${PAD.l + actualW}" y2="${PAD.t + cH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>`;
+    svg += `<text x="${PAD.l + actualW + 6}" y="${PAD.t + 14}" font-size="9" fill="var(--accent)" font-weight="700" font-family="Sarabun,sans-serif">🔮 คาดการณ์</text>`;
+
+    predCandles.forEach((c, j) => {
+      const slotX = PAD.l + actualW + j * fSlotW;
+      const centerX = slotX + fSlotW / 2;
+      const stepIndex = j + 1;
+
+      const unitLabel = periodKey === 'today' ? 'ชม.' : periodKey === 'month' ? 'วัน' : 'ด.';
+      svg += `<text x="${centerX}" y="${H - 8}" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700" font-family="Inter,sans-serif">+${stepIndex} ${unitLabel}</text>`;
+
+      const bullish = c.cl >= c.op;
+      const col = bullish ? '#22c55e' : '#ef4444';
+
+      const hiY  = toY(c.hi);
+      const loY  = toY(c.lo);
+      const opY  = toY(c.op);
+      const clY  = toY(c.cl);
+      const bodyTop = Math.min(opY, clY);
+      const bodyH   = Math.max(2, Math.abs(clY - opY));
+
+      // Wick (dashed)
+      svg += `<line x1="${centerX}" y1="${hiY}" x2="${centerX}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-dasharray="3,3" opacity="0.75"/>`;
+      // Body (dashed outline)
+      svg += `<rect x="${centerX - bodyW/2}" y="${bodyTop}" width="${bodyW}" height="${bodyH}" fill="none" stroke="${col}" stroke-width="1.5" stroke-dasharray="3,2" rx="2"/>`;
+
+      // Connection line
+      const prevY = j === 0 ? toY(averages[averages.length - 1]) : toY(predCandles[j - 1].cl);
+      const prevX = j === 0 ? PAD.l + actualW - slotW / 2 : slotX - fSlotW / 2;
+      svg += `<line x1="${prevX}" y1="${prevY}" x2="${centerX}" y2="${clY}" stroke="${col}" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/>`;
+    });
+  }
+
+  // Latest Y-axis value callout
+  const lastCandle = [...candles, ...predCandles].reverse().find(Boolean);
+  if (lastCandle) {
+    const lvy  = toY(lastCandle.cl);
+    const unit = primaryKey==='pm'?'µg':primaryKey==='temp'?'°':primaryKey==='hum'?'%':'';
+    svg += `<line x1="${PAD.l}" y1="${lvy}" x2="${W-PAD.r}" y2="${lvy}" stroke="${m.color}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>`;
+    svg += `<rect x="${W-PAD.r+2}" y="${lvy-9}" width="${PAD.r-4}" height="18" fill="${m.color}" rx="3"/>`;
+    svg += `<text x="${W-PAD.r/2}" y="${lvy+4}" text-anchor="middle" font-size="9" font-weight="700" fill="#000" font-family="Inter,sans-serif">${lastCandle.cl.toFixed(1)}</text>`;
+  }
+
+  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}" fill="none" stroke="${borderC}" stroke-width="1"/>`;
+
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('height', H);
+  svgEl.innerHTML = svg;
+
+  updatePeriodMeta(periodKey, totalReadings, groups, activeKeys);
+  initCandleTooltip(wrap, candles, predCandles, labels, primaryKey, activeKeys, W, H, PAD, toY, actualW, forecastW);
+}
+
+function updatePeriodMeta(periodKey, totalReadings, groups, activeKeys) {
+  document.getElementById('periodDataCount').textContent = totalReadings > 0 ? `${totalReadings} การวัด` : 'ยังไม่มีข้อมูล';
+  const now = new Date();
+  const infoMap = {
+    today: `📅 ${now.getDate()} ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`,
+    month: `📆 ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`,
+    year:  `📊 ปี ${now.getFullYear()+543}`,
+  };
+  document.getElementById('periodInfoText').textContent = (infoMap[periodKey]||'') + ' · บันทึกทุก 1 นาที';
+
+  // Stat chips
+  const chipStats = {};
+  activeKeys.forEach(k => {
+    const allVals = groups.flatMap(g => g.map(r => r[k])).filter(v => v !== undefined && !isNaN(v));
+    if (allVals.length) {
+      const avg = allVals.reduce((a,b)=>a+b,0)/allVals.length;
+      chipStats[k] = { avg, max:Math.max(...allVals), min:Math.min(...allVals), color:CHART_METRICS[k].color, label:CHART_METRICS[k].label };
+    }
+  });
+  let chips = '';
+  Object.entries(chipStats).forEach(([k,s]) => {
+    const unit = k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
+    chips += `<div class="p-chip">`
+           + `<span class="pc-dot" style="background:${s.color}"></span>`
+           + `<span style="color:${s.color}">${s.label}</span>`
+           + ` เฉลี่ย <strong>${s.avg.toFixed(1)}</strong>${unit}`
+           + ` · สูงสุด <strong style="color:#22c55e">${s.max.toFixed(1)}</strong>`
+           + ` · ต่ำสุด <strong style="color:#ef4444">${s.min.toFixed(1)}</strong>`
+           + `</div>`;
+  });
+  document.getElementById('periodChips').innerHTML = chips;
+}
+
+function initCandleTooltip(wrap, candles, predCandles, labels, primaryKey, activeKeys, W, H, PAD, toY, actualW, forecastW) {
+  const tooltip = document.getElementById('chartTooltip');
+  const cursor  = document.getElementById('chartCursor');
+  const cW = W - PAD.l - PAD.r;
+  const n = candles.length;
+  const totalSlots = n + predCandles.length;
+
+  function onMove(e) {
+    const rect = wrap.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const scaleX = rect.width / W;
+    const svgMx = mx / scaleX;
+    if (svgMx < PAD.l || svgMx > W - PAD.r) { tooltip.style.display='none'; cursor.style.display='none'; return; }
+    
+    let c = null;
+    let label = '';
+    let isForecast = false;
+    let slotCX = 0;
+    
+    if (svgMx <= PAD.l + actualW) {
+      const slotW = actualW / n;
+      const ci = Math.floor((svgMx - PAD.l) / slotW);
+      const idx = Math.max(0, Math.min(ci, n-1));
+      c = candles[idx];
+      label = labels[idx];
+      slotCX = PAD.l + idx * slotW + slotW / 2;
+    } else {
+      const fSlotW = forecastW / 3;
+      const ci = Math.floor((svgMx - PAD.l - actualW) / fSlotW);
+      const idx = Math.max(0, Math.min(ci, 2));
+      c = predCandles[idx];
+      const unitLabel = document.getElementById('pBtn-day').classList.contains('active') ? 'ชั่วโมง' : document.getElementById('pBtn-month').classList.contains('active') ? 'วัน' : 'เดือน';
+      label = `พยากรณ์ (+${idx+1} ${unitLabel})`;
+      isForecast = true;
+      slotCX = PAD.l + actualW + idx * fSlotW + fSlotW / 2;
+    }
+
+    let html = `<div class="tt-time">📅 ${label}</div>`;
+    if (!c) {
+      html += `<div class="tt-row"><span class="tt-label">ข้อมูล</span><span class="tt-val" style="color:rgba(255,255,255,0.3)">ไม่มีข้อมูล</span></div>`;
+    } else {
+      const m = CHART_METRICS[primaryKey];
+      const unit = primaryKey==='pm'?'µg/m³':primaryKey==='temp'?'°C':primaryKey==='hum'?'%':'';
+      const arrow = c.cl >= c.op ? '▲' : '▼';
+      const arrowCol = c.cl >= c.op ? '#22c55e' : '#ef4444';
+      const forecastTag = isForecast ? ' <span style="color:var(--accent);font-size:9px">[คาดการณ์]</span>' : '';
+      
+      html += `<div class="tt-row"><span class="tt-label"><span class="tt-dot" style="background:${m.color}"></span>${m.label}${forecastTag}</span><span class="tt-val" style="color:${arrowCol}">${arrow} ${c.cl.toFixed(1)} ${unit}</span></div>`;
+      html += `<div class="tt-row"><span class="tt-label">สูงสุด</span><span class="tt-val" style="color:#22c55e">${c.hi.toFixed(1)} ${unit}</span></div>`;
+      html += `<div class="tt-row"><span class="tt-label">ต่ำสุด</span><span class="tt-val" style="color:#ef4444">${c.lo.toFixed(1)} ${unit}</span></div>`;
+      html += `<div class="tt-row"><span class="tt-label">เฉลี่ย</span><span class="tt-val" style="color:${m.color}">${c.avg.toFixed(1)} ${unit}</span></div>`;
+      if (!isForecast) html += `<div class="tt-row"><span class="tt-label">จำนวน</span><span class="tt-val">${c.n} รายการ</span></div>`;
+    }
+    tooltip.innerHTML = html;
+
+    cursor.style.left = (slotCX * scaleX) + 'px';
+    cursor.style.display = 'block';
+    let tx = mx + 12;
+    if (tx + 175 > rect.width) tx = mx - 187;
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top = '16px';
+    tooltip.style.display = 'block';
+  }
+  wrap.onmousemove = onMove;
+  wrap.onmouseleave = () => { tooltip.style.display='none'; cursor.style.display='none'; };
+}
+
+
+
+function renderChart() {
+  // Update period info for realtime
+  if (CURRENT_PERIOD === 'realtime') {
+    const cnt = DataStore.getAll().length;
+    document.getElementById('periodDataCount').textContent = cnt > 0 ? `${cnt} บันทึกใน DB` : '';
+    document.getElementById('periodInfoText').textContent = '⚡ กำลังแสดงข้อมูลเรียลไทม์ · อัปเดตอัตโนมัติ';
+    document.getElementById('periodChips').innerHTML = '';
+    renderRealtimeChart();
+    return;
+  }
+  if (CURRENT_PERIOD === 'today') {
+    const rr = DataStore.getToday();
+    const groups = DataStore.groupByHour(rr);
+    const labels = Array.from({length:24}, (_,i) => i + ':00');
+    renderCandleChart(groups, labels, 'today');
+  } else if (CURRENT_PERIOD === 'month') {
+    const rr = DataStore.getMonth();
+    const groups = DataStore.groupByDay(rr);
+    const labels = Array.from({length:groups.length}, (_,i) => String(i+1));
+    renderCandleChart(groups, labels, 'month');
+  } else if (CURRENT_PERIOD === 'year') {
+    const rr = DataStore.getYear();
+    const groups = DataStore.groupByMonth(rr);
+    renderCandleChart(groups, TH_MONTHS, 'year');
+  }
+}
+
+/* ── REALTIME STOCK-STYLE LINE CHART ── */
+function renderRealtimeChart() {
+  const svgEl = document.getElementById('chartSvg');
+  const wrap  = document.getElementById('chartWrap');
+  const W = wrap.clientWidth || 800;
+  const H = 320;
+  const PAD = { t:24, r:62, b:42, l:14 };
+  const cW = W - PAD.l - PAD.r;
+  const cH = H - PAD.t - PAD.b;
+
+  const activeKeys = Object.keys(CHART_METRICS).filter(k => CONFIG.chart[k] && STATE.h[k].length >= 2);
+  if (activeKeys.length === 0) {
+    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.25)" font-family="Sarabun,sans-serif">เลือกข้อมูลที่ต้องการแสดง</text>`;
+    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    return;
+  }
+
+  const n = Math.max(...activeKeys.map(k => STATE.h[k].length));
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)';
+  const textColor  = isDark ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.35)';
+  const bgColor    = isDark ? '#0d1117' : '#f8fafc';
+  const borderC    = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+
+  // X layout actual vs prediction
+  const actualW = CONFIG.forecastEnabled ? cW * 0.82 : cW;
+  const forecastW = cW - actualW;
+
+  const pk = activeKeys[0];
+  const pm = CHART_METRICS[pk];
+  const pdata = STATE.h[pk];
+
+  // Pre-calculate predictions if enabled
+  const forecastSteps = 5;
+  const predictions = {};
+  if (CONFIG.forecastEnabled) {
+    activeKeys.forEach(k => {
+      predictions[k] = Forecast.predict(STATE.h[k], forecastSteps);
+    });
+  }
+
+  // Y scale range
+  const allValsForPrimary = [...pdata];
+  if (CONFIG.forecastEnabled && predictions[pk]) allValsForPrimary.push(...predictions[pk]);
+
+  const pHi = Math.max(...allValsForPrimary);
+  const pLo = Math.min(...allValsForPrimary);
+  const pSpread = pHi - pLo || 1;
+  const yMax = pHi + pSpread * 0.15;
+  const yMin = Math.max(0, pLo - pSpread * 0.10);
+  const yRange = yMax - yMin;
+  const toY = (v, mi, ma) => PAD.t + (1 - Math.max(0, Math.min(1, (v - mi) / (ma - mi)))) * cH;
+
+  let svg = `<defs>`;
+  activeKeys.forEach(k => {
+    const mc = CHART_METRICS[k].color;
+    svg += `<linearGradient id="sg_${k}" x1="0" y1="0" x2="0" y2="1">`
+         + `<stop offset="0%" stop-color="${mc}" stop-opacity="0.3"/>`
+         + `<stop offset="85%" stop-color="${mc}" stop-opacity="0.02"/>`
+         + `<stop offset="100%" stop-color="${mc}" stop-opacity="0"/>`
+         + `</linearGradient>`;
+  });
+  svg += `<clipPath id="chartClip"><rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}"/></clipPath>`;
+  svg += `</defs>`;
+  
+  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="${bgColor}"/>`;
+  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${actualW}" height="${cH}" fill="url(#sg_${pk})" opacity="0.5"/>`;
+
+  // Draw forecast background area
+  if (CONFIG.forecastEnabled) {
+    svg += `<rect x="${PAD.l + actualW}" y="${PAD.t}" width="${forecastW}" height="${cH}" fill="${pm.color}" fill-opacity="0.02"/>`;
+  }
+
+  // Horizontal grid lines
+  const gLines = 5;
+  for (let i = 0; i <= gLines; i++) {
+    const val = yMin + yRange * (1 - i/gLines);
+    const y   = PAD.t + (i/gLines) * cH;
+    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridColor}" stroke-width="1"/>`;
+    svg += `<text x="${W-PAD.r+30}" y="${y+4}" text-anchor="middle" font-size="9" fill="${textColor}" font-family="Inter,sans-serif">${val.toFixed(1)}</text>`;
+  }
+
+  // X labels (time)
+  const step = Math.max(1, Math.floor(n/6));
+  for (let i = 0; i < n; i += step) {
+    const x = PAD.l + (i / (n-1)) * actualW;
+    const t = STATE.h.time[i] || '';
+    svg += `<text x="${x}" y="${H-6}" text-anchor="middle" font-size="9" fill="${textColor}" font-family="Inter,sans-serif">${t.slice(-5)}</text>`;
+  }
+
+  // X labels (forecast relative time)
+  if (CONFIG.forecastEnabled) {
+    // Divider
+    svg += `<line x1="${PAD.l + actualW}" y1="${PAD.t}" x2="${PAD.l + actualW}" y2="${PAD.t + cH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>`;
+    svg += `<text x="${PAD.l + actualW + 6}" y="${PAD.t + 14}" font-size="9" fill="var(--accent)" font-weight="700" font-family="Sarabun,sans-serif">🔮 คาดการณ์</text>`;
+
+    for (let j = 1; j <= forecastSteps; j++) {
+      const x = PAD.l + actualW + (j / forecastSteps) * forecastW;
+      svg += `<text x="${x}" y="${H-6}" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700" font-family="Inter,sans-serif">${formatRelativeTime(j)}</text>`;
+    }
+  }
+
+  // Lines + fills (clipped)
+  svg += `<g clip-path="url(#chartClip)">`;
+  activeKeys.forEach((k, ki) => {
+    const mc = CHART_METRICS[k];
+    const d  = STATE.h[k];
+    if (d.length < 2) return;
+    const mi2 = mc.min, ma2 = mc.max;
+
+    // Actual path points
+    const pts = d.map((v, i) => ({
+      x: PAD.l + (i / (d.length-1)) * actualW,
+      y: toY(v, mi2, ma2),
+      v
+    }));
+
+    const linePath = catmullPath(pts);
+    const last  = pts[pts.length-1];
+    const first = pts[0];
+    const fillPath = linePath + ` L${last.x},${PAD.t+cH} L${first.x},${PAD.t+cH} Z`;
+
+    if (ki === 0) {
+      svg += `<path d="${fillPath}" fill="url(#sg_${k})" stroke="none"/>`;
+    }
+    // Line glow + main line
+    svg += `<path d="${linePath}" fill="none" stroke="${mc.color}" stroke-width="4" stroke-linecap="round" opacity="0.15"/>`;
+    svg += `<path d="${linePath}" fill="none" stroke="${mc.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    // Forecast line
+    if (CONFIG.forecastEnabled && predictions[k]) {
+      const predPts = predictions[k].map((v, idx) => ({
+        x: PAD.l + actualW + ((idx + 1) / forecastSteps) * forecastW,
+        y: toY(v, mi2, ma2),
+        v
+      }));
+
+      // Connect last actual point to forecast points
+      let predD = `M${last.x},${last.y}`;
+      predPts.forEach(p => { predD += ` L${p.x},${p.y}`; });
+
+      svg += `<path d="${predD}" fill="none" stroke="${mc.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.9"/>`;
+      
+      // Connection glow
+      svg += `<path d="${predD}" fill="none" stroke="${mc.color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="5,4" opacity="0.1"/>`;
+
+      // End forecast point indicator
+      const endP = predPts[predPts.length - 1];
+      svg += `<circle cx="${endP.x}" cy="${endP.y}" r="4" fill="${mc.color}" stroke="${bgColor}" stroke-width="1.5"/>`;
+    }
+
+    // Last-value horizontal dashed line
+    svg += `<line x1="${PAD.l}" y1="${last.y}" x2="${W-PAD.r}" y2="${last.y}" stroke="${mc.color}" stroke-width="1" stroke-dasharray="5,4" opacity="0.45"/>`;
+
+    // Animated last-point
+    svg += `<circle cx="${last.x}" cy="${last.y}" r="14" fill="${mc.color}" fill-opacity="0.08"/>`;
+    svg += `<circle cx="${last.x}" cy="${last.y}" r="5" fill="${mc.color}" stroke="${bgColor}" stroke-width="2.5"/>`;
+
+    // Right Y-axis callout
+    const lastValForLabel = CONFIG.forecastEnabled && predictions[k] ? predictions[k][forecastSteps - 1] : last.v;
+    const labelY = CONFIG.forecastEnabled && predictions[k] ? toY(lastValForLabel, mi2, ma2) : last.y;
+    svg += `<rect x="${W-PAD.r+2}" y="${labelY-9}" width="${PAD.r-4}" height="18" fill="${mc.color}" rx="3"/>`;
+    svg += `<text x="${W-PAD.r/2}" y="${labelY+4}" text-anchor="middle" font-size="9" font-weight="700" fill="#000" font-family="Inter,sans-serif">${lastValForLabel.toFixed(1)}</text>`;
+  });
+  svg += `</g>`;
+
+  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}" fill="none" stroke="${borderC}" stroke-width="1"/>`;
+
+  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('height', H);
+  svgEl.innerHTML = svg;
+
+  initStockCrosshair(wrap, W, H, PAD, n, activeKeys, actualW, forecastW, forecastSteps, predictions, toY);
+}
+
+function initStockCrosshair(wrap, W, H, PAD, n, activeKeys, actualW, forecastW, forecastSteps, predictions, toY) {
+  const tooltip = document.getElementById('chartTooltip');
+  const cursor  = document.getElementById('chartCursor');
+  const cW = W - PAD.l - PAD.r;
+  const cH = H - PAD.t - PAD.b;
+  const svgEl = document.getElementById('chartSvg');
+  const totalSnapSteps = CONFIG.forecastEnabled ? n + forecastSteps : n;
+
+  function onMove(e) {
+    const rect = wrap.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const scaleX = rect.width / W;
+    const scaleY = rect.height / H;
+    const svgMx = mx / scaleX;
+    const svgMy = my / scaleY;
+
+    if (svgMx < PAD.l || svgMx > W-PAD.r || svgMy < PAD.t || svgMy > PAD.t+cH || n < 2) {
+      tooltip.style.display='none'; cursor.style.display='none';
+      const ov = svgEl.querySelector('#crosshairOverlay');
+      if (ov) ov.remove();
+      return;
+    }
+
+    let ci = 0;
+    let snapX = 0;
+    let isForecast = false;
+    let forecastIdx = 0;
+
+    if (svgMx <= PAD.l + actualW) {
+      const t = (svgMx - PAD.l) / actualW;
+      const idx = Math.round(t * (n-1));
+      ci = Math.max(0, Math.min(idx, n-1));
+      snapX = PAD.l + (ci / (n-1)) * actualW;
+    } else {
+      const t = (svgMx - PAD.l - actualW) / forecastW;
+      forecastIdx = Math.max(1, Math.min(Math.round(t * forecastSteps), forecastSteps));
+      ci = n - 1 + forecastIdx;
+      isForecast = true;
+      snapX = PAD.l + actualW + (forecastIdx / forecastSteps) * forecastW;
+    }
+
+    const snapXpx = snapX * scaleX;
+
+    // Get Y coordinates for primary metric
+    const pk = activeKeys[0];
+    const pm2 = CHART_METRICS[pk];
+    const pv = isForecast ? predictions[pk][forecastIdx - 1] : STATE.h[pk][ci];
+    const snapY = toY(pv, pm2.min, pm2.max);
+    const snapYpx = snapY * scaleY;
+
+    let ov = svgEl.querySelector('#crosshairOverlay');
+    if (!ov) { ov = document.createElementNS('http://www.w3.org/2000/svg','g'); ov.id='crosshairOverlay'; svgEl.appendChild(ov); }
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    const xhColor = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)';
+    
+    ov.innerHTML =
+      `<line id="xhV" x1="${snapX}" y1="${PAD.t}" x2="${snapX}" y2="${PAD.t+cH}" stroke="${xhColor}" stroke-width="1" stroke-dasharray="4,3"/>`
+    + `<line id="xhH" x1="${PAD.l}" y1="${snapY}" x2="${W-PAD.r}" y2="${snapY}" stroke="${xhColor}" stroke-width="1" stroke-dasharray="4,3"/>`
+    + `<circle cx="${snapX}" cy="${snapY}" r="4" fill="${pm2.color}" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/>`;
+
+    // Tooltip content
+    const time = isForecast ? `พยากรณ์ (${formatRelativeTime(forecastIdx)})` : (STATE.h.time[ci] || '--');
+    let html = `<div class="tt-time">🕐 ${time}</div>`;
+    
+    activeKeys.forEach(k => {
+      const mc = CHART_METRICS[k];
+      const v  = isForecast ? predictions[k][forecastIdx - 1] : STATE.h[k][ci];
+      const unit = k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
+      
+      let arrow = '';
+      if (!isForecast) {
+        const prev = STATE.h[k][Math.max(0, ci-1)];
+        arrow = v > prev ? ' <span style="color:#22c55e">▲</span>' : v < prev ? ' <span style="color:#ef4444">▼</span>' : '';
+      } else {
+        const prevVal = forecastIdx === 1 ? STATE.h[k][n-1] : predictions[k][forecastIdx - 2];
+        arrow = v > prevVal ? ' <span style="color:#22c55e">▲</span>' : v < prevVal ? ' <span style="color:#ef4444">▼</span>' : '';
+      }
+      
+      const forecastTag = isForecast ? ' <span style="color:var(--accent);font-size:9px">[คาดการณ์]</span>' : '';
+      html += `<div class="tt-row">
+        <span class="tt-label"><span class="tt-dot" style="background:${mc.color}"></span>${mc.label}${forecastTag}</span>
+        <span class="tt-val">${v !== undefined ? v.toFixed(1) : '--'} ${unit}${arrow}</span>
+      </div>`;
+    });
+    tooltip.innerHTML = html;
+
+    cursor.style.left = snapXpx + 'px';
+    cursor.style.display = 'block';
+    
+    let tx = mx + 14;
+    if (tx + 155 > rect.width) tx = mx - 167;
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top  = Math.max(8, snapYpx - 30) + 'px';
+    tooltip.style.display = 'block';
+  }
+
+  wrap.onmousemove = onMove;
+  wrap.onmouseleave = () => {
+    tooltip.style.display='none';
+    cursor.style.display='none';
+    const ov = svgEl.querySelector('#crosshairOverlay');
+    if (ov) ov.remove();
+  };
+}
+
+
+
+function toggleChart(key, btn) {
+  CONFIG.chart[key] = !CONFIG.chart[key];
+  btn.classList.toggle('active', CONFIG.chart[key]);
+  saveConfig(); renderChart();
+}
+
+function clearHistoryData() {
+  if (!confirm('ลบข้อมูลประวัติทั้งหมดออกจาก localStorage?')) return;
+  DataStore.clearAll();
+  alert('ลบข้อมูลเรียบร้อยแล้ว');
+  renderChart();
+}
+
+/* ============================================================
+   COUNTDOWN RING
+   ============================================================ */
+function startCountdown(total) {
+  clearInterval(STATE.cTimer);
+  STATE.countdown = Math.floor(total/1000);
+  const prog = document.getElementById('cProg');
+  const cNum = document.getElementById('cNum');
+  const circ = 100;
+
+  prog.style.strokeDashoffset = 0;
+  cNum.textContent = STATE.countdown;
+
+  STATE.cTimer = setInterval(() => {
+    STATE.countdown--;
+    if (STATE.countdown < 0) STATE.countdown = Math.floor(total/1000);
+    const used = (Math.floor(total/1000) - STATE.countdown) / Math.floor(total/1000);
+    prog.style.strokeDashoffset = used * circ;
+    cNum.textContent = Math.max(0, STATE.countdown);
+  }, 1000);
+}
+
+/* ============================================================
+   FETCH
+   ============================================================ */
+async function fetchData() {
+  const spin = document.querySelector('.spin-icon');
+  if (spin) spin.style.animationPlayState = 'running';
+  try {
+    const res = await fetch(API_URL);
+    const data = await res.json();
+    if (data && !data.error) { DataStore.add(data); updateDashboard(data); }
+  } catch (e) {
+    STATE.errCount++;
+    document.getElementById('statusDot').className = 'status-dot err';
+    document.getElementById('statusLabel').textContent = `ไม่มีสัญญาณ (${STATE.errCount})`;
+    if (STATE.errCount >= 3) document.getElementById('errsBadge').classList.add('show');
+    console.warn('Fetch error:', e);
+  }
+  startCountdown(CONFIG.refreshInterval);
+  if (spin) { spin.style.animationPlayState='paused'; setTimeout(()=>spin.style.animationPlayState='running',200); }
+}
+
+/* ============================================================
+   SETTINGS FUNCTIONS
+   ============================================================ */
+function openSettings()  { document.getElementById('settingsSidebar').classList.add('open'); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settingsSidebar').classList.remove('open'); document.getElementById('settingsOverlay').classList.remove('open'); }
+
+function applyTheme(t, btn) {
+  CONFIG.theme = t;
+  const html = document.documentElement;
+  if (t === 'auto') {
+    html.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } else {
+    html.setAttribute('data-theme', t);
+  }
+  document.querySelectorAll('.seg-ctrl .seg-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  saveConfig();
+  setTimeout(renderChart, 100); // re-render chart for new theme colors
+}
+
+function applyAccent(a, btn) {
+  CONFIG.accent = a;
+  document.documentElement.setAttribute('data-accent', a);
+  document.querySelectorAll('.c-dot').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  saveConfig();
+}
+
+function applyRefreshInterval(v) {
+  CONFIG.refreshInterval = +v;
+  document.getElementById('heroInterval').textContent = `ทุก ${+v >= 60000 ? '1 นาที' : (+v/1000) + ' วินาที'}`;
+  clearInterval(STATE.refreshTimer);
+  STATE.refreshTimer = setInterval(fetchData, CONFIG.refreshInterval);
+  startCountdown(CONFIG.refreshInterval);
+  saveConfig();
+}
+
+function applySchoolName() {
+  const v = document.getElementById('schoolNameIn').value;
+  CONFIG.schoolName = v;
+  document.getElementById('navSchoolName').textContent = v;
+  document.title = `UV Monitor | ${v}`;
+  saveConfig();
+}
+function applySchoolSub() {
+  const v = document.getElementById('schoolSubIn').value;
+  CONFIG.schoolSubtitle = v;
+  document.getElementById('navSubtitle').textContent = v;
+  saveConfig();
+}
+
+function resetSession() {
+  if (!confirm('ล้างข้อมูล Session ทั้งหมด?')) return;
+  STATE.h = { uv:[], pm:[], temp:[], hum:[], time:[] };
+  STATE.stats = { uv:{min:Infinity,max:-Infinity,sum:0,n:0}, pm:{min:Infinity,max:-Infinity,sum:0,n:0}, temp:{min:Infinity,max:-Infinity,sum:0,n:0}, hum:{min:Infinity,max:-Infinity,sum:0,n:0} };
+  STATE.count = 0; STATE.sessionStart = new Date();
+  renderStats(); renderChart();
+  closeSettings();
+}
+
+/* ============================================================
+   EXPORT CSV
+   ============================================================ */
+function exportCSV() {
+  const h = STATE.h;
+  if (h.time.length === 0) { alert('ยังไม่มีข้อมูลที่จะส่งออก'); return; }
+  let csv = 'เวลา,UV Index,PM2.5 (µg/m³),อุณหภูมิ (°C),ความชื้น (%)\n';
+  h.time.forEach((t,i) => {
+    csv += `${t},${h.uv[i]||''},${h.pm[i]||''},${h.temp[i]||''},${h.hum[i]||''}\n`;
+  });
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=`uv_data_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+function exportAllCSV() {
+  const all = DataStore.getAll();
+  if (all.length === 0) { alert('ยังไม่มีข้อมูลประวัติใน Database'); return; }
+  let csv = 'Timestamp,วันที่,เวลา,UV Index,PM2.5 (µg/m³),อุณหภูมิ (°C),ความชื้น (%)\n';
+  all.forEach(r => {
+    const d = new Date(r.t);
+    const date = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()+543}`;
+    const time = d.toTimeString().slice(0,8);
+    csv += `${r.t},${date},${time},${r.uv},${r.pm},${r.temp},${r.hum}\n`;
+  });
+  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=`uv_history_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   FULLSCREEN
+   ============================================================ */
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(()=>{});
+    document.getElementById('fsBtn').textContent = '⊡';
+  } else {
+    document.exitFullscreen();
+    document.getElementById('fsBtn').textContent = '⛶';
+  }
+}
+document.addEventListener('fullscreenchange', () => {
+  document.getElementById('fsBtn').textContent = document.fullscreenElement ? '⊡' : '⛶';
+});
+window.addEventListener('keydown', e => { if (e.key==='f'||e.key==='F') toggleFullscreen(); });
+
+/* ============================================================
+   APPLY CONFIG ON LOAD
+   ============================================================ */
+function applyConfigToUI() {
+  // Theme
+  const html = document.documentElement;
+  if (CONFIG.theme === 'auto') {
+    html.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  } else {
+    html.setAttribute('data-theme', CONFIG.theme);
+  }
+  html.setAttribute('data-accent', CONFIG.accent);
+
+  // Accent dots
+  document.querySelectorAll('.c-dot').forEach(b => b.classList.toggle('active', b.classList.contains(CONFIG.accent)));
+
+  // Theme seg buttons
+  const themeLabels = {dark:'🌙 มืด', light:'☀️ สว่าง', auto:'🖥️ อัตโนมัติ'};
+  document.querySelectorAll('.seg-ctrl .seg-btn').forEach(b => {
+    const matches = b.textContent.trim() === themeLabels[CONFIG.theme];
+    b.classList.toggle('active', matches);
+  });
+
+  // Refresh
+  document.getElementById('refreshSel').value = CONFIG.refreshInterval;
+  document.getElementById('histSel').value = CONFIG.historyMax;
+  document.getElementById('heroInterval').textContent = `ทุก ${CONFIG.refreshInterval >= 60000 ? '1 นาที' : CONFIG.refreshInterval/1000 + ' วินาที'}`;
+
+  // Alerts
+  document.getElementById('alertMaster').checked = CONFIG.alertsEnabled;
+  document.getElementById('animToggle').checked   = CONFIG.animations;
+  document.getElementById('forecastToggle').checked = CONFIG.forecastEnabled;
+  document.getElementById('uvAlertOn').checked   = CONFIG.alerts.uv.enabled;
+  document.getElementById('pmAlertOn').checked   = CONFIG.alerts.pm.enabled;
+  document.getElementById('tempAlertOn').checked = CONFIG.alerts.temp.enabled;
+  document.getElementById('humAlertOn').checked  = CONFIG.alerts.hum.enabled;
+  document.getElementById('uvThresh').value   = CONFIG.alerts.uv.threshold;
+  document.getElementById('pmThresh').value   = CONFIG.alerts.pm.threshold;
+  document.getElementById('tempThresh').value = CONFIG.alerts.temp.threshold;
+  document.getElementById('humThresh').value  = CONFIG.alerts.hum.threshold;
+
+  // School (Fixed for school only)
+  document.getElementById('navSchoolName').textContent = "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก";
+  document.getElementById('navSubtitle').textContent   = "PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม";
+
+  // Chart toggles
+  Object.keys(CONFIG.chart).forEach(k => {
+    const btn = document.getElementById('ct' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (btn) btn.classList.toggle('active', CONFIG.chart[k]);
+  });
+
+  // Forecast button initialization
+  const fcBtn = document.getElementById('pBtn-fc');
+  if (fcBtn) {
+    if (CONFIG.forecastEnabled) {
+      fcBtn.style.borderColor = 'var(--accent)';
+      fcBtn.style.color = '#000';
+      fcBtn.style.backgroundColor = 'var(--accent)';
+      fcBtn.textContent = '🔮 พยากรณ์อนาคต: เปิด';
+    } else {
+      fcBtn.style.borderColor = 'var(--border)';
+      fcBtn.style.color = 'var(--text-1)';
+      fcBtn.style.backgroundColor = 'var(--bg-secondary)';
+      fcBtn.textContent = '🔮 พยากรณ์อนาคต: ปิด';
+    }
+  }
+
+  // Skin tone display
+  updateSkinDisplay();
+  if (!CONFIG.skinType) {
+    setTimeout(showSkinModal, 800);
+  }
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadConfig();
+applyConfigToUI();
+fetchData();
+STATE.refreshTimer = setInterval(fetchData, CONFIG.refreshInterval);
+startCountdown(CONFIG.refreshInterval);
+
+// Re-render chart on resize
+let resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer=setTimeout(renderChart,150); });
+
+// System theme change
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (CONFIG.theme === 'auto') document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+});
+</script>
+</body>
+</html>
