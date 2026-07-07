@@ -61,8 +61,8 @@ body.kiosk-mode main{padding:20px}
   display:none;position:fixed;inset:0;z-index:500;
   background:var(--bg-primary);overflow-y:auto;padding:40px;
 }
-body.kiosk-mode .kiosk-overlay{display:flex;flex-direction:column;gap:40px;align-items:center;justify-content:center;min-height:100vh}
-.kiosk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;width:100%;max-width:1100px}
+body.kiosk-mode .kiosk-overlay{display:flex;flex-direction:column;gap:32px;align-items:center;justify-content:flex-start;min-height:100vh;padding:60px 40px}
+.kiosk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;width:100%;max-width:1100px;flex-shrink:0}
 .kiosk-card{
   background:var(--bg-card);border:2px solid var(--border);border-radius:var(--r-xl);
   padding:48px 40px;display:flex;flex-direction:column;align-items:center;gap:12px;
@@ -75,11 +75,11 @@ body.kiosk-mode .kiosk-overlay{display:flex;flex-direction:column;gap:40px;align
 .kiosk-val{font-size:clamp(80px,12vw,140px);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;transition:color .5s}
 .kiosk-unit{font-size:24px;font-weight:500;color:var(--text-2)}
 .kiosk-status-badge{padding:8px 28px;border-radius:20px;font-size:18px;font-weight:700;color:#000;margin-top:8px}
-.kiosk-header{text-align:center;width:100%;max-width:1100px}
+.kiosk-header{text-align:center;width:100%;max-width:1100px;flex-shrink:0}
 .kiosk-header h1{font-size:clamp(22px,3vw,36px);font-weight:800;color:var(--text-1)}
 .kiosk-header p{font-size:16px;color:var(--text-2);margin-top:6px}
 .kiosk-clock{font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums;margin-top:8px}
-.kiosk-flag{width:100%;max-width:1100px}
+.kiosk-flag{width:100%;max-width:1100px;flex-shrink:0}
 .kiosk-exit-btn{
   position:fixed;top:20px;right:20px;z-index:600;
   padding:10px 20px;border-radius:12px;background:var(--bg-card);
@@ -564,6 +564,11 @@ footer{background:var(--bg-card);border:1px solid var(--border);border-radius:va
       <div class="flag-desc" id="kioskFlagDesc">นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ</div>
     </div>
   </div>
+  <div style="font-size:12px; color:var(--text-3); text-align:center; margin-top:20px; width:100%; max-width:1100px; display:flex; justify-content:center; gap:24px; flex-wrap:wrap; flex-shrink:0">
+    <span>📊 แหล่งอ้างอิงเกณฑ์: WHO & กรมควบคุมมลพิษ</span>
+    <span>🗺️ แผนที่ลมและฝุ่น: Windy.com</span>
+    <span>📡 สถานีตรวจวัดสภาพแวดล้อม PCSHS Phitsanulok</span>
+  </div>
 </div>
 
 <!-- SKIN MODAL -->
@@ -1045,6 +1050,33 @@ footer{background:var(--bg-card);border:1px solid var(--border);border-radius:va
       <div class="info-card"><h4>🌡️ อุณหภูมิที่เหมาะสม</h4><p>22–26°C สบายที่สุด · &gt;32°C ควรลดกิจกรรมกลางแจ้ง · &gt;37°C เสี่ยง Heat Stroke</p></div>
       <div class="info-card"><h4>🥵 Heat Index คืออะไร?</h4><p>ดัชนีความร้อน คำนวณจากอุณหภูมิ + ความชื้น บ่งบอกว่าร่างกายรู้สึกร้อนเท่าใด อาจสูงกว่าอุณหภูมิจริงหลายองศา</p></div>
       <div class="info-card"><h4>💦 ป้องกัน Heat Stroke</h4><p>ดื่มน้ำ 250ml ทุก 30 นาที · หลีกเลี่ยงแสงแดดตรง · สวมเสื้อสีอ่อน · หยุดพักในที่ร่มทันทีที่รู้สึกเวียนหัว</p></div>
+    </div>
+  </section>
+
+  <!-- CREDITS & SOURCES -->
+  <section class="credits-section" style="opacity: 0.85; margin-bottom: -10px;">
+    <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-lg); padding:20px 24px; font-size:12px; color:var(--text-2); line-height:1.7">
+      <div style="font-weight:700; color:var(--text-1); margin-bottom:8px; display:flex; align-items:center; gap:6px">
+        ℹ️ แหล่งอ้างอิงข้อมูลและเครดิตระบบ (Data Sources & Credits)
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px">
+        <div>
+          <strong>☀️ เกณฑ์ดัชนีรังสี UV</strong><br>
+          อ้างอิงตามมาตรฐานขององค์การอนามัยโลก (WHO) และกรมอุตุนิยมวิทยา
+        </div>
+        <div>
+          <strong>🌫️ เกณฑ์คุณภาพอากาศ PM2.5</strong><br>
+          อ้างอิงตามเกณฑ์ดัชนีคุณภาพอากาศของกรมควบคุมมลพิษ (PCD) ประเทศไทย
+        </div>
+        <div>
+          <strong>🗺️ แผนที่สภาพภูมิอากาศ</strong><br>
+          แผนที่ลม เรดาร์น้ำฝน และฝุ่นละออง สนับสนุนโดยบริการของ <a href="https://www.windy.com" target="_blank" style="color:var(--accent); text-decoration:underline">Windy.com</a>
+        </div>
+        <div>
+          <strong>📡 ระบบโครงสร้างพื้นฐาน</strong><br>
+          พัฒนาโดยทีมโครงงานคอมพิวเตอร์ โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก
+        </div>
+      </div>
     </div>
   </section>
 
