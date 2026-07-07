@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="pageTitle">UV Monitor | โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</title>
   <meta name="description" content="ระบบตรวจวัดสภาพแวดล้อม UV PM2.5 อุณหภูมิ ความชื้น โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก">
+  <meta name="theme-color" content="#0d1117">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,7 +19,6 @@
   --text-1:#e6edf3; --text-2:#8b949e; --text-3:#484f58;
   --shadow-sm:0 1px 3px rgba(0,0,0,0.5); --shadow-md:0 4px 20px rgba(0,0,0,0.6); --shadow-lg:0 8px 40px rgba(0,0,0,0.7);
   --r-sm:10px; --r-md:16px; --r-lg:24px; --r-xl:32px;
-  /* accent */
   --accent:#f59e0b; --accent-s:rgba(245,158,11,0.12); --accent-g:rgba(245,158,11,0.25);
 }
 [data-accent="sky"]    { --accent:#38bdf8; --accent-s:rgba(56,189,248,0.12);  --accent-g:rgba(56,189,248,0.25); }
@@ -53,6 +53,42 @@ a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
 
 /* =========================================================
+   KIOSK MODE
+   ========================================================= */
+body.kiosk-mode nav,body.kiosk-mode .alert-bar,body.kiosk-mode #skinOverlay{display:none}
+body.kiosk-mode main{padding:20px}
+.kiosk-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:var(--bg-primary);overflow-y:auto;padding:40px;
+}
+body.kiosk-mode .kiosk-overlay{display:flex;flex-direction:column;gap:40px;align-items:center;justify-content:center;min-height:100vh}
+.kiosk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;width:100%;max-width:1100px}
+.kiosk-card{
+  background:var(--bg-card);border:2px solid var(--border);border-radius:var(--r-xl);
+  padding:48px 40px;display:flex;flex-direction:column;align-items:center;gap:12px;
+  box-shadow:var(--shadow-lg);position:relative;overflow:hidden;transition:border-color .4s;
+}
+.kiosk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;border-radius:var(--r-xl) var(--r-xl) 0 0;background:var(--kc-color,#38bdf8)}
+.kiosk-card.kc-uv{--kc-color:#f59e0b}.kiosk-card.kc-pm{--kc-color:#a78bfa}.kiosk-card.kc-temp{--kc-color:#fb7185}.kiosk-card.kc-hum{--kc-color:#34d399}
+.kiosk-icon{font-size:52px}
+.kiosk-label{font-size:18px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.kiosk-val{font-size:clamp(80px,12vw,140px);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;transition:color .5s}
+.kiosk-unit{font-size:24px;font-weight:500;color:var(--text-2)}
+.kiosk-status-badge{padding:8px 28px;border-radius:20px;font-size:18px;font-weight:700;color:#000;margin-top:8px}
+.kiosk-header{text-align:center;width:100%;max-width:1100px}
+.kiosk-header h1{font-size:clamp(22px,3vw,36px);font-weight:800;color:var(--text-1)}
+.kiosk-header p{font-size:16px;color:var(--text-2);margin-top:6px}
+.kiosk-clock{font-size:clamp(28px,4vw,52px);font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums;margin-top:8px}
+.kiosk-flag{width:100%;max-width:1100px}
+.kiosk-exit-btn{
+  position:fixed;top:20px;right:20px;z-index:600;
+  padding:10px 20px;border-radius:12px;background:var(--bg-card);
+  border:1px solid var(--border);color:var(--text-1);font-size:14px;
+  font-weight:700;font-family:inherit;transition:all .2s;box-shadow:var(--shadow-md);
+}
+.kiosk-exit-btn:hover{background:var(--bg-card-h);border-color:var(--border-h)}
+
+/* =========================================================
    NAVBAR
    ========================================================= */
 nav{
@@ -75,17 +111,9 @@ nav{
   transition:all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   padding:3px; overflow:hidden;
 }
-.nav-logo img{
-  width:100%; height:100%; object-fit:contain;
-  transition:transform 0.3s ease;
-}
-.nav-logo:hover{
-  transform:scale(1.08) rotate(5deg);
-  box-shadow:0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px var(--accent-g);
-}
-.nav-logo:hover img{
-  transform:scale(1.12);
-}
+.nav-logo img{width:100%;height:100%;object-fit:contain;transition:transform 0.3s ease}
+.nav-logo:hover{transform:scale(1.08) rotate(5deg);box-shadow:0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px var(--accent-g)}
+.nav-logo:hover img{transform:scale(1.12)}
 .nav-text h1{font-size:13px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px}
 .nav-text p{font-size:10px;color:var(--text-2);letter-spacing:.05em;white-space:nowrap}
 .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
@@ -99,15 +127,19 @@ nav{
 .notif-badge{
   position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;
   background:#ef4444;border-radius:8px;border:2px solid var(--bg-primary);
-  font-size:9px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;
-  padding:0 3px; display:none;
+  font-size:9px;font-weight:700;color:#fff;display:none;align-items:center;justify-content:center;
+  padding:0 3px;
 }
+.notif-badge.show{display:flex}
 .status-row{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--bg-secondary);border:1px solid var(--border)}
 .status-dot{width:8px;height:8px;border-radius:50%;background:#34d399;animation:pulseDot 2s infinite}
 .status-dot.err{background:#fb7185;animation:none}
-.status-dot.warn{background:#f59e0b}
+.status-dot.warn{background:#f59e0b;animation:pulseDotWarn 1.5s infinite}
+.status-dot.loading{background:#a78bfa;animation:pulseDotPurple 1s infinite}
 .status-label{font-size:11px;font-weight:500;color:var(--text-2)}
 @keyframes pulseDot{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.4)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+@keyframes pulseDotWarn{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.4)}50%{box-shadow:0 0 0 5px rgba(245,158,11,0)}}
+@keyframes pulseDotPurple{0%,100%{box-shadow:0 0 0 0 rgba(167,139,250,.4)}50%{box-shadow:0 0 0 5px rgba(167,139,250,0)}}
 
 /* =========================================================
    ALERT BANNER
@@ -119,10 +151,7 @@ nav{
   display:flex; flex-direction:column; gap:2px;
 }
 .alert-bar.visible{transform:translateY(0);opacity:1;pointer-events:auto}
-.alert-item{
-  display:flex;align-items:center;gap:12px;padding:10px 24px;
-  font-size:13px;font-weight:600;
-}
+.alert-item{display:flex;align-items:center;gap:12px;padding:10px 24px;font-size:13px;font-weight:600}
 .alert-item.lv-high{background:linear-gradient(90deg,#9333ea22,#9333ea11);border-bottom:1px solid #9333ea44;color:#c084fc}
 .alert-item.lv-danger{background:linear-gradient(90deg,#ef444422,#ef444411);border-bottom:1px solid #ef444444;color:#fca5a5}
 .alert-item.lv-warn{background:linear-gradient(90deg,#f5780022,#f5780011);border-bottom:1px solid #f5780044;color:#fdba74}
@@ -135,10 +164,7 @@ nav{
 /* =========================================================
    SETTINGS OVERLAY + SIDEBAR
    ========================================================= */
-.settings-overlay{
-  position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5);
-  opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);
-}
+.settings-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
 .settings-overlay.open{opacity:1;pointer-events:auto}
 .settings-sidebar{
   position:fixed;top:0;right:0;bottom:0;z-index:301;
@@ -149,16 +175,9 @@ nav{
   box-shadow:var(--shadow-lg);
 }
 .settings-sidebar.open{transform:translateX(0)}
-.settings-hdr{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0;
-}
+.settings-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
 .settings-hdr h2{font-size:16px;font-weight:700;color:var(--text-1)}
-.settings-close{
-  width:32px;height:32px;border-radius:8px;background:var(--bg-card);
-  border:1px solid var(--border);color:var(--text-2);font-size:18px;line-height:1;
-  display:flex;align-items:center;justify-content:center;transition:all .2s;
-}
+.settings-close{width:32px;height:32px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-2);font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .settings-close:hover{background:var(--bg-card-h);color:var(--text-1)}
 .settings-body{flex:1;overflow-y:auto;padding:12px 0}
 .settings-body::-webkit-scrollbar{width:4px}
@@ -171,141 +190,133 @@ nav{
 .s-row:last-child{margin-bottom:0}
 .s-row.col{flex-direction:column;align-items:flex-start}
 .s-label{font-size:13px;color:var(--text-2);font-weight:500;flex-shrink:0}
-/* Segment Control */
 .seg-ctrl{display:flex;background:var(--bg-primary);border-radius:10px;padding:3px;gap:2px;border:1px solid var(--border)}
-.seg-btn{
-  flex:1;padding:6px 10px;border-radius:8px;background:transparent;color:var(--text-2);
-  font-size:12px;font-weight:500;transition:all .2s;white-space:nowrap;font-family:inherit;
-}
+.seg-btn{flex:1;padding:6px 10px;border-radius:8px;background:transparent;color:var(--text-2);font-size:12px;font-weight:500;transition:all .2s;white-space:nowrap;font-family:inherit}
 .seg-btn.active{background:var(--bg-card);color:var(--text-1);box-shadow:var(--shadow-sm)}
 .seg-btn:hover:not(.active){color:var(--text-1)}
-/* Color Picker */
 .color-dots{display:flex;gap:8px}
-.c-dot{
-  width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;
-  transition:transform .2s,border-color .2s;
-}
+.c-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .2s,border-color .2s}
 .c-dot:hover{transform:scale(1.15)}
 .c-dot.active{border-color:var(--text-1);transform:scale(1.1)}
 .c-dot.amber{background:#f59e0b}.c-dot.sky{background:#38bdf8}.c-dot.emerald{background:#34d399}.c-dot.violet{background:#a78bfa}.c-dot.rose{background:#fb7185}
-/* Toggle Switch */
 .toggle{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
-.t-slider{
-  position:absolute;cursor:pointer;inset:0;border-radius:24px;
-  background:var(--bg-primary);border:1px solid var(--border-h);transition:.3s;
-}
-.t-slider::before{
-  content:'';position:absolute;width:18px;height:18px;left:2px;bottom:2px;
-  background:var(--text-3);border-radius:50%;transition:.3s;
-}
+.t-slider{position:absolute;cursor:pointer;inset:0;border-radius:24px;background:var(--bg-primary);border:1px solid var(--border-h);transition:.3s}
+.t-slider::before{content:'';position:absolute;width:18px;height:18px;left:2px;bottom:2px;background:var(--text-3);border-radius:50%;transition:.3s}
 .toggle input:checked + .t-slider{background:var(--accent);border-color:var(--accent)}
 .toggle input:checked + .t-slider::before{transform:translateX(20px);background:#fff}
-/* Select & Input */
-.s-select,.s-input{
-  background:var(--bg-primary);border:1px solid var(--border-h);color:var(--text-1);
-  border-radius:8px;padding:7px 10px;font-size:12px;font-family:inherit;
-  outline:none;transition:border-color .2s;width:100%;
-}
+.s-select,.s-input{background:var(--bg-primary);border:1px solid var(--border-h);color:var(--text-1);border-radius:8px;padding:7px 10px;font-size:12px;font-family:inherit;outline:none;transition:border-color .2s;width:100%}
 .s-select:focus,.s-input:focus{border-color:var(--accent)}
 .s-select{cursor:pointer}
 .thresh-row{display:flex;align-items:center;gap:8px}
-.thresh-input{
-  width:80px;background:var(--bg-primary);border:1px solid var(--border-h);
-  color:var(--text-1);border-radius:8px;padding:6px 8px;font-size:13px;font-family:inherit;
-  font-weight:600;text-align:center;outline:none;transition:border-color .2s;
-}
+.thresh-input{width:80px;background:var(--bg-primary);border:1px solid var(--border-h);color:var(--text-1);border-radius:8px;padding:6px 8px;font-size:13px;font-family:inherit;font-weight:600;text-align:center;outline:none;transition:border-color .2s}
 .thresh-input:focus{border-color:var(--accent)}
-/* Buttons */
-.btn-export{
-  width:100%;padding:10px;border-radius:10px;background:var(--accent-s);border:1px solid var(--accent-g);
-  color:var(--accent);font-size:13px;font-weight:700;font-family:inherit;
-  transition:all .2s;margin-bottom:8px;
-}
+.btn-export{width:100%;padding:10px;border-radius:10px;background:var(--accent-s);border:1px solid var(--accent-g);color:var(--accent);font-size:13px;font-weight:700;font-family:inherit;transition:all .2s;margin-bottom:8px}
 .btn-export:hover{background:var(--accent);color:#000}
-.btn-reset{
-  width:100%;padding:10px;border-radius:10px;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.2);
-  color:#fb7185;font-size:13px;font-weight:600;font-family:inherit;transition:all .2s;
-}
+.btn-reset{width:100%;padding:10px;border-radius:10px;background:rgba(251,113,133,0.08);border:1px solid rgba(251,113,133,0.2);color:#fb7185;font-size:13px;font-weight:600;font-family:inherit;transition:all .2s}
 .btn-reset:hover{background:#fb7185;color:#fff}
+
+/* =========================================================
+   SKIN MODAL
+   ========================================================= */
+.skin-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.85);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity 0.4s ease}
+.skin-overlay.open{opacity:1;pointer-events:auto}
+.skin-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-45%) scale(0.95);width:90%;max-width:520px;z-index:2001;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);padding:24px;display:flex;flex-direction:column;gap:20px}
+.skin-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.skin-modal-hdr h2{font-size:20px;font-weight:800;color:var(--text-1);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.skin-modal-hdr p{font-size:13px;color:var(--text-2)}
+.skin-modal-body{display:flex;flex-direction:column;gap:10px}
+.skin-opt-card{display:flex;align-items:center;gap:16px;padding:14px 18px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg-secondary);cursor:pointer;transition:all 0.2s ease}
+.skin-opt-card:hover{border-color:var(--accent);background:var(--bg-card-h);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.15)}
+.skin-opt-card .skin-emoji{font-size:28px}
+.skin-opt-card .skin-info{display:flex;flex-direction:column;gap:2px}
+.skin-opt-card .skin-info strong{font-size:14px;color:var(--text-1)}
+.skin-opt-card .skin-info span{font-size:12px;color:var(--text-2);line-height:1.5}
 
 /* =========================================================
    MAIN LAYOUT
    ========================================================= */
-main{
-  max-width:1280px;margin:0 auto;
-  padding:28px 24px 56px;position:relative;z-index:1;
-  display:flex;flex-direction:column;gap:20px;
-}
-.section-label{
-  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px;
-}
+main{max-width:1280px;margin:0 auto;padding:28px 24px 56px;position:relative;z-index:1;display:flex;flex-direction:column;gap:20px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
 
 /* =========================================================
    HERO
    ========================================================= */
 .hero{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-xl);
-  padding:32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center;
+  padding:32px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:start;
   box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
 }
-.hero::after{
-  content:'';position:absolute;inset:0;border-radius:var(--r-xl);pointer-events:none;
-  background:radial-gradient(ellipse 60% 80% at 80% 50%, color-mix(in srgb,var(--accent) 6%,transparent) 0%, transparent 70%);
-}
+.hero::after{content:'';position:absolute;inset:0;border-radius:var(--r-xl);pointer-events:none;background:radial-gradient(ellipse 60% 80% at 80% 50%, color-mix(in srgb,var(--accent) 6%,transparent) 0%, transparent 70%)}
 .hero-sub{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
 .hero h2{font-size:clamp(18px,2.5vw,26px);font-weight:800;color:var(--text-1);margin-bottom:4px;line-height:1.2}
 .hero-desc{font-size:13px;color:var(--text-2);margin-bottom:18px}
 .hero-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.hero-chip{
-  display:flex;align-items:center;gap:6px;padding:5px 12px;
-  border-radius:20px;font-size:12px;font-weight:500;
-  background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-2);
-}
-.hero-chip.refresh-chip{
-  width:28px; height:28px; padding:0; justify-content:center; border-radius:50%; aspect-ratio:1;
-}
+.hero-chip{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;background:var(--bg-secondary);border:1px solid var(--border);color:var(--text-2)}
+.hero-chip.refresh-chip{width:28px;height:28px;padding:0;justify-content:center;border-radius:50%;aspect-ratio:1}
 .hero-chip strong{color:var(--text-1)}
 .spin-icon{display:inline-block;animation:spin 1.5s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* UV Gauge */
+/* Live Clock */
+.live-clock-wrap{
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  border-radius:var(--r-md);background:var(--bg-secondary);border:1px solid var(--border);
+  margin-bottom:16px;flex-wrap:wrap;
+}
+.live-clock-time{font-size:28px;font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1}
+.live-clock-date{font-size:12px;color:var(--text-2);line-height:1.6}
+
+/* Health Flag Card */
+.health-flag-card{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;transition:all 0.3s ease;margin-top:16px}
+.health-flag-card::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent,var(--flag-glow,transparent));opacity:0.12}
+.flag-icon-wrap{width:44px;height:44px;border-radius:50%;background:var(--flag-bg,var(--bg-primary));display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 12px var(--flag-glow,rgba(0,0,0,0.1));animation:flagWave 2s ease-in-out infinite alternate}
+.flag-info{display:flex;flex-direction:column;gap:4px;flex-grow:1}
+.flag-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--flag-color,var(--text-1))}
+.flag-desc{font-size:12px;color:var(--text-2);line-height:1.5}
+.flag-desc strong{color:var(--text-1)}
+@keyframes flagWave{0%{transform:translateY(0) rotate(-2deg)}100%{transform:translateY(-4px) rotate(4deg)}}
+.flag-green{--flag-color:#34d399;--flag-bg:rgba(52,211,153,0.15);--flag-glow:rgba(52,211,153,0.3)}
+.flag-yellow{--flag-color:#fbbf24;--flag-bg:rgba(251,191,36,0.15);--flag-glow:rgba(251,191,36,0.3)}
+.flag-orange{--flag-color:#f97316;--flag-bg:rgba(249,115,22,0.15);--flag-glow:rgba(249,115,22,0.3)}
+.flag-red{--flag-color:#ef4444;--flag-bg:rgba(239,68,68,0.15);--flag-glow:rgba(239,68,68,0.4)}
+
+/* UV Exposure Timer */
+.exposure-timer-card{
+  margin-top:12px;padding:14px 16px;border-radius:var(--r-md);
+  background:var(--bg-secondary);border:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.exp-label{font-size:12px;color:var(--text-2);font-weight:500}
+.exp-bar-wrap{flex:1;height:8px;background:var(--bg-primary);border-radius:8px;overflow:hidden;min-width:80px}
+.exp-bar{height:100%;border-radius:8px;transition:width .8s,background .5s;width:0%}
+.exp-pct{font-size:13px;font-weight:800;color:var(--accent);min-width:40px;text-align:right}
+.exp-timer-btn{
+  padding:6px 14px;border-radius:8px;border:1px solid var(--accent-g);
+  background:var(--accent-s);color:var(--accent);font-size:12px;font-weight:700;
+  font-family:inherit;transition:all .2s;cursor:pointer;
+}
+.exp-timer-btn:hover{background:var(--accent);color:#000}
+.exp-elapsed{font-size:11px;color:var(--text-3);margin-left:auto}
+
+/* Gauge */
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
 .gauge-outer{position:relative;width:160px;height:160px;flex-shrink:0}
-.gauge-glow{
-  position:absolute;inset:-12px;border-radius:50%;
-  background:radial-gradient(circle,var(--gauge-color,#34d399) 0%,transparent 70%);
-  opacity:0;transition:opacity .8s;filter:blur(12px);
-}
+.gauge-glow{position:absolute;inset:-12px;border-radius:50%;background:radial-gradient(circle,var(--gauge-color,#34d399) 0%,transparent 70%);opacity:0;transition:opacity .8s;filter:blur(12px)}
 .gauge-outer:hover .gauge-glow,.gauge-glow.active{opacity:.3}
 .gauge-svg{width:100%;height:100%}
 .gauge-ring-bg{stroke:var(--border);fill:none;stroke-width:10;stroke-linecap:round}
 .gauge-ring{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.34,1.56,.64,1),stroke .5s}
-.gauge-center{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-}
-.gauge-value{
-  font-size:52px;font-weight:900;line-height:1;
-  transition:color .5s;font-variant-numeric:tabular-nums;
-}
+.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-value{font-size:52px;font-weight:900;line-height:1;transition:color .5s;font-variant-numeric:tabular-nums}
 .gauge-unit{font-size:11px;color:var(--text-2);font-weight:500;margin-top:2px}
-.uv-badge{
-  padding:6px 20px;border-radius:20px;font-size:13px;font-weight:700;
-  color:#000;transition:background .5s,box-shadow .5s;
-  box-shadow:0 0 16px var(--accent-g);
-}
+.uv-badge{padding:6px 20px;border-radius:20px;font-size:13px;font-weight:700;color:#000;transition:background .5s,box-shadow .5s;box-shadow:0 0 16px var(--accent-g)}
 
 /* =========================================================
    STATS STRIP
    ========================================================= */
-.stats-strip{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;
-}
-.stat-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);
-  padding:16px;display:flex;flex-direction:column;gap:6px;transition:all .3s;
-}
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;display:flex;flex-direction:column;gap:6px;transition:all .3s}
 .stat-card:hover{transform:translateY(-2px);border-color:var(--border-h);box-shadow:var(--shadow-sm)}
 .stat-metric-name{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
 .stat-row{display:flex;justify-content:space-between;align-items:baseline;gap:4px}
@@ -321,69 +332,78 @@ main{
 .sensor-card{
   background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
   padding:22px;display:flex;flex-direction:column;gap:10px;
-  transition:all .3s;position:relative;overflow:hidden;
+  transition:all .3s;position:relative;overflow:hidden;cursor:pointer;
 }
 .sensor-card:hover{transform:translateY(-3px);border-color:var(--border-h);box-shadow:var(--shadow-md)}
-.sensor-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  border-radius:var(--r-lg) var(--r-lg) 0 0;background:var(--sc-color,#38bdf8);
-}
+.sensor-card:active{transform:scale(0.97)}
+.sensor-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0;background:var(--sc-color,#38bdf8)}
 .sc-uv{--sc-color:#f59e0b}.sc-pm{--sc-color:#a78bfa}.sc-temp{--sc-color:#fb7185}.sc-hum{--sc-color:#34d399}
 .s-top{display:flex;justify-content:space-between;align-items:flex-start}
-.s-icon{
-  width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;
-  font-size:18px;background:var(--sc-s,rgba(56,189,248,0.1));
-}
+.s-icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--sc-s,rgba(56,189,248,0.1))}
 .sc-uv .s-icon{background:rgba(245,158,11,0.12)}.sc-pm .s-icon{background:rgba(167,139,250,0.12)}
 .sc-temp .s-icon{background:rgba(251,113,133,0.12)}.sc-hum .s-icon{background:rgba(52,211,153,0.12)}
-.s-status{
-  padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;
-  transition:background .4s,color .4s;
-}
+.s-status{padding:3px 9px;border-radius:6px;font-size:11px;font-weight:700;transition:background .4s,color .4s}
 .s-name{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
-.s-val{
-  font-size:40px;font-weight:900;line-height:1;color:var(--text-1);
-  font-variant-numeric:tabular-nums;transition:all .3s;
-}
+.s-val{font-size:40px;font-weight:900;line-height:1;color:var(--text-1);font-variant-numeric:tabular-nums;transition:all .3s}
 .s-val .unit{font-size:15px;font-weight:500;color:var(--text-2);margin-left:2px}
-/* Progress bar */
+.s-sub{font-size:11px;color:var(--text-3)}
+.s-heat-index{font-size:12px;color:var(--text-2);font-weight:600;display:flex;align-items:center;gap:4px}
 .s-bar-wrap{height:4px;background:var(--bg-secondary);border-radius:4px;overflow:hidden}
 .s-bar{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.34,1.56,.64,1),background .5s;min-width:4px}
+.copy-toast{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.7);border-radius:var(--r-lg);opacity:0;transition:opacity .25s;pointer-events:none;font-size:14px;font-weight:700;color:#fff}
+.copy-toast.show{opacity:1}
+
+/* Loading Skeleton */
+.skeleton{animation:shimmer 1.5s ease-in-out infinite;background:linear-gradient(90deg,var(--bg-secondary) 25%,var(--bg-card-h) 50%,var(--bg-secondary) 75%);background-size:200% 100%;border-radius:8px;color:transparent}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* =========================================================
    TREND CHART
    ========================================================= */
-.chart-section{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
-  padding:24px;box-shadow:var(--shadow-sm);
-}
+.chart-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm)}
 .chart-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
 .chart-hdr h3{font-size:16px;font-weight:700;color:var(--text-1)}
 .chart-toggles{display:flex;gap:6px;flex-wrap:wrap}
-.ct-btn{
-  display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;
-  border:1px solid var(--border);background:var(--bg-secondary);
-  color:var(--text-2);font-size:12px;font-weight:600;font-family:inherit;transition:all .2s;
-}
+.ct-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-2);font-size:12px;font-weight:600;font-family:inherit;transition:all .2s}
 .ct-btn .ct-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .ct-btn.active{border-color:var(--ct-color,#fff);background:color-mix(in srgb,var(--ct-color,#fff) 12%,var(--bg-secondary));color:var(--text-1)}
 .ct-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
 .chart-wrap{position:relative;border-radius:var(--r-md);overflow:hidden;background:var(--bg-secondary);border:1px solid var(--border)}
 #chartSvg{width:100%;display:block;height:300px}
-/* Tooltip */
-.chart-tooltip{
-  position:absolute;pointer-events:none;display:none;
-  background:var(--bg-card);border:1px solid var(--border-h);border-radius:var(--r-sm);
-  padding:10px 14px;box-shadow:var(--shadow-md);min-width:140px;z-index:50;
-}
+.chart-tooltip{position:absolute;pointer-events:none;display:none;background:var(--bg-card);border:1px solid var(--border-h);border-radius:var(--r-sm);padding:10px 14px;box-shadow:var(--shadow-md);min-width:140px;z-index:50}
 .tt-time{font-size:11px;color:var(--text-2);font-weight:500;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .tt-row{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:4px;align-items:center}
 .tt-row:last-child{margin-bottom:0}
 .tt-label{color:var(--text-2);display:flex;align-items:center;gap:5px}
 .tt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .tt-val{font-weight:700;color:var(--text-1);font-variant-numeric:tabular-nums}
-/* Vertical cursor line */
 .chart-cursor{position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.15);pointer-events:none;display:none;z-index:10}
+
+/* =========================================================
+   PERIOD TABS
+   ========================================================= */
+.period-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.period-btn{padding:7px 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-2);font-size:13px;font-weight:600;font-family:inherit;transition:all .2s;cursor:pointer;display:flex;align-items:center;gap:5px}
+.period-btn.active{background:var(--accent);border-color:var(--accent);color:#000;box-shadow:0 0 12px var(--accent-g)}
+.period-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
+.period-info{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:10px 14px;border-radius:var(--r-sm);background:var(--bg-secondary);border:1px solid var(--border);font-size:12px;color:var(--text-2)}
+.period-info strong{color:var(--text-1)}
+.period-stat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.p-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);font-size:11px;font-weight:600}
+.p-chip .pc-dot{width:7px;height:7px;border-radius:50%}
+
+/* =========================================================
+   WEATHER MAP
+   ========================================================= */
+.map-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:16px}
+.map-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.map-hdr h3{font-size:16px;font-weight:700;color:var(--text-1)}
+.map-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.map-btn{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg-secondary);color:var(--text-2);font-size:12px;font-weight:600;font-family:inherit;transition:all 0.2s;cursor:pointer}
+.map-btn.active{border-color:var(--accent);background:var(--accent-s);color:var(--accent)}
+.map-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
+.map-iframe-wrap{position:relative;width:100%;height:420px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);background:var(--bg-secondary)}
+.map-iframe-wrap iframe{width:100%;height:100%;border:none}
 
 /* =========================================================
    UV SCALE
@@ -393,21 +413,9 @@ main{
 .scale-hdr h3{font-size:16px;font-weight:700;color:var(--text-1)}
 .scale-cur{font-size:13px;color:var(--text-2)}
 .scale-cur span{font-weight:700;color:var(--text-1)}
-.uv-bar{
-  height:18px;border-radius:9px;position:relative;overflow:visible;
-  background:linear-gradient(to right,#34d399 0%,#34d399 17%,#fbbf24 17%,#fbbf24 45%,#f97316 45%,#f97316 63%,#ef4444 63%,#ef4444 90%,#9333ea 90%);
-  box-shadow:0 2px 12px rgba(0,0,0,.4);
-}
-.uv-pointer{
-  position:absolute;top:-10px;bottom:-10px;width:3px;border-radius:3px;
-  background:#fff;box-shadow:0 0 12px rgba(255,255,255,.9);
-  transform:translateX(-50%);transition:left .9s cubic-bezier(.34,1.56,.64,1);
-}
-.uv-pointer::after{
-  content:attr(data-v);position:absolute;top:-26px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:700;color:#fff;white-space:nowrap;
-  background:rgba(0,0,0,.65);padding:2px 7px;border-radius:5px;
-}
+.uv-bar{height:18px;border-radius:9px;position:relative;overflow:visible;background:linear-gradient(to right,#34d399 0%,#34d399 17%,#fbbf24 17%,#fbbf24 45%,#f97316 45%,#f97316 63%,#ef4444 63%,#ef4444 90%,#9333ea 90%);box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.uv-pointer{position:absolute;top:-10px;bottom:-10px;width:3px;border-radius:3px;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.9);transform:translateX(-50%);transition:left .9s cubic-bezier(.34,1.56,.64,1)}
+.uv-pointer::after{content:attr(data-v);position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:700;color:#fff;white-space:nowrap;background:rgba(0,0,0,.65);padding:2px 7px;border-radius:5px}
 .uv-bar-labels{display:flex;justify-content:space-between;margin-top:10px;font-size:10px;color:var(--text-3);font-weight:500}
 .uv-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2)}
@@ -421,10 +429,7 @@ main{
 .reco-hdr h3{font-size:16px;font-weight:700;color:var(--text-1);margin-bottom:2px}
 .reco-headline{font-size:13px;color:var(--text-2)}
 .reco-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-.reco-item{
-  display:flex;align-items:flex-start;gap:10px;padding:13px;
-  border-radius:var(--r-md);background:var(--bg-secondary);border:1px solid var(--border);transition:all .3s;
-}
+.reco-item{display:flex;align-items:flex-start;gap:10px;padding:13px;border-radius:var(--r-md);background:var(--bg-secondary);border:1px solid var(--border);transition:all .3s}
 .reco-item.active{border-color:var(--ri-c,#34d399);background:color-mix(in srgb,var(--ri-c,#34d399) 8%,var(--bg-secondary))}
 .reco-icon{font-size:20px;flex-shrink:0;margin-top:1px}
 .reco-body{font-size:12px;color:var(--text-2);line-height:1.5}
@@ -434,22 +439,29 @@ main{
    INFO CARDS
    ========================================================= */
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.info-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);
-  padding:18px;box-shadow:var(--shadow-sm);transition:all .3s;
-}
+.info-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);padding:18px;box-shadow:var(--shadow-sm);transition:all .3s}
 .info-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--border-h)}
 .info-card h4{font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .info-card p{font-size:12px;color:var(--text-2);line-height:1.65}
 
 /* =========================================================
+   AQI INDICATOR STRIP
+   ========================================================= */
+.aqi-strip{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:20px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;box-shadow:var(--shadow-sm);
+}
+.aqi-block{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:90px;padding:12px;border-radius:var(--r-md);border:1px solid var(--border);background:var(--bg-secondary);transition:all .3s}
+.aqi-block:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.aqi-icon{font-size:24px}
+.aqi-name{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.aqi-value{font-size:22px;font-weight:900;font-variant-numeric:tabular-nums;transition:color .4s}
+.aqi-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:6px;margin-top:2px}
+
+/* =========================================================
    FOOTER
    ========================================================= */
-footer{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);
-  padding:18px 24px;display:flex;align-items:center;justify-content:space-between;
-  gap:16px;flex-wrap:wrap;box-shadow:var(--shadow-sm);
-}
+footer{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:var(--shadow-sm)}
 .footer-l{font-size:12px;color:var(--text-2);line-height:1.7}
 .footer-r{display:flex;align-items:center;gap:12px}
 .countdown-wrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-2)}
@@ -459,11 +471,7 @@ footer{
 .c-ring .c-track{stroke:var(--border-h)}
 .c-ring .c-prog{stroke:var(--accent);stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset 1s linear}
 .c-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent)}
-.errs-badge{
-  padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;
-  background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.2);color:#fb7185;
-  display:none;
-}
+.errs-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.2);color:#fb7185;display:none}
 .errs-badge.show{display:block}
 
 /* =========================================================
@@ -471,9 +479,10 @@ footer{
    ========================================================= */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .fade-up{animation:fadeUp .4s ease forwards}
-
 @keyframes flash{0%{opacity:.4;transform:scale(.96)}50%{opacity:1;transform:scale(1.02)}100%{opacity:1;transform:scale(1)}}
 .flash{animation:flash .35s ease}
+@keyframes popIn{0%{transform:scale(0.8);opacity:0}80%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.pop-in{animation:popIn .35s cubic-bezier(.34,1.56,.64,1) forwards}
 
 /* =========================================================
    RESPONSIVE
@@ -485,12 +494,15 @@ footer{
   .gauge-wrap{flex-direction:row;align-items:center;gap:20px;justify-content:center}
   nav{padding:0 16px}
   .nav-text h1{max-width:200px;font-size:12px}
+  .live-clock-wrap{justify-content:center}
 }
 @media(max-width:600px){
   .sensor-grid{grid-template-columns:repeat(2,1fr)}
   .settings-sidebar{width:100vw}
   .stats-strip{grid-template-columns:repeat(2,1fr)}
   .chart-toggles{justify-content:flex-start}
+  .aqi-strip{gap:8px}
+  .kiosk-grid{grid-template-columns:1fr}
 }
 @media(max-width:400px){
   .sensor-grid{grid-template-columns:1fr}
@@ -504,144 +516,84 @@ footer{
 
 /* Fullscreen */
 :fullscreen body,:fullscreen main{background:var(--bg-primary)}
-
-/* =========================================================
-   PERIOD TABS
-   ========================================================= */
-.period-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.period-btn{
-  padding:7px 16px;border-radius:10px;border:1px solid var(--border);
-  background:var(--bg-secondary);color:var(--text-2);font-size:13px;font-weight:600;
-  font-family:inherit;transition:all .2s;cursor:pointer;display:flex;align-items:center;gap:5px;
-}
-.period-btn.active{background:var(--accent);border-color:var(--accent);color:#000;box-shadow:0 0 12px var(--accent-g)}
-.period-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
-.period-info{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;
-  padding:10px 14px;border-radius:var(--r-sm);background:var(--bg-secondary);
-  border:1px solid var(--border);font-size:12px;color:var(--text-2);
-}
-.period-info strong{color:var(--text-1)}
-.period-stat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.p-chip{
-  display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;
-  background:var(--bg-secondary);border:1px solid var(--border);font-size:11px;font-weight:600;
-}
-.p-chip .pc-dot{width:7px;height:7px;border-radius:50%}
-/* No data state */
-.chart-no-data{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  height:300px;gap:10px;color:var(--text-3);
-}
-.chart-no-data .no-icon{font-size:40px;opacity:.5}
-.chart-no-data p{font-size:13px;text-align:center;line-height:1.6}
-
-/* Skin Modal Styling */
-.skin-overlay {
-  position: fixed; inset: 0; z-index: 2000;
-  background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
-  opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
-}
-.skin-overlay.open { opacity: 1; pointer-events: auto; }
-.skin-modal {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%) scale(0.95);
-  width: 90%; max-width: 520px; z-index: 2001;
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 24px; display: flex; flex-direction: column; gap: 20px;
-}
-.skin-modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-.skin-modal-hdr h2 { font-size: 20px; font-weight: 800; color: var(--text-1); margin-bottom: 4px; display: flex; align-items: center; gap: 8px;}
-.skin-modal-hdr p { font-size: 13px; color: var(--text-2); }
-.skin-modal-body { display: flex; flex-direction: column; gap: 10px; }
-.skin-opt-card {
-  display: flex; align-items: center; gap: 16px; padding: 14px 18px;
-  border-radius: var(--r-md); border: 1px solid var(--border);
-  background: var(--bg-secondary); cursor: pointer; transition: all 0.2s ease;
-}
-.skin-opt-card:hover {
-  border-color: var(--accent); background: var(--bg-card-h);
-  transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-.skin-opt-card .skin-emoji { font-size: 28px; }
-.skin-opt-card .skin-info { display: flex; flex-direction: column; gap: 2px; }
-.skin-opt-card .skin-info strong { font-size: 14px; color: var(--text-1); }
-.skin-opt-card .skin-info span { font-size: 11px; color: var(--text-2); line-height: 1.4; }
 </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav id="navbar">
-  <div class="nav-inner">
-    <div class="nav-brand">
-      <div class="nav-logo" id="navLogo">
-        <img src="logo.png" alt="โลโก้ โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก">
-      </div>
-      <div class="nav-text">
-        <h1 id="navSchoolName">โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
-        <p id="navSubtitle">PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม</p>
-      </div>
+<!-- KIOSK OVERLAY -->
+<div class="kiosk-overlay" id="kioskOverlay">
+  <button class="kiosk-exit-btn" onclick="exitKiosk()">✕ ออกจาก TV Mode</button>
+  <div class="kiosk-header">
+    <h1>🏫 โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
+    <p>ระบบตรวจวัดสภาพแวดล้อมแบบเรียลไทม์</p>
+    <div class="live-clock-time kiosk-clock" id="kioskClock">--:--:--</div>
+  </div>
+  <div class="kiosk-grid">
+    <div class="kiosk-card kc-uv">
+      <div class="kiosk-icon">☀️</div>
+      <div class="kiosk-label">UV Index</div>
+      <div class="kiosk-val" id="kUvVal" style="color:#f59e0b">--</div>
+      <div class="kiosk-status-badge" id="kUvBadge" style="background:#34d399">กำลังโหลด</div>
     </div>
-    <div class="nav-actions">
-      <div class="status-row">
-        <div class="status-dot" id="statusDot"></div>
-        <span class="status-label" id="statusLabel">กำลังเชื่อมต่อ</span>
-      </div>
-      <button class="nav-btn" id="alertBtn" title="การแจ้งเตือน" onclick="toggleAlertPanel()">
-        🔔
-        <span class="notif-badge" id="notifBadge">0</span>
-      </button>
-      <button class="nav-btn" id="fsBtn" title="เต็มจอ (F)" onclick="toggleFullscreen()">⛶</button>
-      <button class="nav-btn" id="settingsBtn" title="การตั้งค่า" onclick="openSettings()">⚙️</button>
+    <div class="kiosk-card kc-pm">
+      <div class="kiosk-icon">🌫️</div>
+      <div class="kiosk-label">PM2.5</div>
+      <div class="kiosk-val" id="kPmVal" style="color:#a78bfa">--</div>
+      <div class="kiosk-unit">µg/m³</div>
+    </div>
+    <div class="kiosk-card kc-temp">
+      <div class="kiosk-icon">🌡️</div>
+      <div class="kiosk-label">อุณหภูมิ</div>
+      <div class="kiosk-val" id="kTempVal" style="color:#fb7185">--</div>
+      <div class="kiosk-unit">°C</div>
+    </div>
+    <div class="kiosk-card kc-hum">
+      <div class="kiosk-icon">💧</div>
+      <div class="kiosk-label">ความชื้น</div>
+      <div class="kiosk-val" id="kHumVal" style="color:#34d399">--</div>
+      <div class="kiosk-unit">%</div>
     </div>
   </div>
-</nav>
-
-<!-- ===== ALERT BANNER ===== -->
-<div class="alert-bar" id="alertBar"></div>
-
-<!-- ===== SKIN SELECTION ===== -->
-<div class="skin-overlay" id="skinOverlay"></div>
-<div class="skin-modal" id="skinModal">
-  <div class="skin-modal-hdr">
-    <h2>👤 เลือกประเภทสีผิวของคุณ</h2>
-    <p>เพื่อคำนวณและปรับเปลี่ยนคำแนะนำความปลอดภัย UV รายบุคคล</p>
-  </div>
-  <div class="skin-modal-body">
-    <div class="skin-opt-card" onclick="selectSkinType('type1')">
-      <div class="skin-emoji">🧑🏻</div>
-      <div class="skin-info">
-        <strong>ผิวขาวมาก / ผิวเผือก (Type I-II)</strong>
-        <span>เกิดผิวไหม้แดดได้ง่ายมาก (มักไม่เปลี่ยนเป็นผิวคล้ำ) มีความไวต่อรังสี UV สูงสุด</span>
+  <div class="health-flag-card flag-green kiosk-flag" id="kioskFlag">
+    <div class="flag-icon-wrap" id="kioskFlagIcon">🟢</div>
+    <div class="flag-info">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div class="flag-title" id="kioskFlagTitle">ธงสีเขียว (ความปลอดภัยสูงสุด)</div>
+        <button class="nav-btn" onclick="speakCurrentFlag()" title="ฟังเสียงประกาศ" style="width:36px;height:36px;font-size:16px;border-radius:8px;background:rgba(255,255,255,0.08)">🔊</button>
       </div>
-    </div>
-    <div class="skin-opt-card" onclick="selectSkinType('type2')">
-      <div class="skin-emoji">🧑🏼</div>
-      <div class="skin-info">
-        <strong>ผิวขาวเหลือง (Type III)</strong>
-        <span>เกิดผิวไหม้แดดได้ปานกลาง คล้ำแดดได้ง่ายปานกลาง ไวต่อรังสี UV ปานกลาง</span>
-      </div>
-    </div>
-    <div class="skin-opt-card" onclick="selectSkinType('type3')">
-      <div class="skin-emoji">🧑🏽</div>
-      <div class="skin-info">
-        <strong>ผิวสองสี / ผิวน้ำผึ้ง (Type IV)</strong>
-        <span>เกิดผิวไหม้แดดได้น้อย คล้ำแดดได้ง่ายมาก มีความต้านทานรังสี UV ปานกลาง-สูง</span>
-      </div>
-    </div>
-    <div class="skin-opt-card" onclick="selectSkinType('type4')">
-      <div class="skin-emoji">🧑🏾</div>
-      <div class="skin-info">
-        <strong>ผิวเข้ม / ผิวคล้ำ (Type V-VI)</strong>
-        <span>แทบจะไม่ไหม้แดดเลย คล้ำแดดง่ายมาก ต้านทานต่อรังสี UV สูงที่สุด</span>
-      </div>
+      <div class="flag-desc" id="kioskFlagDesc">นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ</div>
     </div>
   </div>
 </div>
 
-<!-- ===== SETTINGS ===== -->
+<!-- SKIN MODAL -->
+<div class="skin-overlay" id="skinOverlay" onclick="hideSkinModal()"></div>
+<div class="skin-modal" id="skinModal">
+  <div class="skin-modal-hdr">
+    <h2>🧬 เลือกประเภทสีผิว</h2>
+    <p>ข้อมูลนี้ช่วยให้ระบบคำนวณเวลาสูงสุดในการรับแสงแดดที่ปลอดภัยสำหรับคุณได้อย่างแม่นยำ</p>
+  </div>
+  <div class="skin-modal-body">
+    <div class="skin-opt-card" onclick="selectSkinType('type1')">
+      <div class="skin-emoji">🧑🏻</div>
+      <div class="skin-info"><strong>ผิวขาวมาก / ผิวเผือก (Type I-II)</strong><span>เกิดผิวไหม้แดดง่ายมาก คล้ำแดดได้น้อย ไวต่อรังสี UV มาก</span></div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type2')">
+      <div class="skin-emoji">🧑🏼</div>
+      <div class="skin-info"><strong>ผิวขาวเหลือง (Type III)</strong><span>เกิดผิวไหม้แดดได้ปานกลาง คล้ำแดดได้ง่ายปานกลาง ไวต่อรังสี UV ปานกลาง</span></div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type3')">
+      <div class="skin-emoji">🧑🏽</div>
+      <div class="skin-info"><strong>ผิวสองสี / ผิวน้ำผึ้ง (Type IV)</strong><span>เกิดผิวไหม้แดดได้น้อย คล้ำแดดได้ง่ายมาก มีความต้านทานรังสี UV ปานกลาง-สูง</span></div>
+    </div>
+    <div class="skin-opt-card" onclick="selectSkinType('type4')">
+      <div class="skin-emoji">🧑🏾</div>
+      <div class="skin-info"><strong>ผิวเข้ม / ผิวคล้ำ (Type V-VI)</strong><span>แทบจะไม่ไหม้แดดเลย คล้ำแดดง่ายมาก ต้านทานต่อรังสี UV สูงที่สุด</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS OVERLAY -->
 <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
 <div class="settings-sidebar" id="settingsSidebar">
   <div class="settings-hdr">
@@ -683,11 +635,12 @@ footer{
       <div class="s-row">
         <span class="s-label">อัปเดตทุก</span>
         <select class="s-select" id="refreshSel" onchange="applyRefreshInterval(this.value)" style="width:auto">
-          <option value="3000">3 วินาที</option>
-          <option value="5000">5 วินาที</option>
-          <option value="10000">10 วินาที</option>
-          <option value="30000">30 วินาที</option>
+          <option value="15000">15 วินาที</option>
+          <option value="30000" selected>30 วินาที</option>
+          <option value="45000">45 วินาที</option>
           <option value="60000">1 นาที</option>
+          <option value="120000">2 นาที</option>
+          <option value="300000">5 นาที</option>
         </select>
       </div>
       <div class="s-row">
@@ -701,7 +654,7 @@ footer{
       </div>
       <div class="s-row">
         <span class="s-label">🔮 พยากรณ์แนวโน้ม</span>
-        <label class="toggle"><input type="checkbox" id="forecastToggle" onchange="CONFIG.forecastEnabled=this.checked;saveConfig();renderChart();"><span class="t-slider"></span></label>
+        <label class="toggle"><input type="checkbox" id="forecastToggle" onchange="CONFIG.forecastEnabled=this.checked;saveConfig();renderChart()"><span class="t-slider"></span></label>
       </div>
     </div>
 
@@ -711,6 +664,14 @@ footer{
       <div class="s-row">
         <span class="s-label">เปิดการแจ้งเตือน</span>
         <label class="toggle"><input type="checkbox" id="alertMaster" checked onchange="CONFIG.alertsEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+      </div>
+      <div class="s-row">
+        <span class="s-label">🔊 เสียงแจ้งเตือน</span>
+        <label class="toggle"><input type="checkbox" id="soundToggle" onchange="CONFIG.soundEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
+      </div>
+      <div class="s-row">
+        <span class="s-label">📢 ประกาศเสียงพูดอัตโนมัติ</span>
+        <label class="toggle"><input type="checkbox" id="autoSpeechToggle" onchange="CONFIG.autoSpeechEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
       </div>
       <div class="s-row">
         <span class="s-label">UV เกิน</span>
@@ -742,14 +703,12 @@ footer{
       </div>
     </div>
 
-    <!-- Skin Tone Profile -->
+    <!-- Skin Tone -->
     <div class="s-section">
       <div class="s-section-title">👤 โปรไฟล์สีผิวของคุณ</div>
       <div class="s-row col" style="gap:8px">
-        <div id="settingsSkinDisplay" style="font-size:13px; font-weight:600; padding:6px 10px; border-radius:8px; background:var(--bg-secondary); border:1px solid var(--border); text-align:center">
-          ผิวของคุณ: --
-        </div>
-        <button class="btn-export" style="background:var(--accent); color:#000; font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
+        <div id="settingsSkinDisplay" style="font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);text-align:center">ผิวของคุณ: --</div>
+        <button class="btn-export" style="background:var(--accent);color:#000;font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
       </div>
     </div>
 
@@ -757,13 +716,44 @@ footer{
     <div class="s-section">
       <div class="s-section-title">💾 ส่งออกข้อมูล</div>
       <button class="btn-export" onclick="exportCSV()">⬇️ ดาวน์โหลด CSV (Session)</button>
-      <button class="btn-export" style="margin-top:4px" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
+      <button class="btn-export" style="margin-top:0" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.25);color:#a78bfa" onclick="shareSnapshot()">📤 แชร์ / บันทึกสแนปช็อต</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.25);color:#34d399" onclick="downloadSnapshotCard()">🖼️ ดาวน์โหลดรูปภาพการ์ดสรุป (PNG)</button>
       <button class="btn-reset" onclick="resetSession()">🗑️ ล้างข้อมูล Session</button>
       <button class="btn-reset" style="margin-top:4px" onclick="clearHistoryData()">🗑️ ลบประวัติทั้งหมด (DB)</button>
     </div>
 
   </div>
 </div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <div class="nav-logo">
+        <img src="logo.png" alt="โรงเรียนโลโก้" onerror="this.parentElement.innerHTML='🌿'">
+      </div>
+      <div class="nav-text">
+        <h1 id="navSchoolName">โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
+        <p id="navSubtitle">PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม</p>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <div class="status-row">
+        <div class="status-dot loading" id="statusDot"></div>
+        <span class="status-label" id="statusLabel">กำลังเชื่อมต่อ</span>
+      </div>
+      <button class="nav-btn" id="tvBtn" onclick="enterKiosk()" title="TV / Kiosk Mode">📺</button>
+      <button class="nav-btn" onclick="shareSnapshot()" title="แชร์ข้อมูล">📤</button>
+      <button class="nav-btn" id="fsBtn" onclick="toggleFullscreen()" title="เต็มจอ">⛶</button>
+      <button class="nav-btn" id="notifBtn" onclick="toggleAlertPanel()" title="การแจ้งเตือน">🔔<span class="notif-badge" id="notifBadge">0</span></button>
+      <button class="nav-btn" onclick="openSettings()" title="ตั้งค่า">⚙️</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ALERT BAR -->
+<div class="alert-bar" id="alertBar"></div>
 
 <!-- ===== MAIN ===== -->
 <main>
@@ -774,10 +764,38 @@ footer{
       <p class="hero-sub">☀️ ค่า UV Index ปัจจุบัน</p>
       <h2>ตรวจวัดสภาพแวดล้อมภายในโรงเรียน</h2>
       <p class="hero-desc">ข้อมูลเซนเซอร์แบบเรียลไทม์เพื่อความปลอดภัยของนักเรียนและบุคลากร</p>
-      <div class="hero-meta">
-        <div class="hero-chip">⏰ อัปเดต: <strong id="heroTime">--:--:--</strong></div>
-        <div class="hero-chip">📊 การวัด: <strong id="heroCount">0</strong> ครั้ง</div>
-        <div class="hero-chip refresh-chip" title="อัปเดตข้อมูลอัตโนมัติ"><span class="spin-icon">↻</span><span id="heroInterval" style="display: none;">ทุก 3 วินาที</span></div>
+
+      <!-- Live Clock -->
+      <div class="live-clock-wrap">
+        <div>
+          <div class="live-clock-time" id="liveClock">--:--:--</div>
+          <div class="live-clock-date" id="liveDate">-- -- --</div>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+          <div class="hero-chip">⏰ อัปเดต: <strong id="heroTime">--:--:--</strong></div>
+          <div class="hero-chip refresh-chip" title="อัปเดตข้อมูลอัตโนมัติ"><span class="spin-icon">↻</span><span id="heroInterval" style="display:none"></span></div>
+        </div>
+      </div>
+
+      <!-- Health Flag Card -->
+      <div class="health-flag-card flag-green" id="healthFlagCard">
+        <div class="flag-icon-wrap" id="flagIcon">🟢</div>
+        <div class="flag-info">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+            <div class="flag-title" id="flagTitle">ธงสีเขียว (ความปลอดภัยสูงสุด)</div>
+            <button class="nav-btn" onclick="speakCurrentFlag()" title="ฟังเสียงประกาศ" style="width:28px;height:28px;font-size:12px;border-radius:6px;background:rgba(255,255,255,0.08);margin-top:-2px">🔊</button>
+          </div>
+          <div class="flag-desc" id="flagAdviceText">ดัชนี UV และค่าฝุ่นรวมอยู่ในระดับนี้ <strong>คำแนะนำ:</strong> นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ</div>
+        </div>
+      </div>
+
+      <!-- UV Exposure Timer -->
+      <div class="exposure-timer-card">
+        <span class="exp-label">⏱️ สะสมแสงแดด:</span>
+        <div class="exp-bar-wrap"><div class="exp-bar" id="expBar" style="background:#34d399"></div></div>
+        <span class="exp-pct" id="expPct">0%</span>
+        <button class="exp-timer-btn" id="expBtn" onclick="toggleExposureTimer()">▶ เริ่ม</button>
+        <span class="exp-elapsed" id="expElapsed">0:00 / -- นาที</span>
       </div>
     </div>
     <div class="gauge-wrap">
@@ -795,6 +813,43 @@ footer{
         </div>
       </div>
       <div class="uv-badge" id="uvBadge" style="background:#34d399">กำลังโหลด</div>
+    </div>
+  </section>
+
+  <!-- AQI QUICK STRIP -->
+  <section>
+    <div class="section-label">📊 ค่าสิ่งแวดล้อมด่วน</div>
+    <div class="aqi-strip">
+      <div class="aqi-block">
+        <div class="aqi-icon">☀️</div>
+        <div class="aqi-name">UV Index</div>
+        <div class="aqi-value" id="aqiUv" style="color:#f59e0b">--</div>
+        <div class="aqi-badge" id="aqiUvBadge" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+      </div>
+      <div class="aqi-block">
+        <div class="aqi-icon">🌫️</div>
+        <div class="aqi-name">PM2.5 µg/m³</div>
+        <div class="aqi-value" id="aqiPm" style="color:#a78bfa">--</div>
+        <div class="aqi-badge" id="aqiPmBadge" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+      </div>
+      <div class="aqi-block">
+        <div class="aqi-icon">🌡️</div>
+        <div class="aqi-name">อุณหภูมิ °C</div>
+        <div class="aqi-value" id="aqiTemp" style="color:#fb7185">--</div>
+        <div class="aqi-badge" id="aqiTempBadge" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+      </div>
+      <div class="aqi-block">
+        <div class="aqi-icon">💧</div>
+        <div class="aqi-name">ความชื้น %</div>
+        <div class="aqi-value" id="aqiHum" style="color:#34d399">--</div>
+        <div class="aqi-badge" id="aqiHumBadge" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
+      </div>
+      <div class="aqi-block" style="border-color:rgba(251,113,133,0.3)">
+        <div class="aqi-icon">🥵</div>
+        <div class="aqi-name">รู้สึกร้อน °C</div>
+        <div class="aqi-value" id="aqiHeatIdx" style="color:#fb7185">--</div>
+        <div class="aqi-badge" id="aqiHeatBadge" style="background:rgba(251,113,133,.1);color:#fb7185">Heat Index</div>
+      </div>
     </div>
   </section>
 
@@ -835,9 +890,9 @@ footer{
 
   <!-- SENSOR GRID -->
   <section>
-    <div class="section-label">📡 ค่าเซนเซอร์ปัจจุบัน</div>
+    <div class="section-label">📡 ค่าเซนเซอร์ปัจจุบัน <span style="font-weight:400;color:var(--text-3)">· คลิกเพื่อคัดลอก</span></div>
     <div class="sensor-grid">
-      <div class="sensor-card sc-uv">
+      <div class="sensor-card sc-uv" onclick="copySensorCard('uv')" title="คลิกเพื่อคัดลอก">
         <div class="s-top">
           <div class="s-icon">☀️</div>
           <div class="s-status" id="uvStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
@@ -845,9 +900,10 @@ footer{
         <div class="s-name">UV Radiation Index</div>
         <div class="s-val" id="uvVal">--</div>
         <div class="s-bar-wrap"><div class="s-bar" id="uvBar" style="width:1%;background:#f59e0b"></div></div>
-        <div style="font-size:11px;color:var(--text-3)">ดัชนีรังสี UV · มาตรฐาน WHO</div>
+        <div class="s-sub">ดัชนีรังสี UV · มาตรฐาน WHO</div>
+        <div class="copy-toast" id="copyToastUv">✓ คัดลอกแล้ว!</div>
       </div>
-      <div class="sensor-card sc-pm">
+      <div class="sensor-card sc-pm" onclick="copySensorCard('pm')" title="คลิกเพื่อคัดลอก">
         <div class="s-top">
           <div class="s-icon">🌫️</div>
           <div class="s-status" id="pmStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
@@ -855,9 +911,10 @@ footer{
         <div class="s-name">PM2.5 ฝุ่นละออง</div>
         <div class="s-val" id="pmVal">-- <span class="unit">µg/m³</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="pmBar" style="width:1%;background:#a78bfa"></div></div>
-        <div style="font-size:11px;color:var(--text-3)">ฝุ่นละอองขนาด &lt; 2.5 ไมครอน</div>
+        <div class="s-sub">ฝุ่นละอองขนาด &lt; 2.5 ไมครอน</div>
+        <div class="copy-toast" id="copyToastPm">✓ คัดลอกแล้ว!</div>
       </div>
-      <div class="sensor-card sc-temp">
+      <div class="sensor-card sc-temp" onclick="copySensorCard('temp')" title="คลิกเพื่อคัดลอก">
         <div class="s-top">
           <div class="s-icon">🌡️</div>
           <div class="s-status" id="tempStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
@@ -865,9 +922,10 @@ footer{
         <div class="s-name">อุณหภูมิอากาศ</div>
         <div class="s-val" id="tempVal">-- <span class="unit">°C</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="tempBar" style="width:1%;background:#fb7185"></div></div>
-        <div style="font-size:11px;color:var(--text-3)">อุณหภูมิในพื้นที่ตรวจวัด</div>
+        <div class="s-heat-index" id="heatIndexDisplay">🥵 รู้สึกร้อน: -- °C</div>
+        <div class="copy-toast" id="copyToastTemp">✓ คัดลอกแล้ว!</div>
       </div>
-      <div class="sensor-card sc-hum">
+      <div class="sensor-card sc-hum" onclick="copySensorCard('hum')" title="คลิกเพื่อคัดลอก">
         <div class="s-top">
           <div class="s-icon">💧</div>
           <div class="s-status" id="humStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
@@ -875,7 +933,8 @@ footer{
         <div class="s-name">ความชื้นสัมพัทธ์</div>
         <div class="s-val" id="humVal">-- <span class="unit">%</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="humBar" style="width:1%;background:#34d399"></div></div>
-        <div style="font-size:11px;color:var(--text-3)">ปริมาณไอน้ำในอากาศ</div>
+        <div class="s-sub">ปริมาณไอน้ำในอากาศ</div>
+        <div class="copy-toast" id="copyToastHum">✓ คัดลอกแล้ว!</div>
       </div>
     </div>
   </section>
@@ -888,27 +947,19 @@ footer{
         <h3 id="chartTitle">Trend Chart — เรียลไทม์</h3>
       </div>
       <div class="chart-toggles">
-        <button class="ct-btn active" id="ctUV" style="--ct-color:#f59e0b" onclick="toggleChart('uv',this)">
-          <span class="ct-dot" style="background:#f59e0b"></span>UV Index
-        </button>
-        <button class="ct-btn active" id="ctPM" style="--ct-color:#a78bfa" onclick="toggleChart('pm',this)">
-          <span class="ct-dot" style="background:#a78bfa"></span>PM2.5
-        </button>
-        <button class="ct-btn" id="ctTemp" style="--ct-color:#fb7185" onclick="toggleChart('temp',this)">
-          <span class="ct-dot" style="background:#fb7185"></span>อุณหภูมิ
-        </button>
-        <button class="ct-btn" id="ctHum" style="--ct-color:#34d399" onclick="toggleChart('hum',this)">
-          <span class="ct-dot" style="background:#34d399"></span>ความชื้น
-        </button>
+        <button class="ct-btn active" id="ctUV" style="--ct-color:#f59e0b" onclick="toggleChart('uv',this)"><span class="ct-dot" style="background:#f59e0b"></span>UV Index</button>
+        <button class="ct-btn active" id="ctPM" style="--ct-color:#a78bfa" onclick="toggleChart('pm',this)"><span class="ct-dot" style="background:#a78bfa"></span>PM2.5</button>
+        <button class="ct-btn" id="ctTemp" style="--ct-color:#fb7185" onclick="toggleChart('temp',this)"><span class="ct-dot" style="background:#fb7185"></span>อุณหภูมิ</button>
+        <button class="ct-btn" id="ctHum" style="--ct-color:#34d399" onclick="toggleChart('hum',this)"><span class="ct-dot" style="background:#34d399"></span>ความชื้น</button>
       </div>
     </div>
     <!-- Period Tabs -->
     <div class="period-tabs">
       <button class="period-btn active" id="pBtn-rt" onclick="setPeriod('realtime',this)">⚡ เรียลไทม์</button>
-      <button class="period-btn" id="pBtn-day" onclick="setPeriod('today',this)">📅 วันนี้ (รายชั่วโมง)</button>
-      <button class="period-btn" id="pBtn-month" onclick="setPeriod('month',this)">📆 เดือนนี้ (รายวัน)</button>
-      <button class="period-btn" id="pBtn-year" onclick="setPeriod('year',this)">📊 ปีนี้ (รายเดือน)</button>
-      <button class="period-btn" id="pBtn-fc" onclick="toggleForecast(this)" style="margin-left:auto;border-color:rgba(167,139,250,0.3);color:var(--text-1)">🔮 พยากรณ์อนาคต: ปิด</button>
+      <button class="period-btn" id="pBtn-day" onclick="setPeriod('today',this)">📅 วันนี้</button>
+      <button class="period-btn" id="pBtn-month" onclick="setPeriod('month',this)">📆 เดือนนี้</button>
+      <button class="period-btn" id="pBtn-year" onclick="setPeriod('year',this)">📊 ปีนี้</button>
+      <button class="period-btn" id="pBtn-fc" onclick="toggleForecast(this)" style="margin-left:auto;border-color:rgba(167,139,250,0.3)">🔮 พยากรณ์: ปิด</button>
     </div>
     <div class="period-info" id="periodInfo">
       <span id="periodInfoText">⚡ กำลังแสดงข้อมูลเรียลไทม์ · อัปเดตอัตโนมัติ</span>
@@ -922,6 +973,28 @@ footer{
     <div class="period-stat-chips" id="periodChips"></div>
     <div style="margin-top:10px;font-size:11px;color:var(--text-3)">
       <span id="chartHint">ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด</span>
+    </div>
+  </section>
+
+  <!-- WEATHER & AQI MAP -->
+  <section class="map-section">
+    <div class="map-hdr">
+      <div>
+        <div class="section-label" style="margin-bottom:4px">🗺️ แผนที่สิ่งแวดล้อม</div>
+        <h3>แผนที่สภาพอากาศและฝุ่นรอบโรงเรียน</h3>
+      </div>
+      <div class="map-tabs">
+        <button class="map-btn active" onclick="switchMap('wind',this)">🌀 ลม & เมฆ</button>
+        <button class="map-btn" onclick="switchMap('rain',this)">🌧️ เรดาร์ฝน</button>
+        <button class="map-btn" onclick="switchMap('pm25',this)">🌫️ PM2.5</button>
+        <button class="map-btn" onclick="switchMap('temp',this)">🌡️ อุณหภูมิ</button>
+      </div>
+    </div>
+    <div class="map-iframe-wrap">
+      <iframe id="weatherMapIframe" src="https://embed.windy.com/embed.html?lat=16.822&lon=100.266&zoom=8&level=surface&overlay=wind&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" allowfullscreen></iframe>
+    </div>
+    <div style="font-size:11px;color:var(--text-3)">
+      แผนที่อินเตอร์แอคทีฟสนับสนุนโดย Windy · พิกัดโรงเรียน (ละติจูด 16.822, ลองจิจูด 100.266)
     </div>
   </section>
 
@@ -970,6 +1043,8 @@ footer{
       <div class="info-card"><h4>🛡️ ป้องกัน UV อย่างไร?</h4><p>UV ≥ 3: ทาครีม SPF 30+ · UV ≥ 6: สวมหมวก แว่ด UV · UV ≥ 8: หลีกเลี่ยงกลางแจ้ง 10:00–16:00</p></div>
       <div class="info-card"><h4>🌫️ PM2.5 อันตรายแค่ไหน?</h4><p>≤25 µg/m³ ปลอดภัย · 25–50 ปานกลาง · 50–100 เริ่มมีผล · &gt;100 อันตราย ควรสวม N95</p></div>
       <div class="info-card"><h4>🌡️ อุณหภูมิที่เหมาะสม</h4><p>22–26°C สบายที่สุด · &gt;32°C ควรลดกิจกรรมกลางแจ้ง · &gt;37°C เสี่ยง Heat Stroke</p></div>
+      <div class="info-card"><h4>🥵 Heat Index คืออะไร?</h4><p>ดัชนีความร้อน คำนวณจากอุณหภูมิ + ความชื้น บ่งบอกว่าร่างกายรู้สึกร้อนเท่าใด อาจสูงกว่าอุณหภูมิจริงหลายองศา</p></div>
+      <div class="info-card"><h4>💦 ป้องกัน Heat Stroke</h4><p>ดื่มน้ำ 250ml ทุก 30 นาที · หลีกเลี่ยงแสงแดดตรง · สวมเสื้อสีอ่อน · หยุดพักในที่ร่มทันทีที่รู้สึกเวียนหัว</p></div>
     </div>
   </section>
 
@@ -988,7 +1063,7 @@ footer{
             <circle class="c-track" cx="18" cy="18" r="15.9"/>
             <circle class="c-prog" id="cProg" cx="18" cy="18" r="15.9"/>
           </svg>
-          <div class="c-num" id="cNum">3</div>
+          <div class="c-num" id="cNum">30</div>
         </div>
         <span id="cSec">วินาที</span>
       </div>
@@ -1002,15 +1077,25 @@ footer{
 'use strict';
 
 /* ============================================================
+   DOM HELPER
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+/* ============================================================
    CONFIG & STATE
    ============================================================ */
 const DEFAULT_CONFIG = {
   theme: 'dark', accent: 'amber',
-  refreshInterval: 3000, historyMax: 20,
-  schoolName: 'โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก',
-  schoolSubtitle: 'PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม',
-  animations: true, alertsEnabled: true, forecastEnabled: false, skinType: '',
-  alerts: { uv:{enabled:true,threshold:6}, pm:{enabled:true,threshold:50}, temp:{enabled:true,threshold:35}, hum:{enabled:false,threshold:90} },
+  refreshInterval: 30000, historyMax: 20,
+  animations: true, alertsEnabled: true,
+  forecastEnabled: false, skinType: '',
+  soundEnabled: false, autoSpeechEnabled: false,
+  alerts: {
+    uv:   { enabled:true,  threshold:6  },
+    pm:   { enabled:true,  threshold:50 },
+    temp: { enabled:true,  threshold:35 },
+    hum:  { enabled:false, threshold:90 },
+  },
   chart: { uv:true, pm:true, temp:false, hum:false }
 };
 
@@ -1022,10 +1107,13 @@ function loadConfig() {
     if (s) {
       const p = JSON.parse(s);
       CONFIG = { ...DEFAULT_CONFIG, ...p };
-      CONFIG.alerts = { ...DEFAULT_CONFIG.alerts, ...p.alerts };
-      CONFIG.chart  = { ...DEFAULT_CONFIG.chart,  ...p.chart  };
-      CONFIG.forecastEnabled = p.forecastEnabled !== undefined ? p.forecastEnabled : false;
-      CONFIG.skinType = p.skinType || '';
+      CONFIG.alerts = { ...DEFAULT_CONFIG.alerts };
+      if (p.alerts) {
+        Object.keys(p.alerts).forEach(k => {
+          if (CONFIG.alerts[k]) CONFIG.alerts[k] = { ...CONFIG.alerts[k], ...p.alerts[k] };
+        });
+      }
+      CONFIG.chart = { ...DEFAULT_CONFIG.chart, ...p.chart };
     }
   } catch(e) {}
 }
@@ -1035,129 +1123,38 @@ function saveConfig() {
 }
 
 const STATE = {
-  h: { uv:[], pm:[], temp:[], hum:[], time:[] },   // history
+  h: { uv:[], pm:[], temp:[], hum:[], time:[] },
   stats: {
-    uv:  {min:Infinity,max:-Infinity,sum:0,n:0},
-    pm:  {min:Infinity,max:-Infinity,sum:0,n:0},
-    temp:{min:Infinity,max:-Infinity,sum:0,n:0},
-    hum: {min:Infinity,max:-Infinity,sum:0,n:0},
+    uv:   { min:Infinity, max:-Infinity, sum:0, n:0 },
+    pm:   { min:Infinity, max:-Infinity, sum:0, n:0 },
+    temp: { min:Infinity, max:-Infinity, sum:0, n:0 },
+    hum:  { min:Infinity, max:-Infinity, sum:0, n:0 },
   },
   count: 0,
   sessionStart: new Date(),
-  activeAlerts: new Map(),   // key -> alert info
+  activeAlerts: new Map(),
   refreshTimer: null,
   cTimer: null,
-  countdown: 3,
+  countdown: 30,
   errCount: 0,
+  retryCount: 0,
   lastData: null,
+  // Exposure timer
+  expRunning: false,
+  expStart: null,
+  expElapsedMs: 0,
+  expTimer: null,
 };
 
 /* ============================================================
-   FORECAST ENGINE & SKIN TYPES
+   SKIN TYPES
    ============================================================ */
 const SKIN_TYPES = {
-  type1: { label: 'ผิวขาวมาก / ผิวเผือก 🧑🏻', threshold: 3, burnTime: '10-15 นาที', spf: 'SPF 50+' },
-  type2: { label: 'ผิวขาวเหลือง 🧑🏼', threshold: 4, burnTime: '20-25 นาที', spf: 'SPF 30+' },
-  type3: { label: 'ผิวสองสี / ผิวน้ำผึ้ง 🧑🏽', threshold: 5, burnTime: '30-40 นาที', spf: 'SPF 30+' },
-  type4: { label: 'ผิวเข้ม / ผิวคล้ำ 🧑🏾', threshold: 6, burnTime: '50-60 นาที', spf: 'SPF 15-30' },
+  type1: { label:'ผิวขาวมาก / ผิวเผือก 🧑🏻', threshold:3, burnTime:'10-15 นาที', spf:'SPF 50+', maxMins:15 },
+  type2: { label:'ผิวขาวเหลือง 🧑🏼',          threshold:4, burnTime:'20-25 นาที', spf:'SPF 30+', maxMins:25 },
+  type3: { label:'ผิวสองสี / ผิวน้ำผึ้ง 🧑🏽',  threshold:5, burnTime:'30-40 นาที', spf:'SPF 30+', maxMins:40 },
+  type4: { label:'ผิวเข้ม / ผิวคล้ำ 🧑🏾',      threshold:6, burnTime:'50-60 นาที', spf:'SPF 15-30', maxMins:60 },
 };
-
-function showSkinModal() {
-  document.getElementById('skinOverlay').classList.add('open');
-  document.getElementById('skinModal').classList.add('open');
-}
-
-function hideSkinModal() {
-  document.getElementById('skinOverlay').classList.remove('open');
-  document.getElementById('skinModal').classList.remove('open');
-}
-
-function selectSkinType(type) {
-  CONFIG.skinType = type;
-  saveConfig();
-  hideSkinModal();
-  updateSkinDisplay();
-  if (STATE.lastData) {
-    updateDashboard(STATE.lastData);
-  }
-}
-
-function updateSkinDisplay() {
-  const el = document.getElementById('settingsSkinDisplay');
-  if (el) {
-    const skin = SKIN_TYPES[CONFIG.skinType];
-    el.textContent = skin ? `ผิวของคุณ: ${skin.label}` : 'ผิวของคุณ: ยังไม่เลือก 👤';
-  }
-}
-
-const Forecast = {
-  linearRegression(data) {
-    const n = data.length;
-    if (n < 2) return null;
-    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
-    for (let i = 0; i < n; i++) {
-      sumX += i;
-      sumY += data[i];
-      sumXY += i * data[i];
-      sumXX += i * i;
-    }
-    const denom = n * sumXX - sumX * sumX;
-    if (denom === 0) return { slope: 0, intercept: data[0] };
-    const slope = (n * sumXY - sumX * sumY) / denom;
-    const intercept = (sumY - slope * sumX) / n;
-    return { slope, intercept };
-  },
-
-  predict(data, steps = 5) {
-    if (data.length < 2) return Array(steps).fill(data[0] || 0);
-    const subset = data.slice(-12); // focus on recent history for trend
-    const lr = this.linearRegression(subset);
-    if (!lr) return Array(steps).fill(data[data.length - 1]);
-
-    const predictions = [];
-    const lastIdx = subset.length - 1;
-    const lastActual = data[data.length - 1];
-    const connectionOffset = lastActual - (lr.slope * lastIdx + lr.intercept);
-
-    for (let step = 1; step <= steps; step++) {
-      const predX = lastIdx + step;
-      const val = lr.slope * predX + lr.intercept + connectionOffset;
-      predictions.push(Math.max(0, val));
-    }
-    return predictions;
-  }
-};
-
-function toggleForecast(btn) {
-  CONFIG.forecastEnabled = !CONFIG.forecastEnabled;
-  saveConfig();
-  const toggleInSettings = document.getElementById('forecastToggle');
-  if (toggleInSettings) toggleInSettings.checked = CONFIG.forecastEnabled;
-  
-  if (CONFIG.forecastEnabled) {
-    btn.style.borderColor = 'var(--accent)';
-    btn.style.color = '#000';
-    btn.style.backgroundColor = 'var(--accent)';
-    btn.textContent = '🔮 พยากรณ์อนาคต: เปิด';
-  } else {
-    btn.style.borderColor = 'var(--border)';
-    btn.style.color = 'var(--text-1)';
-    btn.style.backgroundColor = 'var(--bg-secondary)';
-    btn.textContent = '🔮 พยากรณ์อนาคต: ปิด';
-  }
-  renderChart();
-}
-
-function formatRelativeTime(steps) {
-  const intervalMs = CONFIG.refreshInterval;
-  const totalSec = Math.round((intervalMs * steps) / 1000);
-  if (totalSec >= 60) {
-    const min = Math.floor(totalSec / 60);
-    const sec = totalSec % 60;
-    return `+${min}น${sec > 0 ? sec + 'ว' : ''}`;
-  }
-  return `+${totalSec}ว`;
-}
 
 /* ============================================================
    LEVEL CLASSIFIERS
@@ -1166,69 +1163,610 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyIOBAP3YxbKodSwoghGu3P
 
 function uvLevel(v) {
   const n = parseFloat(v);
-  if (isNaN(n)) return {label:'--',color:'#8b949e',badge:'ไม่ทราบ',pct:0};
-  if (n <= 2)  return {label:'ต่ำ',color:'#34d399',badge:'ต่ำ 🟢',pct:(n/12)*100};
-  if (n <= 5)  return {label:'ปานกลาง',color:'#fbbf24',badge:'ปานกลาง 🟡',pct:(n/12)*100};
-  if (n <= 7)  return {label:'สูง',color:'#f97316',badge:'สูง 🟠',pct:(n/12)*100};
-  if (n <= 10) return {label:'สูงมาก',color:'#ef4444',badge:'สูงมาก 🔴',pct:(n/12)*100};
-  return {label:'อันตราย',color:'#9333ea',badge:'อันตราย 🟣',pct:100};
+  if (isNaN(n)) return { label:'--', color:'#8b949e', badge:'ไม่ทราบ', pct:0 };
+  if (n <= 2)  return { label:'ต่ำ',      color:'#34d399', badge:'ต่ำ 🟢',      pct:(n/12)*100 };
+  if (n <= 5)  return { label:'ปานกลาง', color:'#fbbf24', badge:'ปานกลาง 🟡', pct:(n/12)*100 };
+  if (n <= 7)  return { label:'สูง',      color:'#f97316', badge:'สูง 🟠',      pct:(n/12)*100 };
+  if (n <= 10) return { label:'สูงมาก',  color:'#ef4444', badge:'สูงมาก 🔴',  pct:(n/12)*100 };
+  return { label:'อันตราย', color:'#9333ea', badge:'อันตราย 🟣', pct:100 };
 }
 
-function pmLevel(v)   {
-  const n=parseFloat(v);
-  if(isNaN(n)) return {label:'--',color:'#8b949e'};
-  if(n<=25)  return {label:'ดี',color:'#34d399'};
-  if(n<=50)  return {label:'ปานกลาง',color:'#fbbf24'};
-  if(n<=100) return {label:'เริ่มมีผล',color:'#f97316'};
-  return {label:'อันตราย',color:'#ef4444'};
+function pmLevel(v) {
+  const n = parseFloat(v);
+  if (isNaN(n)) return { label:'--', color:'#8b949e' };
+  if (n <= 25)  return { label:'ดี',        color:'#34d399' };
+  if (n <= 50)  return { label:'ปานกลาง', color:'#fbbf24' };
+  if (n <= 100) return { label:'เริ่มมีผล', color:'#f97316' };
+  return { label:'อันตราย', color:'#ef4444' };
 }
+
 function tempLevel(v) {
-  const n=parseFloat(v);
-  if(isNaN(n)) return {label:'--',color:'#8b949e'};
-  if(n<=22)  return {label:'เย็น',color:'#38bdf8'};
-  if(n<=28)  return {label:'สบาย',color:'#34d399'};
-  if(n<=35)  return {label:'ร้อน',color:'#f97316'};
-  return {label:'ร้อนมาก',color:'#ef4444'};
+  const n = parseFloat(v);
+  if (isNaN(n)) return { label:'--', color:'#8b949e' };
+  if (n <= 22)  return { label:'เย็น',    color:'#38bdf8' };
+  if (n <= 28)  return { label:'สบาย',   color:'#34d399' };
+  if (n <= 35)  return { label:'ร้อน',   color:'#f97316' };
+  return { label:'ร้อนมาก', color:'#ef4444' };
 }
+
 function humLevel(v) {
-  const n=parseFloat(v);
-  if(isNaN(n)) return {label:'--',color:'#8b949e'};
-  if(n<30)   return {label:'แห้ง',color:'#f97316'};
-  if(n<=60)  return {label:'เหมาะสม',color:'#34d399'};
-  if(n<=80)  return {label:'ชื้น',color:'#fbbf24'};
-  return {label:'ชื้นมาก',color:'#38bdf8'};
+  const n = parseFloat(v);
+  if (isNaN(n)) return { label:'--', color:'#8b949e' };
+  if (n < 30)   return { label:'แห้ง',     color:'#f97316' };
+  if (n <= 60)  return { label:'เหมาะสม', color:'#34d399' };
+  if (n <= 80)  return { label:'ชื้น',     color:'#fbbf24' };
+  return { label:'ชื้นมาก', color:'#38bdf8' };
+}
+
+/* ============================================================
+   HEAT INDEX CALCULATOR
+   ============================================================ */
+function calcHeatIndex(tempC, humidity) {
+  const T = tempC;
+  const H = humidity;
+  if (isNaN(T) || isNaN(H) || T < 27) return T; // Only meaningful above 27°C
+  const HI =
+    -8.78469475556 +
+    1.61139411 * T +
+    2.33854883889 * H +
+    -0.14611605 * T * H +
+    -0.01230809 * T * T +
+    -0.01642482 * H * H +
+    0.00221173 * T * T * H +
+    0.00072546 * T * H * H +
+    -0.00000358 * T * T * H * H;
+  return Math.round(HI * 10) / 10;
+}
+
+/* ============================================================
+   FORECAST ENGINE
+   ============================================================ */
+const Forecast = {
+  linearRegression(data) {
+    const n = data.length;
+    if (n < 2) return null;
+    let sX=0, sY=0, sXY=0, sXX=0;
+    for (let i=0; i<n; i++) { sX+=i; sY+=data[i]; sXY+=i*data[i]; sXX+=i*i; }
+    const d = n*sXX - sX*sX;
+    if (d === 0) return { slope:0, intercept:data[0] };
+    return { slope:(n*sXY - sX*sY)/d, intercept:(sY - (n*sXY - sX*sY)/d * sX)/n };
+  },
+  predict(data, steps=5) {
+    if (data.length < 2) return Array(steps).fill(data[0]||0);
+    const sub = data.slice(-12);
+    const lr = this.linearRegression(sub);
+    if (!lr) return Array(steps).fill(data[data.length-1]);
+    const last = data[data.length-1];
+    const off = last - (lr.slope*(sub.length-1) + lr.intercept);
+    return Array.from({length:steps}, (_,i) => Math.max(0, lr.slope*(sub.length+i) + lr.intercept + off));
+  }
+};
+
+/* ============================================================
+   WEB AUDIO — ALERT BEEP
+   ============================================================ */
+let audioCtx = null;
+function playBeep(freq=880, dur=0.18, vol=0.3) {
+  if (!CONFIG.soundEnabled) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine'; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + dur);
+  } catch(e) {}
+}
+
+/* ============================================================
+   UV EXPOSURE TIMER
+   ============================================================ */
+function toggleExposureTimer() {
+  if (STATE.expRunning) {
+    clearInterval(STATE.expTimer);
+    STATE.expElapsedMs += Date.now() - STATE.expStart;
+    STATE.expRunning = false;
+    $('expBtn').textContent = '▶ เริ่ม';
+  } else {
+    STATE.expStart = Date.now();
+    STATE.expRunning = true;
+    $('expBtn').textContent = '⏸ หยุด';
+    STATE.expTimer = setInterval(updateExposureBar, 1000);
+  }
+}
+
+function resetExposureTimer() {
+  clearInterval(STATE.expTimer);
+  STATE.expRunning = false;
+  STATE.expElapsedMs = 0;
+  STATE.expStart = null;
+  $('expBtn').textContent = '▶ เริ่ม';
+  $('expBar').style.width = '0%';
+  $('expPct').textContent = '0%';
+  $('expElapsed').textContent = '0:00 / -- นาที';
+}
+
+function updateExposureBar() {
+  const skin = SKIN_TYPES[CONFIG.skinType] || SKIN_TYPES.type2;
+  const uvNow = parseFloat(STATE.lastData?.uv) || 0;
+
+  const totalMs = STATE.expElapsedMs + (STATE.expRunning ? Date.now() - STATE.expStart : 0);
+  const totalSec = Math.floor(totalMs / 1000);
+  const min = Math.floor(totalSec / 60), sec = totalSec % 60;
+  const elapsedStr = `${min}:${sec.toString().padStart(2,'0')}`;
+
+  // Adjust max exposure by UV level (higher UV = faster burn)
+  const uvFactor = uvNow <= 2 ? 0.3 : uvNow <= 5 ? 0.6 : uvNow <= 7 ? 0.85 : uvNow <= 10 ? 1.0 : 1.3;
+  const effectiveMins = uvFactor > 0 ? skin.maxMins / Math.max(0.3, uvFactor) : skin.maxMins;
+  const pct = Math.min(100, (totalSec / 60) / effectiveMins * 100);
+
+  const barColor = pct < 50 ? '#34d399' : pct < 80 ? '#fbbf24' : '#ef4444';
+  $('expBar').style.width = pct.toFixed(1) + '%';
+  $('expBar').style.background = barColor;
+  $('expPct').textContent = pct.toFixed(0) + '%';
+  $('expElapsed').textContent = `${elapsedStr} / ${Math.round(effectiveMins)} นาที`;
+
+  if (pct >= 100 && CONFIG.soundEnabled) {
+    playBeep(440, 0.4, 0.5);
+    playBeep(660, 0.3, 0.4);
+  }
+}
+
+/* ============================================================
+   TEXT TO SPEECH ANNOUNCEMENTS
+   ============================================================ */
+function speakCurrentFlag() {
+  const data = STATE.lastData;
+  if (!data) return;
+  const flag = getFlagState(parseFloat(data.uv)||0, parseFloat(data.pm)||0);
+  const text = `ขณะนี้ ค่าดัชนีแสงแดด อยู่ที่ ${parseFloat(data.uv).toFixed(1)} และค่าฝุ่น พีเอ็ม 2.5 อยู่ที่ ${parseFloat(data.pm).toFixed(0)} ไมโครกรัมต่อลูกบาศก์เมตร โรงเรียนประกาศ ${flag.name}. คำแนะนำคือ ${flag.advice}`;
+  
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'th-TH';
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert('อุปกรณ์ของคุณไม่รองรับระบบออกเสียงข้อความ (Text to Speech)');
+  }
+}
+
+/* ============================================================
+   PNG SNAPSHOT CARD GENERATOR (CANVAS)
+   ============================================================ */
+function downloadSnapshotCard() {
+  const data = STATE.lastData;
+  if (!data) { alert('ยังไม่มีข้อมูลสำหรับสร้างรูปภาพ'); return; }
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = 900;
+  canvas.height = 680;
+  const ctx = canvas.getContext('2d');
+  
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  
+  const themeBg1 = isDark ? '#0d1117' : '#f0f4f8';
+  const themeBg2 = isDark ? '#1c2128' : '#ffffff';
+  const themeCardBg = isDark ? '#161b22' : '#f8fafc';
+  const themeText1 = isDark ? '#e6edf3' : '#0f172a';
+  const themeText2 = isDark ? '#8b949e' : '#475569';
+  const themeBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  
+  const grad = ctx.createRadialGradient(450, 340, 50, 450, 340, 500);
+  grad.addColorStop(0, themeBg2);
+  grad.addColorStop(1, themeBg1);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 900, 680);
+  
+  const uvL = uvLevel(data.uv);
+  ctx.fillStyle = uvL.color + '0D';
+  ctx.beginPath();
+  ctx.arc(750, 160, 200, 0, Math.PI * 2);
+  ctx.fill();
+
+  const crest = new Image();
+  crest.onload = function() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(80, 75, 36, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(44, 39, 72, 72);
+    ctx.drawImage(crest, 46, 41, 68, 68);
+    ctx.restore();
+    
+    ctx.strokeStyle = uvL.color;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(80, 75, 36, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    drawRemaining();
+  };
+  crest.onerror = function() {
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.1)';
+    ctx.beginPath();
+    ctx.arc(80, 75, 36, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 36px Sarabun, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🌿', 80, 75);
+    
+    drawRemaining();
+  };
+  crest.src = 'logo.png';
+  
+  function drawRemaining() {
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = themeText1;
+    ctx.font = 'bold 22px Sarabun, sans-serif';
+    ctx.fillText('โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก', 134, 46);
+    
+    ctx.fillStyle = themeText2;
+    ctx.font = '600 13px Sarabun, sans-serif';
+    ctx.fillText('PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อมสิ่งแวดล้อม', 134, 76);
+    
+    ctx.fillStyle = '#f59e0b';
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.fillText('LIVE SENSOR SNAPSHOT', 134, 94);
+    
+    ctx.strokeStyle = themeBorder;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(40, 134);
+    ctx.lineTo(860, 134);
+    ctx.stroke();
+    
+    const blocks = [
+      { name: 'UV RADIATION INDEX', icon: '☀️', val: data.uv, unit: '', level: uvLevel(data.uv) },
+      { name: 'PM2.5 DUST', icon: '🌫️', val: data.pm, unit: ' µg/m³', level: pmLevel(data.pm) },
+      { name: 'TEMPERATURE', icon: '🌡️', val: data.temp, unit: ' °C', level: tempLevel(data.temp) },
+      { name: 'HUMIDITY', icon: '💧', val: data.hum, unit: ' %', level: humLevel(data.hum) }
+    ];
+    
+    const startX = 40;
+    const startY = 160;
+    const blockW = 196;
+    const blockH = 150;
+    const gap = 12;
+    
+    blocks.forEach((b, idx) => {
+      const bx = startX + idx * (blockW + gap);
+      const by = startY;
+      
+      ctx.fillStyle = themeCardBg;
+      ctx.strokeStyle = themeBorder;
+      ctx.lineWidth = 1;
+      drawRoundedRect(ctx, bx, by, blockW, blockH, 12, true, true);
+      
+      ctx.fillStyle = b.level.color;
+      ctx.fillRect(bx, by, blockW, 4);
+      
+      ctx.fillStyle = themeText2;
+      ctx.font = '800 10px Inter, sans-serif';
+      ctx.fillText(b.name, bx + 16, by + 18);
+      
+      ctx.fillStyle = themeText1;
+      ctx.font = '22px Sarabun, sans-serif';
+      ctx.fillText(b.icon, bx + 16, by + 36);
+      
+      ctx.fillStyle = themeText1;
+      ctx.font = 'bold 36px Inter, sans-serif';
+      ctx.fillText(b.val + b.unit, bx + 16, by + 68);
+      
+      ctx.fillStyle = b.level.color;
+      drawRoundedRect(ctx, bx + 16, by + 114, 80, 20, 6, true, false);
+      
+      ctx.fillStyle = '#000000';
+      ctx.font = 'bold 11px Sarabun, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(b.level.label || b.level.badge || '--', bx + 16 + 40, by + 114 + 10);
+      
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'top';
+    });
+
+    const hiVal = calcHeatIndex(parseFloat(data.temp)||0, parseFloat(data.hum)||0);
+    const hiColor = hiVal > 40 ? '#ef4444' : hiVal > 35 ? '#f97316' : hiVal > 32 ? '#fbbf24' : '#34d399';
+    
+    const hix = 40;
+    const hiy = 328;
+    const hiw = 820;
+    const hih = 80;
+    
+    ctx.fillStyle = themeCardBg;
+    ctx.strokeStyle = themeBorder;
+    drawRoundedRect(ctx, hix, hiy, hiw, hih, 12, true, true);
+    
+    ctx.fillStyle = themeText1;
+    ctx.font = 'bold 16px Sarabun, sans-serif';
+    ctx.fillText('🥵 ดัชนีความร้อน (Heat Index / Feels Like)', hix + 20, hiy + 18);
+    
+    ctx.fillStyle = themeText2;
+    ctx.font = '500 13px Sarabun, sans-serif';
+    ctx.fillText('ความรู้สึกร้อนสัมพัทธ์ของร่างกายมนุษย์ คำนวณจากความชื้นรวมกับอุณหภูมิ', hix + 20, hiy + 44);
+    
+    ctx.fillStyle = hiColor;
+    ctx.font = 'bold 32px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`${hiVal} °C`, hix + hiw - 24, hiy + 40);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+
+    const flag = getFlagState(parseFloat(data.uv)||0, parseFloat(data.pm)||0);
+    const flagColors = {
+      green: { text: '#34d399', bg: 'rgba(52, 211, 153, 0.12)' },
+      yellow: { text: '#fbbf24', bg: 'rgba(251, 191, 36, 0.12)' },
+      orange: { text: '#f97316', bg: 'rgba(249, 115, 22, 0.12)' },
+      red: { text: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)' }
+    };
+    const fc = flagColors[flag.color] || flagColors.green;
+    
+    const fx = 40;
+    const fy = 426;
+    const fw = 820;
+    const fh = 140;
+    
+    ctx.fillStyle = fc.bg;
+    ctx.strokeStyle = fc.text + '33';
+    drawRoundedRect(ctx, fx, fy, fw, fh, 16, true, true);
+    
+    ctx.fillStyle = themeText1;
+    ctx.font = '48px Sarabun, sans-serif';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(flag.icon, fx + 24, fy + 70);
+    ctx.textBaseline = 'top';
+    
+    ctx.fillStyle = fc.text;
+    ctx.font = 'bold 18px Sarabun, sans-serif';
+    ctx.fillText(flag.name, fx + 90, fy + 24);
+    
+    ctx.fillStyle = themeText1;
+    ctx.font = '500 14px Sarabun, sans-serif';
+    ctx.fillText('การประเมินความปลอดภัยสุขภาพสำหรับกิจกรรมกลางแจ้งของโรงเรียน:', fx + 90, fy + 52);
+    
+    ctx.fillStyle = themeText2;
+    ctx.font = 'bold 13px Sarabun, sans-serif';
+    const lines = flag.advice.match(/.{1,60}/g) || [flag.advice];
+    lines.forEach((l, lIdx) => {
+      ctx.fillText(l, fx + 90, fy + 78 + (lIdx * 20));
+    });
+    
+    const now = new Date();
+    const ts = `บันทึกเมื่อ: วัน${TH_DAYS[now.getDay()]}ที่ ${now.getDate()} ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543} เวลา ${now.toTimeString().slice(0,8)}`;
+    
+    ctx.fillStyle = themeText2;
+    ctx.font = '500 12px Sarabun, sans-serif';
+    ctx.fillText(ts, 40, 600);
+    
+    ctx.fillStyle = themeText2;
+    ctx.font = 'bold 11px Inter, sans-serif';
+    ctx.fillText('ARDUINO SENSOR STATIONS → GOOGLE SHEETS CLOUD → WEB DASHBOARD', 40, 622);
+    
+    ctx.textAlign = 'right';
+    ctx.fillStyle = themeText2;
+    ctx.font = 'italic 12px Sarabun, sans-serif';
+    ctx.fillText('โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก', 860, 600);
+    
+    try {
+      const link = document.createElement('a');
+      link.download = `uv_monitor_snapshot_${now.toISOString().slice(0,10)}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch(e) {
+      alert('เกิดข้อผิดพลาดในการดาวน์โหลดภาพ: ' + e.message);
+    }
+  }
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius, fill, stroke) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+  if (fill) ctx.fill();
+  if (stroke) ctx.stroke();
+}
+
+/* ============================================================
+   LIVE CLOCK
+   ============================================================ */
+const TH_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const TH_DAYS   = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
+
+function tickClock() {
+  const d = new Date();
+  const hh = d.getHours().toString().padStart(2,'0');
+  const mm = d.getMinutes().toString().padStart(2,'0');
+  const ss = d.getSeconds().toString().padStart(2,'0');
+  const timeStr = `${hh}:${mm}:${ss}`;
+
+  const dayTh = TH_DAYS[d.getDay()];
+  const dateTh = `วัน${dayTh} ${d.getDate()} ${TH_MONTHS[d.getMonth()]} ${d.getFullYear()+543}`;
+
+  const lc = $('liveClock'), ld = $('liveDate');
+  if (lc) lc.textContent = timeStr;
+  if (ld) ld.textContent = dateTh;
+
+  const kc = $('kioskClock');
+  if (kc) kc.textContent = timeStr;
+}
+setInterval(tickClock, 1000);
+tickClock();
+
+/* ============================================================
+   COPY TO CLIPBOARD
+   ============================================================ */
+function copySensorCard(key) {
+  const data = STATE.lastData;
+  if (!data) return;
+  const hi = calcHeatIndex(parseFloat(data.temp), parseFloat(data.hum));
+  const texts = {
+    uv:   `☀️ UV Index: ${data.uv}\n🌫️ PM2.5: ${data.pm} µg/m³\n🌡️ อุณหภูมิ: ${data.temp}°C\n💧 ความชื้น: ${data.hum}%\n🥵 รู้สึกร้อน: ${hi}°C\n⏰ ${data.time}`,
+    pm:   `🌫️ PM2.5: ${data.pm} µg/m³ (${pmLevel(data.pm).label})\n⏰ ${data.time}`,
+    temp: `🌡️ อุณหภูมิ: ${data.temp}°C (${tempLevel(data.temp).label})\n🥵 รู้สึกร้อน: ${hi}°C\n⏰ ${data.time}`,
+    hum:  `💧 ความชื้น: ${data.hum}% (${humLevel(data.hum).label})\n⏰ ${data.time}`,
+  };
+  navigator.clipboard?.writeText(texts[key] || '').catch(() => {});
+
+  // Show toast
+  const toast = $(`copyToast${key.charAt(0).toUpperCase()+key.slice(1)}`);
+  if (toast) {
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1500);
+  }
+}
+
+/* ============================================================
+   SHARE SNAPSHOT
+   ============================================================ */
+function shareSnapshot() {
+  const data = STATE.lastData;
+  const uvL = data ? uvLevel(data.uv) : { badge:'--' };
+  const pmL = data ? pmLevel(data.pm) : { label:'--' };
+  const tempL = data ? tempLevel(data.temp) : { label:'--' };
+  const hi = data ? calcHeatIndex(parseFloat(data.temp), parseFloat(data.hum)) : '--';
+  const now = new Date();
+  const dateStr = `${now.getDate()} ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543} ${now.toTimeString().slice(0,8)}`;
+
+  const text = [
+    `🏫 โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก`,
+    `📅 ${dateStr}`,
+    `━━━━━━━━━━━━━━`,
+    `☀️  UV Index: ${data?.uv ?? '--'} (${uvL.badge})`,
+    `🌫️  PM2.5: ${data?.pm ?? '--'} µg/m³ (${pmL.label})`,
+    `🌡️  อุณหภูมิ: ${data?.temp ?? '--'}°C (${tempL.label})`,
+    `💧  ความชื้น: ${data?.hum ?? '--'}%`,
+    `🥵  รู้สึกร้อน: ${hi}°C`,
+    `━━━━━━━━━━━━━━`,
+    `ข้อมูลจากระบบตรวจวัดสภาพแวดล้อม PCSHS Phitsanulok`,
+  ].join('\n');
+
+  if (navigator.share) {
+    navigator.share({ title:'UV Monitor PCSHS', text }).catch(()=>{});
+  } else {
+    navigator.clipboard?.writeText(text).then(() => {
+      alert('✅ คัดลอกข้อมูลสแนปช็อตแล้ว!\n\nสามารถนำไปวางใน Line, Facebook หรือ SMS ได้เลย');
+    }).catch(() => {
+      prompt('คัดลอกข้อความด้านล่าง:', text);
+    });
+  }
+}
+
+/* ============================================================
+   KIOSK / TV MODE
+   ============================================================ */
+function enterKiosk() {
+  document.body.classList.add('kiosk-mode');
+  document.documentElement.requestFullscreen?.().catch(()=>{});
+}
+
+function exitKiosk() {
+  document.body.classList.remove('kiosk-mode');
+  document.exitFullscreen?.().catch(()=>{});
+}
+
+function updateKiosk(data) {
+  if (!document.body.classList.contains('kiosk-mode')) return;
+  const uvL = uvLevel(data.uv), pmL = pmLevel(data.pm), tL = tempLevel(data.temp), hL = humLevel(data.hum);
+  const kUv = $('kUvVal'), kPm = $('kPmVal'), kT = $('kTempVal'), kH = $('kHumVal');
+  if (kUv) { kUv.textContent = data.uv; kUv.style.color = uvL.color; }
+  if (kPm) { kPm.textContent = data.pm; kPm.style.color = pmL.color; }
+  if (kT)  { kT.textContent = data.temp; kT.style.color = tL.color; }
+  if (kH)  { kH.textContent = data.hum; kH.style.color = hL.color; }
+  const badge = $('kUvBadge');
+  if (badge) { badge.textContent = uvL.badge; badge.style.background = uvL.color; }
+  updateKioskFlag(parseFloat(data.uv)||0, parseFloat(data.pm)||0);
+}
+
+function updateKioskFlag(uv, pm) {
+  const flagCard = $('kioskFlag'), flagIcon = $('kioskFlagIcon');
+  const flagTitle = $('kioskFlagTitle'), flagDesc = $('kioskFlagDesc');
+  if (!flagCard) return;
+  const { color, icon, name, advice } = getFlagState(uv, pm);
+  flagCard.className = `health-flag-card flag-${color} kiosk-flag`;
+  if (flagIcon)  flagIcon.textContent = icon;
+  if (flagTitle) flagTitle.textContent = name;
+  if (flagDesc)  flagDesc.textContent = advice;
+}
+
+/* ============================================================
+   HEALTH FLAG SYSTEM
+   ============================================================ */
+function getFlagState(uv, pm) {
+  if (uv > 7 || pm > 100) return {
+    color:'red', icon:'🔴',
+    name:'ธงสีแดง (อันตราย / งดกิจกรรม)',
+    advice:'งดทำกิจกรรมกลางแจ้งทุกชนิด สวมหน้ากากอนามัย และอยู่ภายในอาคาร'
+  };
+  if (uv > 5 || pm > 50) return {
+    color:'orange', icon:'🟠',
+    name:'ธงสีส้ม (เริ่มมีผลกระทบ)',
+    advice:'ลดเวลาทำกิจกรรมกลางแจ้ง และหลีกเลี่ยงแสงแดดโดยตรงช่วงเวลาแดดจัด'
+  };
+  if (uv > 2 || pm > 25) return {
+    color:'yellow', icon:'🟡',
+    name:'ธงสีเหลือง (เฝ้าระวัง)',
+    advice:'กลุ่มเสี่ยงควรระมัดระวังเป็นพิเศษ ดื่มน้ำสะอาดบ่อยๆ และสวมหมวก/แว่นกันแดด'
+  };
+  return {
+    color:'green', icon:'🟢',
+    name:'ธงสีเขียว (ความปลอดภัยสูงสุด)',
+    advice:'นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ'
+  };
+}
+
+function updateHealthFlag(uv, pm) {
+  const { color, icon, name, advice } = getFlagState(uv, pm);
+  const flagCard = $('healthFlagCard');
+  if (!flagCard) return;
+  flagCard.className = `health-flag-card flag-${color}`;
+  const fi = $('flagIcon'); if (fi) fi.textContent = icon;
+  const ft = $('flagTitle'); if (ft) ft.textContent = name;
+  const fa = $('flagAdviceText'); if (fa) fa.innerHTML = `ดัชนี UV และค่าฝุ่นรวมอยู่ในระดับนี้ <strong>คำแนะนำ:</strong> ${advice}`;
 }
 
 /* ============================================================
    RECOMMENDATIONS
    ============================================================ */
 function buildRecos(uv, pm, temp) {
-  const u=parseFloat(uv)||0, p=parseFloat(pm)||0, t=parseFloat(temp)||0;
-  const items=[];
+  const u = parseFloat(uv)||0, p = parseFloat(pm)||0, t = parseFloat(temp)||0;
   const skin = SKIN_TYPES[CONFIG.skinType] || SKIN_TYPES.type2;
+  const items = [];
 
-  // UV
-  if(u>=11) {
-    items.push({icon:'⛔',title:'ห้ามออกกลางแจ้งโดยเด็ดขาด',body:`สำหรับผิวคุณ: จะเกิดอาการเบิร์นสะสมอย่างรวดเร็ว (ภายในไม่กี่นาที)`,c:'#9333ea'});
-    items.push({icon:'🕶️',title:'สวมแว่นกรองแสง UV 100% และครีมแดด',body:`ควรใช้ครีมกันแดดที่แรงที่สุด (${skin.spf})`,c:'#9333ea'});
-  } else if(u>=skin.threshold) {
-    const urgencyColor = u>=8?'#ef4444':'#f97316';
-    items.push({icon:'🧴',title:`ต้องทาครีมกันแดด ${skin.spf}`,body:`สีผิวของคุณไวต่อแดดสูง มีโอกาสไหม้เกรียมใน ${skin.burnTime} หากไม่ป้องกัน`,c:urgencyColor});
-    items.push({icon:'🧢',title:'สวมหมวกและกางร่ม',body:'ควรหลีกเลี่ยงแสงแดดช่วงเที่ยงหรือช่วงที่ดัชนี UV ขึ้นสูง',c:urgencyColor});
-  } else if(u>=3) {
-    items.push({icon:'☂️',title:'ใช้ร่มหรือเดินในที่ร่ม',body:'UV ปานกลาง สำหรับผิวคุณควรเริ่มระมัดระวัง',c:'#fbbf24'});
+  if (u >= 11) {
+    items.push({ icon:'⛔', title:'ห้ามออกกลางแจ้งโดยเด็ดขาด', body:`รังสีอันตราย ผิวเสียหายได้ภายในไม่กี่นาที`, c:'#9333ea' });
+  } else if (u >= skin.threshold) {
+    const c = u>=8?'#ef4444':'#f97316';
+    items.push({ icon:'🧴', title:`ต้องทาครีมกันแดด ${skin.spf}`, body:`สีผิวคุณมีโอกาสไหม้ใน ${skin.burnTime} หากไม่ป้องกัน`, c });
+    items.push({ icon:'🧢', title:'สวมหมวกและกางร่ม', body:'ควรหลีกเลี่ยงแสงแดดช่วงกลางวัน', c });
+  } else if (u >= 3) {
+    items.push({ icon:'☂️', title:'ใช้ร่มหรือเดินในที่ร่ม', body:'UV ปานกลาง ควรเริ่มระมัดระวัง', c:'#fbbf24' });
   } else {
-    items.push({icon:'✅',title:'ความเข้มแสงแดดปลอดภัย',body:'ออกกำลังกายหรือทำกิจกรรมกลางแจ้งได้ตามปกติ',c:'#34d399'});
+    items.push({ icon:'✅', title:'ความเข้มแสงแดดปลอดภัย', body:'ออกกำลังกายหรือทำกิจกรรมกลางแจ้งได้ตามปกติ', c:'#34d399' });
   }
 
-  // PM2.5
-  if(p>=100) items.push({icon:'😷',title:'สวมหน้ากาก N95 ทันที',body:'ฝุ่น PM2.5 อันตราย งดกิจกรรมกลางแจ้ง',c:'#ef4444'});
-  else if(p>=50) items.push({icon:'😷',title:'แนะนำสวมหน้ากากอนามัย',body:'ฝุ่นเริ่มส่งผลต่อระบบทางเดินหายใจ',c:'#f97316'});
-  else if(p>=25) items.push({icon:'🌬️',title:'ระวังฝุ่นละอองปานกลาง',body:'ผู้มีโรคทางเดินหายใจควรระมัดระวัง',c:'#fbbf24'});
+  if (p >= 100)     items.push({ icon:'😷', title:'สวมหน้ากาก N95 ทันที',      body:'ฝุ่น PM2.5 อันตราย งดกิจกรรมกลางแจ้ง', c:'#ef4444' });
+  else if (p >= 50) items.push({ icon:'😷', title:'แนะนำสวมหน้ากากอนามัย',     body:'ฝุ่นเริ่มส่งผลต่อระบบทางเดินหายใจ', c:'#f97316' });
+  else if (p >= 25) items.push({ icon:'🌬️', title:'ระวังฝุ่นละอองปานกลาง',   body:'ผู้มีโรคทางเดินหายใจควรระมัดระวัง', c:'#fbbf24' });
 
-  // Temperature
-  if(t>=37) items.push({icon:'💧',title:'ดื่มน้ำให้มาก! เสี่ยง Heat Stroke',body:'อากาศร้อนจัด งดกิจกรรมกลางแจ้งทุกประเภท',c:'#ef4444'});
-  else if(t>=32) items.push({icon:'💦',title:'ดื่มน้ำทุก 30 นาที',body:'อากาศร้อน ระวังการขาดน้ำขณะทำกิจกรรม',c:'#f97316'});
+  if (t >= 37)      items.push({ icon:'💧', title:'ดื่มน้ำให้มาก! เสี่ยง Heat Stroke', body:'อากาศร้อนจัด งดกิจกรรมกลางแจ้ง', c:'#ef4444' });
+  else if (t >= 32) items.push({ icon:'💦', title:'ดื่มน้ำทุก 30 นาที',            body:'อากาศร้อน ระวังการขาดน้ำ', c:'#f97316' });
 
   return items;
 }
@@ -1240,33 +1778,38 @@ function checkAlerts(data) {
   if (!CONFIG.alertsEnabled) { clearAllAlerts(); return; }
 
   const checks = [
-    { key:'uv',   val:parseFloat(data.uv),  cfg:CONFIG.alerts.uv,   lvFn:uvLevel,   icon:'☀️', name:'UV Index' },
-    { key:'pm',   val:parseFloat(data.pm),  cfg:CONFIG.alerts.pm,   lvFn:pmLevel,   icon:'🌫️', name:'PM2.5' },
-    { key:'temp', val:parseFloat(data.temp),cfg:CONFIG.alerts.temp, lvFn:tempLevel, icon:'🌡️', name:'อุณหภูมิ' },
-    { key:'hum',  val:parseFloat(data.hum), cfg:CONFIG.alerts.hum,  lvFn:humLevel,  icon:'💧', name:'ความชื้น' },
+    { key:'uv',   val:parseFloat(data.uv),   cfg:CONFIG.alerts.uv,   lvFn:uvLevel,   icon:'☀️', name:'UV Index' },
+    { key:'pm',   val:parseFloat(data.pm),   cfg:CONFIG.alerts.pm,   lvFn:pmLevel,   icon:'🌫️', name:'PM2.5' },
+    { key:'temp', val:parseFloat(data.temp), cfg:CONFIG.alerts.temp, lvFn:tempLevel, icon:'🌡️', name:'อุณหภูมิ' },
+    { key:'hum',  val:parseFloat(data.hum),  cfg:CONFIG.alerts.hum,  lvFn:humLevel,  icon:'💧', name:'ความชื้น' },
   ];
 
-  let changed = false;
+  let changed = false, newAlert = false;
   checks.forEach(c => {
-    if (!c.cfg.enabled || isNaN(c.val)) { STATE.activeAlerts.delete(c.key); changed=true; return; }
+    if (!c.cfg.enabled || isNaN(c.val)) { if(STATE.activeAlerts.delete(c.key)) changed=true; return; }
     if (c.val > c.cfg.threshold) {
       const lv = c.lvFn(c.val);
-      const severity = c.val > c.cfg.threshold * 1.5 ? 'danger' : (c.val > c.cfg.threshold * 1.2 ? 'high' : (c.val > c.cfg.threshold * 1.05 ? 'warn' : 'med'));
-      STATE.activeAlerts.set(c.key, { icon:c.icon, name:c.name, val:c.val, threshold:c.cfg.threshold, color:lv.color, severity });
+      const sev = c.val > c.cfg.threshold*1.5?'danger':c.val>c.cfg.threshold*1.2?'high':c.val>c.cfg.threshold*1.05?'warn':'med';
+      if (!STATE.activeAlerts.has(c.key)) newAlert = true;
+      STATE.activeAlerts.set(c.key, { icon:c.icon, name:c.name, val:c.val, threshold:c.cfg.threshold, color:lv.color, severity:sev });
       changed = true;
     } else {
-      if (STATE.activeAlerts.has(c.key)) { STATE.activeAlerts.delete(c.key); changed=true; }
+      if (STATE.activeAlerts.delete(c.key)) changed = true;
     }
   });
 
   if (changed) renderAlertBar();
-  const badge = document.getElementById('notifBadge');
-  badge.style.display = STATE.activeAlerts.size > 0 ? 'flex' : 'none';
-  badge.textContent = STATE.activeAlerts.size;
+  if (newAlert) playBeep(880, 0.25);
+
+  const badge = $('notifBadge');
+  if (badge) {
+    badge.classList.toggle('show', STATE.activeAlerts.size > 0);
+    badge.textContent = STATE.activeAlerts.size;
+  }
 }
 
 function renderAlertBar() {
-  const bar = document.getElementById('alertBar');
+  const bar = $('alertBar');
   if (STATE.activeAlerts.size === 0) { bar.classList.remove('visible'); bar.innerHTML=''; return; }
   bar.innerHTML = [...STATE.activeAlerts.values()].map(a => `
     <div class="alert-item lv-${a.severity}">
@@ -1279,13 +1822,16 @@ function renderAlertBar() {
 
 function clearAllAlerts() {
   STATE.activeAlerts.clear();
-  document.getElementById('alertBar').classList.remove('visible');
-  document.getElementById('notifBadge').style.display='none';
+  const bar = $('alertBar'), badge = $('notifBadge');
+  if (bar) bar.classList.remove('visible');
+  if (badge) badge.classList.remove('show');
 }
+
 function checkAlertBarVis() {
-  if (!document.querySelector('.alert-item')) document.getElementById('alertBar').classList.remove('visible');
+  if (!document.querySelector('.alert-item')) $('alertBar')?.classList.remove('visible');
 }
-function toggleAlertPanel() { document.getElementById('alertBar').classList.toggle('visible'); }
+
+function toggleAlertPanel() { $('alertBar')?.classList.toggle('visible'); }
 
 /* ============================================================
    STATS UPDATE
@@ -1301,211 +1847,204 @@ function updateStats(key, val) {
 function renderStats() {
   const fmt = (v, d=1) => isFinite(v) ? v.toFixed(d) : '--';
   const avg = k => STATE.stats[k].n > 0 ? STATE.stats[k].sum / STATE.stats[k].n : NaN;
-
   ['uv','pm','temp','hum'].forEach(k => {
     const s = STATE.stats[k];
     const id = k.charAt(0).toUpperCase() + k.slice(1);
-    document.getElementById(`stat${id}Min`).textContent = fmt(s.min);
-    document.getElementById(`stat${id}Max`).textContent = fmt(s.max);
-    document.getElementById(`stat${id}Avg`).textContent = fmt(avg(k));
+    const mn = $(`stat${id}Min`), mx = $(`stat${id}Max`), av = $(`stat${id}Avg`);
+    if (mn) mn.textContent = fmt(s.min);
+    if (mx) mx.textContent = fmt(s.max);
+    if (av) av.textContent = fmt(avg(k));
   });
 }
 
 /* ============================================================
-   SENSOR CARD UPDATE
+   ANIMATION HELPERS
    ============================================================ */
 function flashEl(el) {
-  if (!CONFIG.animations) return;
+  if (!CONFIG.animations || !el) return;
   el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
 }
 
 function setStatusBadge(el, label, color) {
+  if (!el) return;
   el.textContent = label;
   el.style.background = color + '22';
   el.style.color = color;
 }
 
 function animateNumber(el, target, decimals=1) {
+  if (!el) return;
   if (!CONFIG.animations) { el.textContent = isNaN(target) ? '--' : target.toFixed(decimals); return; }
   const start = parseFloat(el.textContent) || 0;
   const dur = 400, t0 = performance.now();
   function step(t) {
     const p = Math.min(1, (t-t0)/dur);
-    const cur = start + (target-start) * (1 - Math.pow(1-p,3));
-    el.textContent = cur.toFixed(decimals);
+    el.textContent = (start + (target-start) * (1 - Math.pow(1-p,3))).toFixed(decimals);
     if (p < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
+}
+
+function setBar(id, pct, color) {
+  const el = $(id);
+  if (!el) return;
+  el.style.width = Math.max(2, Math.min(100, pct)) + '%';
+  el.style.background = color;
 }
 
 /* ============================================================
    MAIN DASHBOARD UPDATE
    ============================================================ */
 function updateDashboard(data) {
-  const uv=data.uv, pm=data.pm, temp=data.temp, hum=data.hum, time=data.time;
+  const { uv, pm, temp, hum, time } = data;
   STATE.count++; STATE.lastData = data;
 
   // History
   const h = STATE.h;
   ['uv','pm','temp','hum'].forEach(k => {
     h[k].push(parseFloat(data[k])||0);
-    if(h[k].length > CONFIG.historyMax) h[k].shift();
+    if (h[k].length > CONFIG.historyMax) h[k].shift();
   });
   h.time.push(time);
-  if(h.time.length > CONFIG.historyMax) h.time.shift();
+  if (h.time.length > CONFIG.historyMax) h.time.shift();
 
   // Stats
-  updateStats('uv', uv); updateStats('pm', pm);
-  updateStats('temp', temp); updateStats('hum', hum);
+  ['uv','pm','temp','hum'].forEach(k => updateStats(k, data[k]));
   renderStats();
 
   // Hero
-  document.getElementById('heroTime').textContent = time;
-  document.getElementById('heroCount').textContent = STATE.count;
+  const ht = $('heroTime'); if (ht) ht.textContent = time;
+
+  // Health Flag
+  const uvNum = parseFloat(uv)||0, pmNum = parseFloat(pm)||0;
+  updateHealthFlag(uvNum, pmNum);
+
+  // Speak on change if enabled
+  const flagState = getFlagState(uvNum, pmNum);
+  if (STATE.lastFlagColor && STATE.lastFlagColor !== flagState.color && CONFIG.autoSpeechEnabled) {
+    speakCurrentFlag();
+  }
+  STATE.lastFlagColor = flagState.color;
+
+  // Exposure timer passive update
+  if (!STATE.expRunning) updateExposureBar();
 
   // Gauge
   const uvL = uvLevel(uv);
-  const uvNum = parseFloat(uv)||0;
   const circumf = 314.16;
   const offset = circumf * (1 - Math.min(1, uvNum/12));
-  const ring = document.getElementById('gaugeRing');
-  ring.style.stroke = uvL.color;
-  ring.style.strokeDashoffset = offset;
-  const gaugeVal = document.getElementById('gaugeVal');
-  gaugeVal.style.color = uvL.color;
-  animateNumber(gaugeVal, uvNum, uvNum >= 10 ? 0 : 1);
-  document.getElementById('uvBadge').textContent = uvL.badge;
-  document.getElementById('uvBadge').style.background = uvL.color;
-  document.getElementById('uvBadge').style.boxShadow = `0 0 20px ${uvL.color}66`;
-  document.getElementById('gaugeGlow').style.setProperty('--gauge-color', uvL.color);
-  document.getElementById('gaugeGlow').classList.add('active');
+  const ring = $('gaugeRing');
+  if (ring) { ring.style.stroke = uvL.color; ring.style.strokeDashoffset = offset; }
+  const gaugeVal = $('gaugeVal');
+  if (gaugeVal) { gaugeVal.style.color = uvL.color; animateNumber(gaugeVal, uvNum, uvNum>=10?0:1); }
+  const uvBadge = $('uvBadge');
+  if (uvBadge) { uvBadge.textContent = uvL.badge; uvBadge.style.background = uvL.color; uvBadge.style.boxShadow = `0 0 20px ${uvL.color}66`; }
+  const gaugeGlow = $('gaugeGlow');
+  if (gaugeGlow) { gaugeGlow.style.setProperty('--gauge-color', uvL.color); gaugeGlow.classList.add('active'); }
 
   // Sensor cards
-  const pmL=pmLevel(pm), tL=tempLevel(temp), hL=humLevel(hum);
+  const pmL = pmLevel(pm), tL = tempLevel(temp), hL = humLevel(hum);
+  const uvV = $('uvVal'); if (uvV) { animateNumber(uvV, uvNum, uvNum>=10?0:1); flashEl(uvV); }
+  const pmV = $('pmVal'); if (pmV) { pmV.innerHTML = `${(parseFloat(pm)||0).toFixed(1)} <span class="unit">µg/m³</span>`; flashEl(pmV); }
+  const tV = $('tempVal'); if (tV) { tV.innerHTML = `${(parseFloat(temp)||0).toFixed(1)} <span class="unit">°C</span>`; flashEl(tV); }
+  const hV = $('humVal'); if (hV) { hV.innerHTML = `${(parseFloat(hum)||0).toFixed(0)} <span class="unit">%</span>`; flashEl(hV); }
 
-  document.getElementById('uvVal').innerHTML  = `${uvNum.toFixed(1)}`;
-  document.getElementById('pmVal').innerHTML  = `${parseFloat(pm)||0} <span class="unit">µg/m³</span>`;
-  document.getElementById('tempVal').innerHTML= `${parseFloat(temp)||0} <span class="unit">°C</span>`;
-  document.getElementById('humVal').innerHTML = `${parseFloat(hum)||0} <span class="unit">%</span>`;
+  setStatusBadge($('uvStat'), uvL.label, uvL.color);
+  setStatusBadge($('pmStat'), pmL.label, pmL.color);
+  setStatusBadge($('tempStat'), tL.label, tL.color);
+  setStatusBadge($('humStat'), hL.label, hL.color);
 
-  setStatusBadge(document.getElementById('uvStat'),  uvL.label, uvL.color);
-  setStatusBadge(document.getElementById('pmStat'),  pmL.label, pmL.color);
-  setStatusBadge(document.getElementById('tempStat'),tL.label,  tL.color);
-  setStatusBadge(document.getElementById('humStat'), hL.label,  hL.color);
+  setBar('uvBar',   (uvNum/12)*100, uvL.color);
+  setBar('pmBar',   (Math.min(150, pmNum)/150)*100, pmL.color);
+  setBar('tempBar', (Math.max(0, (parseFloat(temp)||0)-10)/50)*100, tL.color);
+  setBar('humBar',  (parseFloat(hum)||0), hL.color);
 
-  // Progress bars
-  setBar('uvBar',  (uvNum/12)*100,   '#f59e0b');
-  setBar('pmBar',  (Math.min(150,parseFloat(pm)||0)/150)*100, '#a78bfa');
-  setBar('tempBar',(Math.max(0,(parseFloat(temp)||0)-10)/50)*100,'#fb7185');
-  setBar('humBar', (parseFloat(hum)||0), '#34d399');
+  // Heat Index
+  const hiVal = calcHeatIndex(parseFloat(temp)||0, parseFloat(hum)||0);
+  const hiEl = $('heatIndexDisplay');
+  if (hiEl) {
+    const hiColor = hiVal > 40 ? '#ef4444' : hiVal > 35 ? '#f97316' : hiVal > 32 ? '#fbbf24' : '#34d399';
+    hiEl.innerHTML = `🥵 รู้สึกร้อน: <span style="color:${hiColor};font-weight:700">${hiVal}°C</span>`;
+  }
 
-  // UV Scale pointer
+  // AQI Strip
+  const setAqi = (id, badgeId, val, lv) => {
+    const el = $(id), be = $(badgeId);
+    if (el) { el.textContent = typeof val==='number'?val.toFixed(1):val; el.style.color = lv.color; }
+    if (be) { be.textContent = lv.label; be.style.background = lv.color+'22'; be.style.color = lv.color; }
+  };
+  setAqi('aqiUv',   'aqiUvBadge',   uvNum, uvL);
+  setAqi('aqiPm',   'aqiPmBadge',   pmNum, pmL);
+  setAqi('aqiTemp', 'aqiTempBadge', parseFloat(temp)||0, tL);
+  setAqi('aqiHum',  'aqiHumBadge',  parseFloat(hum)||0, hL);
+  const hiAqi = $('aqiHeatIdx');
+  if (hiAqi) { hiAqi.textContent = hiVal; hiAqi.style.color = hiVal > 40?'#ef4444':hiVal>35?'#f97316':'#fb7185'; }
+
+  // Kiosk
+  updateKiosk(data);
+
+  // UV Scale
   const pct = Math.max(1, Math.min(99, (uvNum/12)*100));
-  document.getElementById('uvPointer').style.left = pct + '%';
-  document.getElementById('uvPointer').setAttribute('data-v', 'UV ' + uvNum.toFixed(1));
-  document.getElementById('scaleCurVal').textContent = uvNum.toFixed(1);
+  const ptr = $('uvPointer');
+  if (ptr) { ptr.style.left = pct+'%'; ptr.setAttribute('data-v', 'UV '+uvNum.toFixed(1)); }
+  const scv = $('scaleCurVal'); if (scv) scv.textContent = uvNum.toFixed(1);
 
   // Recommendations
   const recos = buildRecos(uv, pm, temp);
   const skin = SKIN_TYPES[CONFIG.skinType] || SKIN_TYPES.type2;
-  const headlines = ['✅ แสงแดดปลอดภัย','⚠️ เริ่มมีความเสี่ยงต่อผิวคุณ','🟠 แดดจัด — ผิวบอบบางเกิดอาการไหม้ได้ง่าย','🔴 แดดแรงจัด — โอกาสไหม้แดดสูงสุด','⛔ รังสีอันตรายถึงขีดสุด — หลีกเลี่ยงเด็ดขาด'];
-  let hi = 0;
-  if (uvNum >= 11) hi = 4;
-  else if (uvNum >= 8) hi = 3;
-  else if (uvNum >= 6) hi = 2;
-  else if (uvNum >= skin.threshold) hi = 1;
-  else hi = 0;
-  document.getElementById('recoHeadline').textContent = headlines[hi];
-  document.getElementById('recoGrid').innerHTML = recos.map(r=>`
+  const headlines = ['✅ แสงแดดปลอดภัย','⚠️ เริ่มมีความเสี่ยงต่อผิว','🟠 แดดจัด — อาจไหม้แดดได้','🔴 แดดแรงมาก — อันตราย','⛔ รังสีอันตรายถึงขีดสุด'];
+  const hi2 = uvNum>=11?4:uvNum>=8?3:uvNum>=6?2:uvNum>=skin.threshold?1:0;
+  const rh = $('recoHeadline'); if (rh) rh.textContent = headlines[hi2];
+  const rg = $('recoGrid'); if (rg) rg.innerHTML = recos.map(r=>`
     <div class="reco-item active" style="--ri-c:${r.c}">
       <div class="reco-icon">${r.icon}</div>
       <div class="reco-body"><strong>${r.title}</strong>${r.body}</div>
     </div>`).join('');
 
-  // Chart
+  // Chart & Alerts
   renderChart();
-
-  // Alerts
   checkAlerts(data);
 
-  // Status
-  document.getElementById('statusDot').className='status-dot';
-  document.getElementById('statusLabel').textContent='เชื่อมต่อแล้ว';
-  document.getElementById('errsBadge').classList.remove('show');
-  STATE.errCount = 0;
-}
-
-function setBar(id, pct, color) {
-  const el = document.getElementById(id);
-  el.style.width = Math.max(2, Math.min(100, pct)) + '%';
-  el.style.background = color;
+  // Status OK
+  const sd = $('statusDot'), sl = $('statusLabel');
+  if (sd) sd.className = 'status-dot';
+  if (sl) sl.textContent = 'เชื่อมต่อแล้ว';
+  $('errsBadge')?.classList.remove('show');
+  STATE.errCount = 0; STATE.retryCount = 0;
 }
 
 /* ============================================================
-   DATA STORE — localStorage persistence for historical data
+   DATA STORE
    ============================================================ */
 const DataStore = {
   KEY: 'uvdash_history',
-  MIN_GAP_MS: 60 * 1000,   // store at most 1 reading per minute
+  MIN_GAP_MS: 60 * 1000,
   MAX_DAYS: 366,
 
-  load() {
-    try { return JSON.parse(localStorage.getItem(this.KEY)) || { r:[] }; }
-    catch(e) { return { r:[] }; }
-  },
-
-  save(store) {
-    try { localStorage.setItem(this.KEY, JSON.stringify(store)); } catch(e) {}
-  },
+  load() { try { return JSON.parse(localStorage.getItem(this.KEY)) || { r:[] }; } catch(e) { return { r:[] }; } },
+  save(s) { try { localStorage.setItem(this.KEY, JSON.stringify(s)); } catch(e) {} },
 
   add(data) {
     const store = this.load();
     const now = Date.now();
-    const last = store.r[store.r.length - 1];
+    const last = store.r[store.r.length-1];
     if (last && now - last.t < this.MIN_GAP_MS) return;
-    store.r.push({
-      t: now,
-      uv: parseFloat(data.uv)||0,
-      pm: parseFloat(data.pm)||0,
-      temp: parseFloat(data.temp)||0,
-      hum: parseFloat(data.hum)||0,
-    });
-    // Keep only last 366 days worth
-    const cutoff = now - this.MAX_DAYS * 86400 * 1000;
+    store.r.push({ t:now, uv:parseFloat(data.uv)||0, pm:parseFloat(data.pm)||0, temp:parseFloat(data.temp)||0, hum:parseFloat(data.hum)||0 });
+    const cutoff = now - this.MAX_DAYS * 86400000;
     store.r = store.r.filter(r => r.t >= cutoff);
     this.save(store);
   },
 
-  getToday()   { const d=this.load().r, s=startOfDay(); return d.filter(r=>r.t>=s); },
-  getMonth()   { const d=this.load().r, s=startOfMonth(); return d.filter(r=>r.t>=s); },
-  getYear()    { const d=this.load().r, s=startOfYear(); return d.filter(r=>r.t>=s); },
-  getAll()     { return this.load().r; },
+  getToday()  { return this.load().r.filter(r => r.t >= startOfDay()); },
+  getMonth()  { return this.load().r.filter(r => r.t >= startOfMonth()); },
+  getYear()   { return this.load().r.filter(r => r.t >= startOfYear()); },
+  getAll()    { return this.load().r; },
 
-  groupByHour(rr) {
-    const g = Array.from({length:24}, ()=>[]);
-    rr.forEach(r => g[new Date(r.t).getHours()].push(r));
-    return g;
-  },
-  groupByDay(rr) {
-    const now = new Date();
-    const days = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-    const g = Array.from({length:days}, ()=>[]);
-    rr.forEach(r => {
-      const d = new Date(r.t).getDate()-1;
-      if (d >= 0 && d < days) g[d].push(r);
-    });
-    return g;
-  },
-  groupByMonth(rr) {
-    const g = Array.from({length:12}, ()=>[]);
-    rr.forEach(r => g[new Date(r.t).getMonth()].push(r));
-    return g;
-  },
-  avg(arr, key) {
-    if (!arr || !arr.length) return null;
-    return arr.reduce((s,r) => s + (r[key]||0), 0) / arr.length;
-  },
-  clearAll() { localStorage.removeItem(this.KEY); },
+  groupByHour(rr)  { const g=Array.from({length:24},()=>[]); rr.forEach(r=>g[new Date(r.t).getHours()].push(r)); return g; },
+  groupByDay(rr)   { const now=new Date(),days=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),g=Array.from({length:days},()=>[]); rr.forEach(r=>{const d=new Date(r.t).getDate()-1;if(d>=0&&d<days)g[d].push(r)}); return g; },
+  groupByMonth(rr) { const g=Array.from({length:12},()=>[]); rr.forEach(r=>g[new Date(r.t).getMonth()].push(r)); return g; },
+  avg(arr,key)     { if(!arr?.length) return null; return arr.reduce((s,r)=>s+(r[key]||0),0)/arr.length; },
+  clearAll()       { localStorage.removeItem(this.KEY); },
 };
 
 function startOfDay()   { const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); }
@@ -1516,30 +2055,26 @@ function startOfYear()  { const d=new Date(); d.setMonth(0,1); d.setHours(0,0,0,
    PERIOD STATE
    ============================================================ */
 let CURRENT_PERIOD = 'realtime';
-const PERIOD_TITLES = {
-  realtime: 'Trend Chart — เรียลไทม์',
-  today:    'กราฟรายชั่วโมง — วันนี้',
-  month:    'กราฟรายวัน — เดือนนี้',
-  year:     'กราฟรายเดือน — ปีนี้',
-};
-const PERIOD_HINTS = {
-  realtime: 'ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด',
-  today:    'แสดงค่าเฉลี่ยรายชั่วโมงของวันนี้ · ข้อมูลถูกบันทึกทุก 1 นาที',
-  month:    'แสดงค่าเฉลี่ยรายวันของเดือนนี้ · แต่ละแท่งคือค่าเฉลี่ยตลอดวันนั้น',
-  year:     'แสดงค่าเฉลี่ยรายเดือนของปีนี้ · แต่ละแท่งคือค่าเฉลี่ยตลอดเดือนนั้น',
-};
+const PERIOD_TITLES = { realtime:'Trend Chart — เรียลไทม์', today:'กราฟรายชั่วโมง — วันนี้', month:'กราฟรายวัน — เดือนนี้', year:'กราฟรายเดือน — ปีนี้' };
+const PERIOD_HINTS  = { realtime:'ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์เพื่อดูรายละเอียด', today:'ค่าเฉลี่ยรายชั่วโมง · บันทึกทุก 1 นาที', month:'ค่าเฉลี่ยรายวัน · แต่ละแท่งคือค่าเฉลี่ยตลอดวัน', year:'ค่าเฉลี่ยรายเดือน · แต่ละแท่งคือค่าเฉลี่ยตลอดเดือน' };
 
 function setPeriod(p, btn) {
   CURRENT_PERIOD = p;
   document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('chartTitle').textContent = PERIOD_TITLES[p];
-  document.getElementById('chartHint').textContent  = PERIOD_HINTS[p];
+  const ct = $('chartTitle'); if(ct) ct.textContent = PERIOD_TITLES[p];
+  const ch = $('chartHint');  if(ch) ch.textContent = PERIOD_HINTS[p];
   renderChart();
 }
 
+function toggleChart(key, btn) {
+  CONFIG.chart[key] = !CONFIG.chart[key];
+  btn.classList.toggle('active', CONFIG.chart[key]);
+  saveConfig(); renderChart();
+}
+
 /* ============================================================
-   SVG TREND CHART
+   CHART METRICS
    ============================================================ */
 const CHART_METRICS = {
   uv:   { label:'UV Index', color:'#f59e0b', max:12,  min:0 },
@@ -1548,8 +2083,6 @@ const CHART_METRICS = {
   hum:  { label:'Hum%',     color:'#34d399', max:100, min:0 },
 };
 
-const TH_MONTHS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-
 function catmullPath(pts) {
   if (pts.length < 2) return `M${pts[0].x},${pts[0].y}`;
   let d = `M${pts[0].x},${pts[0].y}`;
@@ -1557,642 +2090,312 @@ function catmullPath(pts) {
     const p0=pts[Math.max(0,i-1)], p1=pts[i], p2=pts[i+1], p3=pts[Math.min(pts.length-1,i+2)];
     const cp1x=p1.x+(p2.x-p0.x)/6, cp1y=p1.y+(p2.y-p0.y)/6;
     const cp2x=p2.x-(p3.x-p1.x)/6, cp2y=p2.y-(p3.y-p1.y)/6;
-    d+=` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+    d += ` C${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
   }
   return d;
 }
 
-/* -- Bar Chart for aggregated periods -- */
-/* ── CANDLESTICK CHART for aggregated periods ── */
-function renderCandleChart(groups, labels, periodKey) {
-  const svgEl = document.getElementById('chartSvg');
-  const wrap  = document.getElementById('chartWrap');
-  const W = wrap.clientWidth || 800;
-  const H = 320;
-  const PAD = { t:30, r:56, b:46, l:56 };
-  const cW = W - PAD.l - PAD.r;
-  const cH = H - PAD.t - PAD.b;
-  const n = groups.length;
+/* ============================================================
+   RENDER CHART
+   ============================================================ */
+function renderChart() {
+  if (CURRENT_PERIOD !== 'realtime') { renderCandleChart(...getCandleData(CURRENT_PERIOD)); return; }
 
+  const svgEl = $('chartSvg'), wrap = $('chartWrap');
+  if (!svgEl || !wrap) return;
+  const W = wrap.clientWidth || 800, H = 300;
+  const PAD = { t:20, r:16, b:36, l:44 };
+  const cW = W-PAD.l-PAD.r, cH = H-PAD.t-PAD.b;
   const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)';
-  const textColor  = isDark ? 'rgba(255,255,255,0.32)' : 'rgba(0,0,0,0.38)';
-  const bgColor    = isDark ? '#0d1117' : '#f8fafc';
-  const borderC    = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+  const gridC = isDark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)';
+  const textC = isDark?'rgba(255,255,255,0.32)':'rgba(0,0,0,0.38)';
+  const bgC   = isDark?'#161b22':'#f8fafc';
 
   const activeKeys = Object.keys(CHART_METRICS).filter(k => CONFIG.chart[k]);
-  const primaryKey = activeKeys[0];
-  if (!primaryKey) {
-    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="${textColor}" font-family="Sarabun,sans-serif">เลือก metric ที่ต้องการแสดง</text>`;
-    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const n = STATE.h.time.length;
+
+  if (!n || !activeKeys.length) {
+    svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    svgEl.innerHTML = `<rect width="${W}" height="${H}" fill="${bgC}"/><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="${textC}" font-family="Sarabun,sans-serif">${!n?'รอข้อมูล...':'เลือก metric ที่ต้องการ'}</text>`;
+    $('periodDataCount').textContent = '';
     return;
   }
-  const m = CHART_METRICS[primaryKey];
 
-  // Compute per-group OHLC
-  const candles = groups.map((g, i) => {
-    if (!g.length) return null;
-    const vals = g.map(r => r[primaryKey]).filter(v => !isNaN(v));
-    if (!vals.length) return null;
-    const hi  = Math.max(...vals);
-    const lo  = Math.min(...vals);
-    const op  = vals[0];
-    const cl  = vals[vals.length - 1];
-    const avg = vals.reduce((a,b)=>a+b,0)/vals.length;
-    return { i, hi, lo, op, cl, avg, n: g.length };
+  let defs = '<defs>';
+  activeKeys.forEach(k => {
+    const m = CHART_METRICS[k];
+    defs += `<linearGradient id="g_${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${m.color}" stop-opacity="0.2"/><stop offset="100%" stop-color="${m.color}" stop-opacity="0"/></linearGradient>`;
   });
-
-  const averages = candles.filter(Boolean).map(c => c.avg);
-  const spreads = candles.filter(Boolean).map(c => c.hi - c.lo);
-  const hasEnoughData = averages.length >= 2;
-
-  // Add 3 forecast candles if enabled
-  const predCandles = [];
-  if (CONFIG.forecastEnabled && hasEnoughData) {
-    const predAvgs = Forecast.predict(averages, 3);
-    const avgSpread = spreads.reduce((a,b)=>a+b,0)/spreads.length || 1;
-    for (let j = 1; j <= 3; j++) {
-      const Close = predAvgs[j - 1];
-      const Open = j === 1 ? averages[averages.length - 1] : predAvgs[j - 2];
-      const High = Math.max(Open, Close) + avgSpread * 0.45;
-      const Low = Math.max(0, Math.min(Open, Close) - avgSpread * 0.45);
-      predCandles.push({ hi: High, lo: Low, op: Open, cl: Close, avg: Close, isForecast: true, n: 0 });
-    }
-  }
-
-  // Y scale: use actual data range with 10% padding
-  const allHi = [...candles, ...predCandles].filter(Boolean).map(c=>c.hi);
-  const allLo = [...candles, ...predCandles].filter(Boolean).map(c=>c.lo);
-  if (!allHi.length) {
-    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="${textColor}" font-family="Sarabun,sans-serif">ยังไม่มีข้อมูลในช่วงนี้ · ข้อมูลจะสะสมเมื่อเวลาผ่านไป</text>`;
-    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svgEl.setAttribute('width', W); svgEl.setAttribute('height', H);
-    updatePeriodMeta(periodKey, 0, groups, activeKeys);
-    wrap.onmousemove = null;
-    return;
-  }
-  const dataHi  = Math.max(...allHi);
-  const dataLo  = Math.min(...allLo);
-  const spread  = dataHi - dataLo || 1;
-  const yMax    = dataHi + spread * 0.12;
-  const yMin    = Math.max(0, dataLo - spread * 0.08);
-  const yRange  = yMax - yMin;
-
-  const toY = v => PAD.t + (1 - (v - yMin) / yRange) * cH;
-
-  let svg = `<defs>`;
-  svg += `<linearGradient id="cand_bg" x1="0" y1="0" x2="0" y2="1">`
-       + `<stop offset="0%" stop-color="${m.color}" stop-opacity="0.07"/>`
-       + `<stop offset="100%" stop-color="${m.color}" stop-opacity="0"/>`
-       + `</linearGradient>`;
-  svg += `</defs>`;
-  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="${bgColor}"/>`;
-  
-  // Layout actual width vs forecast width
-  const actualW = CONFIG.forecastEnabled && hasEnoughData ? cW * 0.82 : cW;
-  const forecastW = cW - actualW;
-  
-  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${actualW}" height="${cH}" fill="url(#cand_bg)"/>`;
-
-  // Draw forecast zone background
-  if (CONFIG.forecastEnabled && hasEnoughData) {
-    svg += `<rect x="${PAD.l + actualW}" y="${PAD.t}" width="${forecastW}" height="${cH}" fill="${m.color}" fill-opacity="0.02"/>`;
-  }
-
-  // Horizontal grid lines with Y-axis labels
-  const gLines = 6;
-  for (let i=0; i<=gLines; i++) {
-    const val = yMin + (yRange * (1 - i/gLines));
-    const y   = toY(val);
-    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridColor}" stroke-width="1"/>`;
-    svg += `<text x="${PAD.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="${textColor}" font-family="Inter,sans-serif">${val.toFixed(1)}</text>`;
-  }
-
-  // Candlesticks (Actual)
-  const slotW  = actualW / n;
-  const bodyW  = Math.max(3, Math.min(slotW * 0.55, 18));
-  const wickW  = Math.max(1, bodyW * 0.18);
-
-  let totalReadings = 0;
-  candles.forEach((c, i) => {
-    const slotX   = PAD.l + i * slotW;
-    const centerX = slotX + slotW / 2;
-
-    const showLabel = n <= 12 || i % Math.max(1, Math.floor(n / 10)) === 0;
-    if (showLabel) {
-      svg += `<text x="${centerX}" y="${H - 8}" text-anchor="middle" font-size="${n > 20 ? 8 : 10}" fill="${textColor}" font-family="Inter,sans-serif">${labels[i]}</text>`;
-    }
-
-    if (!c) {
-      svg += `<line x1="${centerX}" y1="${PAD.t + cH - 2}" x2="${centerX}" y2="${PAD.t + cH}" stroke="${gridColor}" stroke-width="2"/>`;
-      return;
-    }
-    totalReadings += c.n;
-
-    const bullish = c.cl >= c.op;
-    const colUp   = '#22c55e';
-    const colDn   = '#ef4444';
-    const col     = bullish ? colUp : colDn;
-    const colDim  = bullish ? 'rgba(34,197,94,0.20)' : 'rgba(239,68,68,0.20)';
-
-    const hiY  = toY(c.hi);
-    const loY  = toY(c.lo);
-    const opY  = toY(c.op);
-    const clY  = toY(c.cl);
-    const bodyTop = Math.min(opY, clY);
-    const bodyH   = Math.max(2, Math.abs(clY - opY));
-
-    svg += `<rect x="${centerX - bodyW/2 - 2}" y="${bodyTop - 2}" width="${bodyW + 4}" height="${bodyH + 4}" fill="${colDim}" rx="3"/>`;
-    svg += `<line x1="${centerX}" y1="${hiY}" x2="${centerX}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-linecap="round"/>`;
-    svg += `<rect x="${centerX - bodyW/2}" y="${bodyTop}" width="${bodyW}" height="${bodyH}" fill="${col}" rx="2"/>`;
-
-    const avgY = toY(c.avg);
-    svg += `<circle cx="${centerX}" cy="${avgY}" r="2" fill="${m.color}" fill-opacity="0.6"/>`;
-  });
-
-  // Candlesticks (Forecast)
-  if (CONFIG.forecastEnabled && hasEnoughData) {
-    const fSlotW = forecastW / 3;
-    
-    // Draw vertical divider
-    svg += `<line x1="${PAD.l + actualW}" y1="${PAD.t}" x2="${PAD.l + actualW}" y2="${PAD.t + cH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>`;
-    svg += `<text x="${PAD.l + actualW + 6}" y="${PAD.t + 14}" font-size="9" fill="var(--accent)" font-weight="700" font-family="Sarabun,sans-serif">🔮 คาดการณ์</text>`;
-
-    predCandles.forEach((c, j) => {
-      const slotX = PAD.l + actualW + j * fSlotW;
-      const centerX = slotX + fSlotW / 2;
-      const stepIndex = j + 1;
-
-      const unitLabel = periodKey === 'today' ? 'ชม.' : periodKey === 'month' ? 'วัน' : 'ด.';
-      svg += `<text x="${centerX}" y="${H - 8}" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700" font-family="Inter,sans-serif">+${stepIndex} ${unitLabel}</text>`;
-
-      const bullish = c.cl >= c.op;
-      const col = bullish ? '#22c55e' : '#ef4444';
-
-      const hiY  = toY(c.hi);
-      const loY  = toY(c.lo);
-      const opY  = toY(c.op);
-      const clY  = toY(c.cl);
-      const bodyTop = Math.min(opY, clY);
-      const bodyH   = Math.max(2, Math.abs(clY - opY));
-
-      // Wick (dashed)
-      svg += `<line x1="${centerX}" y1="${hiY}" x2="${centerX}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-dasharray="3,3" opacity="0.75"/>`;
-      // Body (dashed outline)
-      svg += `<rect x="${centerX - bodyW/2}" y="${bodyTop}" width="${bodyW}" height="${bodyH}" fill="none" stroke="${col}" stroke-width="1.5" stroke-dasharray="3,2" rx="2"/>`;
-
-      // Connection line
-      const prevY = j === 0 ? toY(averages[averages.length - 1]) : toY(predCandles[j - 1].cl);
-      const prevX = j === 0 ? PAD.l + actualW - slotW / 2 : slotX - fSlotW / 2;
-      svg += `<line x1="${prevX}" y1="${prevY}" x2="${centerX}" y2="${clY}" stroke="${col}" stroke-width="1" stroke-dasharray="2,2" opacity="0.4"/>`;
+  // If forecast enabled, add prediction gradients
+  if (CONFIG.forecastEnabled && n >= 5) {
+    activeKeys.forEach(k => {
+      const m = CHART_METRICS[k];
+      defs += `<linearGradient id="gf_${k}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${m.color}" stop-opacity="0.08"/><stop offset="100%" stop-color="${m.color}" stop-opacity="0"/></linearGradient>`;
     });
   }
+  defs += '</defs>';
 
-  // Latest Y-axis value callout
-  const lastCandle = [...candles, ...predCandles].reverse().find(Boolean);
-  if (lastCandle) {
-    const lvy  = toY(lastCandle.cl);
-    const unit = primaryKey==='pm'?'µg':primaryKey==='temp'?'°':primaryKey==='hum'?'%':'';
-    svg += `<line x1="${PAD.l}" y1="${lvy}" x2="${W-PAD.r}" y2="${lvy}" stroke="${m.color}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>`;
-    svg += `<rect x="${W-PAD.r+2}" y="${lvy-9}" width="${PAD.r-4}" height="18" fill="${m.color}" rx="3"/>`;
-    svg += `<text x="${W-PAD.r/2}" y="${lvy+4}" text-anchor="middle" font-size="9" font-weight="700" fill="#000" font-family="Inter,sans-serif">${lastCandle.cl.toFixed(1)}</text>`;
+  let svg = defs + `<rect width="${W}" height="${H}" fill="${bgC}"/>`;
+  const gLines = 5;
+  for (let i=0; i<=gLines; i++) {
+    const y = PAD.t + (i/gLines)*cH;
+    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridC}" stroke-width="1"/>`;
+    const pct = 100 - i*20;
+    svg += `<text x="${PAD.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="${textC}" font-family="Inter,sans-serif">${pct}%</text>`;
   }
 
-  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}" fill="none" stroke="${borderC}" stroke-width="1"/>`;
-
-  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svgEl.setAttribute('width', W);
-  svgEl.setAttribute('height', H);
-  svgEl.innerHTML = svg;
-
-  updatePeriodMeta(periodKey, totalReadings, groups, activeKeys);
-  initCandleTooltip(wrap, candles, predCandles, labels, primaryKey, activeKeys, W, H, PAD, toY, actualW, forecastW);
-}
-
-function updatePeriodMeta(periodKey, totalReadings, groups, activeKeys) {
-  document.getElementById('periodDataCount').textContent = totalReadings > 0 ? `${totalReadings} การวัด` : 'ยังไม่มีข้อมูล';
-  const now = new Date();
-  const infoMap = {
-    today: `📅 ${now.getDate()} ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`,
-    month: `📆 ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`,
-    year:  `📊 ปี ${now.getFullYear()+543}`,
-  };
-  document.getElementById('periodInfoText').textContent = (infoMap[periodKey]||'') + ' · บันทึกทุก 1 นาที';
-
-  // Stat chips
-  const chipStats = {};
-  activeKeys.forEach(k => {
-    const allVals = groups.flatMap(g => g.map(r => r[k])).filter(v => v !== undefined && !isNaN(v));
-    if (allVals.length) {
-      const avg = allVals.reduce((a,b)=>a+b,0)/allVals.length;
-      chipStats[k] = { avg, max:Math.max(...allVals), min:Math.min(...allVals), color:CHART_METRICS[k].color, label:CHART_METRICS[k].label };
+  // X-axis labels
+  const labelEvery = Math.max(1, Math.floor(n/6));
+  STATE.h.time.forEach((t,i) => {
+    if (i % labelEvery === 0) {
+      const x = PAD.l + (i/(Math.max(n-1,1)))*cW;
+      svg += `<text x="${x}" y="${H-6}" text-anchor="middle" font-size="10" fill="${textC}" font-family="Inter,sans-serif">${t.slice(-8)}</text>`;
     }
   });
-  let chips = '';
-  Object.entries(chipStats).forEach(([k,s]) => {
-    const unit = k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
-    chips += `<div class="p-chip">`
-           + `<span class="pc-dot" style="background:${s.color}"></span>`
-           + `<span style="color:${s.color}">${s.label}</span>`
-           + ` เฉลี่ย <strong>${s.avg.toFixed(1)}</strong>${unit}`
-           + ` · สูงสุด <strong style="color:#22c55e">${s.max.toFixed(1)}</strong>`
-           + ` · ต่ำสุด <strong style="color:#ef4444">${s.min.toFixed(1)}</strong>`
-           + `</div>`;
+
+  // Data lines
+  activeKeys.forEach(k => {
+    const m = CHART_METRICS[k];
+    const vals = STATE.h[k];
+    const toY = v => PAD.t + (1 - Math.max(0,Math.min(1,(v-m.min)/(m.max-m.min))))*cH;
+    const pts = vals.map((v,i) => ({ x: PAD.l+(i/Math.max(n-1,1))*cW, y:toY(v) }));
+
+    // Area fill
+    let area = `M${pts[0].x},${PAD.t+cH}`;
+    const curvePts = catmullPath(pts);
+    area += ` L${pts[0].x},${pts[0].y}`;
+    for (let i=0; i<pts.length-1; i++) {
+      const p0=pts[Math.max(0,i-1)], p1=pts[i], p2=pts[i+1], p3=pts[Math.min(pts.length-1,i+2)];
+      area += ` C${p1.x+(p2.x-p0.x)/6},${p1.y+(p2.y-p0.y)/6} ${p2.x-(p3.x-p1.x)/6},${p2.y-(p3.y-p1.y)/6} ${p2.x},${p2.y}`;
+    }
+    area += ` L${pts[pts.length-1].x},${PAD.t+cH} Z`;
+    svg += `<path d="${area}" fill="url(#g_${k})"/>`;
+    svg += `<path d="${curvePts}" fill="none" stroke="${m.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    // Dots (last 3)
+    pts.slice(-3).forEach(p => { svg += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${m.color}"/>`; });
+    // Latest label
+    const last = pts[pts.length-1];
+    svg += `<circle cx="${last.x}" cy="${last.y}" r="5" fill="${m.color}" stroke="${bgC}" stroke-width="2"/>`;
+    svg += `<text x="${last.x}" y="${last.y-9}" text-anchor="middle" font-size="10" font-weight="700" fill="${m.color}" font-family="Inter,sans-serif">${vals[vals.length-1].toFixed(1)}</text>`;
+
+    // Forecast line
+    if (CONFIG.forecastEnabled && n >= 5) {
+      const predVals = Forecast.predict(vals, 3);
+      const lastX = pts[pts.length-1].x;
+      const stepW = cW / Math.max(n-1,1);
+      const fPts = predVals.map((v,i) => ({ x: lastX+(i+1)*stepW, y:toY(v) }));
+      const fPath = `M${lastX},${last.y}` + fPts.map(p=>` L${p.x},${p.y}`).join('');
+      svg += `<path d="${fPath}" fill="none" stroke="${m.color}" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.65"/>`;
+      fPts.forEach(p => { svg += `<circle cx="${p.x}" cy="${p.y}" r="3" fill="none" stroke="${m.color}" stroke-width="1.5" opacity="0.65"/>`; });
+    }
   });
-  document.getElementById('periodChips').innerHTML = chips;
+
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svgEl.setAttribute('width', W); svgEl.setAttribute('height', H);
+  svgEl.innerHTML = svg;
+  $('periodDataCount').textContent = `${n} จุด`;
+  $('periodChips').innerHTML = '';
+  initRealtimeTooltip(svgEl, wrap, W, H, PAD, cW, cH, n, activeKeys);
 }
 
-function initCandleTooltip(wrap, candles, predCandles, labels, primaryKey, activeKeys, W, H, PAD, toY, actualW, forecastW) {
-  const tooltip = document.getElementById('chartTooltip');
-  const cursor  = document.getElementById('chartCursor');
-  const cW = W - PAD.l - PAD.r;
-  const n = candles.length;
-  const totalSlots = n + predCandles.length;
+function initRealtimeTooltip(svgEl, wrap, W, H, PAD, cW, cH, n, activeKeys) {
+  const tooltip = $('chartTooltip'), cursor = $('chartCursor');
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
   function onMove(e) {
     const rect = wrap.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
+    const mx = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
     const scaleX = rect.width / W;
-    const svgMx = mx / scaleX;
-    if (svgMx < PAD.l || svgMx > W - PAD.r) { tooltip.style.display='none'; cursor.style.display='none'; return; }
-    
-    let c = null;
-    let label = '';
-    let isForecast = false;
-    let slotCX = 0;
-    
-    if (svgMx <= PAD.l + actualW) {
-      const slotW = actualW / n;
-      const ci = Math.floor((svgMx - PAD.l) / slotW);
-      const idx = Math.max(0, Math.min(ci, n-1));
-      c = candles[idx];
-      label = labels[idx];
-      slotCX = PAD.l + idx * slotW + slotW / 2;
-    } else {
-      const fSlotW = forecastW / 3;
-      const ci = Math.floor((svgMx - PAD.l - actualW) / fSlotW);
-      const idx = Math.max(0, Math.min(ci, 2));
-      c = predCandles[idx];
-      const unitLabel = document.getElementById('pBtn-day').classList.contains('active') ? 'ชั่วโมง' : document.getElementById('pBtn-month').classList.contains('active') ? 'วัน' : 'เดือน';
-      label = `พยากรณ์ (+${idx+1} ${unitLabel})`;
-      isForecast = true;
-      slotCX = PAD.l + actualW + idx * fSlotW + fSlotW / 2;
-    }
-
-    let html = `<div class="tt-time">📅 ${label}</div>`;
-    if (!c) {
-      html += `<div class="tt-row"><span class="tt-label">ข้อมูล</span><span class="tt-val" style="color:rgba(255,255,255,0.3)">ไม่มีข้อมูล</span></div>`;
-    } else {
-      const m = CHART_METRICS[primaryKey];
-      const unit = primaryKey==='pm'?'µg/m³':primaryKey==='temp'?'°C':primaryKey==='hum'?'%':'';
-      const arrow = c.cl >= c.op ? '▲' : '▼';
-      const arrowCol = c.cl >= c.op ? '#22c55e' : '#ef4444';
-      const forecastTag = isForecast ? ' <span style="color:var(--accent);font-size:9px">[คาดการณ์]</span>' : '';
-      
-      html += `<div class="tt-row"><span class="tt-label"><span class="tt-dot" style="background:${m.color}"></span>${m.label}${forecastTag}</span><span class="tt-val" style="color:${arrowCol}">${arrow} ${c.cl.toFixed(1)} ${unit}</span></div>`;
-      html += `<div class="tt-row"><span class="tt-label">สูงสุด</span><span class="tt-val" style="color:#22c55e">${c.hi.toFixed(1)} ${unit}</span></div>`;
-      html += `<div class="tt-row"><span class="tt-label">ต่ำสุด</span><span class="tt-val" style="color:#ef4444">${c.lo.toFixed(1)} ${unit}</span></div>`;
-      html += `<div class="tt-row"><span class="tt-label">เฉลี่ย</span><span class="tt-val" style="color:${m.color}">${c.avg.toFixed(1)} ${unit}</span></div>`;
-      if (!isForecast) html += `<div class="tt-row"><span class="tt-label">จำนวน</span><span class="tt-val">${c.n} รายการ</span></div>`;
-    }
-    tooltip.innerHTML = html;
-
-    cursor.style.left = (slotCX * scaleX) + 'px';
-    cursor.style.display = 'block';
-    let tx = mx + 12;
-    if (tx + 175 > rect.width) tx = mx - 187;
-    tooltip.style.left = tx + 'px';
-    tooltip.style.top = '16px';
+    const svgX = mx / scaleX;
+    if (svgX < PAD.l || svgX > W-PAD.r || !n) { tooltip.style.display='none'; cursor.style.display='none'; return; }
+    const idx = Math.max(0, Math.min(n-1, Math.round((svgX-PAD.l)/cW*(n-1))));
+    let rows = `<div class="tt-time">${STATE.h.time[idx]||''}</div>`;
+    activeKeys.forEach(k => {
+      const m = CHART_METRICS[k];
+      const v = STATE.h[k][idx];
+      const unit = k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
+      rows += `<div class="tt-row"><span class="tt-label"><span class="tt-dot" style="background:${m.color}"></span>${m.label}</span><span class="tt-val">${v?.toFixed?.(1)??'--'} ${unit}</span></div>`;
+    });
+    tooltip.innerHTML = rows;
     tooltip.style.display = 'block';
+    const tx = mx + 14; const tw = tooltip.offsetWidth;
+    tooltip.style.left = (tx + tw > rect.width ? mx - tw - 10 : tx) + 'px';
+    tooltip.style.top = '10px';
+    cursor.style.display = 'block';
+    cursor.style.left = mx + 'px';
   }
+
   wrap.onmousemove = onMove;
+  wrap.ontouchmove = e => { e.preventDefault(); onMove(e); };
   wrap.onmouseleave = () => { tooltip.style.display='none'; cursor.style.display='none'; };
 }
 
-
-
-function renderChart() {
-  // Update period info for realtime
-  if (CURRENT_PERIOD === 'realtime') {
-    const cnt = DataStore.getAll().length;
-    document.getElementById('periodDataCount').textContent = cnt > 0 ? `${cnt} บันทึกใน DB` : '';
-    document.getElementById('periodInfoText').textContent = '⚡ กำลังแสดงข้อมูลเรียลไทม์ · อัปเดตอัตโนมัติ';
-    document.getElementById('periodChips').innerHTML = '';
-    renderRealtimeChart();
-    return;
+/* ============================================================
+   CANDLE CHART (Historical Periods)
+   ============================================================ */
+function getCandleData(period) {
+  let groups, labels;
+  if (period === 'today') {
+    groups = DataStore.groupByHour(DataStore.getToday());
+    labels = Array.from({length:24},(_,i)=>i.toString().padStart(2,'0'));
+  } else if (period === 'month') {
+    const now = new Date(), days = new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+    groups = DataStore.groupByDay(DataStore.getMonth());
+    labels = Array.from({length:days},(_,i)=>(i+1).toString());
+  } else {
+    groups = DataStore.groupByMonth(DataStore.getYear());
+    labels = TH_MONTHS;
   }
-  if (CURRENT_PERIOD === 'today') {
-    const rr = DataStore.getToday();
-    const groups = DataStore.groupByHour(rr);
-    const labels = Array.from({length:24}, (_,i) => i + ':00');
-    renderCandleChart(groups, labels, 'today');
-  } else if (CURRENT_PERIOD === 'month') {
-    const rr = DataStore.getMonth();
-    const groups = DataStore.groupByDay(rr);
-    const labels = Array.from({length:groups.length}, (_,i) => String(i+1));
-    renderCandleChart(groups, labels, 'month');
-  } else if (CURRENT_PERIOD === 'year') {
-    const rr = DataStore.getYear();
-    const groups = DataStore.groupByMonth(rr);
-    renderCandleChart(groups, TH_MONTHS, 'year');
-  }
+  return [groups, labels, period];
 }
 
-/* ── REALTIME STOCK-STYLE LINE CHART ── */
-function renderRealtimeChart() {
-  const svgEl = document.getElementById('chartSvg');
-  const wrap  = document.getElementById('chartWrap');
-  const W = wrap.clientWidth || 800;
-  const H = 320;
-  const PAD = { t:24, r:62, b:42, l:14 };
-  const cW = W - PAD.l - PAD.r;
-  const cH = H - PAD.t - PAD.b;
+function renderCandleChart(groups, labels, periodKey) {
+  const svgEl = $('chartSvg'), wrap = $('chartWrap');
+  if (!svgEl || !wrap) return;
+  const W = wrap.clientWidth||800, H = 320;
+  const PAD = { t:30, r:56, b:46, l:56 };
+  const cW = W-PAD.l-PAD.r, cH = H-PAD.t-PAD.b;
+  const n = groups.length;
 
-  const activeKeys = Object.keys(CHART_METRICS).filter(k => CONFIG.chart[k] && STATE.h[k].length >= 2);
-  if (activeKeys.length === 0) {
-    svgEl.innerHTML = `<text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="rgba(255,255,255,0.25)" font-family="Sarabun,sans-serif">เลือกข้อมูลที่ต้องการแสดง</text>`;
-    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    return;
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  const gridC = isDark?'rgba(255,255,255,0.04)':'rgba(0,0,0,0.05)';
+  const textC = isDark?'rgba(255,255,255,0.32)':'rgba(0,0,0,0.38)';
+  const bgC   = isDark?'#0d1117':'#f8fafc';
+  const borderC = isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.08)';
+
+  const activeKeys = Object.keys(CHART_METRICS).filter(k => CONFIG.chart[k]);
+  const primaryKey = activeKeys[0];
+  if (!primaryKey) { svgEl.innerHTML=`<rect width="${W}" height="${H}" fill="${bgC}"/><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="13" fill="${textC}" font-family="Sarabun,sans-serif">เลือก metric</text>`; svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`); return; }
+  const m = CHART_METRICS[primaryKey];
+
+  const candles = groups.map((g,i) => {
+    if (!g.length) return null;
+    const vals = g.map(r=>r[primaryKey]).filter(v=>!isNaN(v));
+    if (!vals.length) return null;
+    const hi=Math.max(...vals), lo=Math.min(...vals), op=vals[0], cl=vals[vals.length-1], avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+    return { i, hi, lo, op, cl, avg, n:g.length };
+  });
+
+  const avgs = candles.filter(Boolean).map(c=>c.avg);
+  const spreads = candles.filter(Boolean).map(c=>c.hi-c.lo);
+  const hasDat = avgs.length >= 2;
+
+  const predCandles = [];
+  if (CONFIG.forecastEnabled && hasDat) {
+    const pAvgs = Forecast.predict(avgs, 3);
+    const avgSpread = spreads.reduce((a,b)=>a+b,0)/spreads.length||1;
+    for (let j=1; j<=3; j++) {
+      const Close = pAvgs[j-1], Open = j===1?avgs[avgs.length-1]:pAvgs[j-2];
+      predCandles.push({ hi:Math.max(Open,Close)+avgSpread*0.45, lo:Math.max(0,Math.min(Open,Close)-avgSpread*0.45), op:Open, cl:Close, avg:Close, isForecast:true, n:0 });
+    }
   }
 
-  const n = Math.max(...activeKeys.map(k => STATE.h[k].length));
-  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-  const gridColor  = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)';
-  const textColor  = isDark ? 'rgba(255,255,255,0.28)' : 'rgba(0,0,0,0.35)';
-  const bgColor    = isDark ? '#0d1117' : '#f8fafc';
-  const borderC    = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+  const allHi=[...candles,...predCandles].filter(Boolean).map(c=>c.hi);
+  const allLo=[...candles,...predCandles].filter(Boolean).map(c=>c.lo);
+  if (!allHi.length) {
+    svgEl.innerHTML=`<rect width="${W}" height="${H}" fill="${bgC}"/><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="${textC}" font-family="Sarabun,sans-serif">ยังไม่มีข้อมูลในช่วงนี้</text>`;
+    svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`); svgEl.setAttribute('width',W); svgEl.setAttribute('height',H);
+    updatePeriodMeta(periodKey,0,groups,activeKeys); wrap.onmousemove=null; return;
+  }
 
-  // X layout actual vs prediction
-  const actualW = CONFIG.forecastEnabled ? cW * 0.82 : cW;
-  const forecastW = cW - actualW;
+  const dataHi=Math.max(...allHi), dataLo=Math.min(...allLo);
+  const spread=dataHi-dataLo||1, yMax=dataHi+spread*0.12, yMin=Math.max(0,dataLo-spread*0.08), yRange=yMax-yMin;
+  const toY = v => PAD.t+(1-(v-yMin)/yRange)*cH;
 
-  const pk = activeKeys[0];
-  const pm = CHART_METRICS[pk];
-  const pdata = STATE.h[pk];
+  let svg=`<defs><linearGradient id="cand_bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${m.color}" stop-opacity="0.07"/><stop offset="100%" stop-color="${m.color}" stop-opacity="0"/></linearGradient></defs>`;
+  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="${bgC}"/>`;
 
-  // Pre-calculate predictions if enabled
-  const forecastSteps = 5;
-  const predictions = {};
-  if (CONFIG.forecastEnabled) {
-    activeKeys.forEach(k => {
-      predictions[k] = Forecast.predict(STATE.h[k], forecastSteps);
+  const actualW = CONFIG.forecastEnabled&&hasDat?cW*0.82:cW;
+  const forecastW = cW-actualW;
+
+  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${actualW}" height="${cH}" fill="url(#cand_bg)"/>`;
+  if (CONFIG.forecastEnabled&&hasDat) svg += `<rect x="${PAD.l+actualW}" y="${PAD.t}" width="${forecastW}" height="${cH}" fill="${m.color}" fill-opacity="0.02"/>`;
+
+  for (let i=0; i<=6; i++) {
+    const val=yMin+(yRange*(1-i/6)), y=toY(val);
+    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridC}" stroke-width="1"/>`;
+    svg += `<text x="${PAD.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="${textC}" font-family="Inter,sans-serif">${val.toFixed(1)}</text>`;
+  }
+
+  const slotW=actualW/n, bodyW=Math.max(3,Math.min(slotW*0.55,18)), wickW=Math.max(1,bodyW*0.18);
+  let totalReadings=0;
+  candles.forEach((c,i) => {
+    const slotX=PAD.l+i*slotW, cx=slotX+slotW/2;
+    if ((n<=12||i%Math.max(1,Math.floor(n/10))===0))
+      svg += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="${n>20?8:10}" fill="${textC}" font-family="Inter,sans-serif">${labels[i]}</text>`;
+    if (!c) { svg+=`<line x1="${cx}" y1="${PAD.t+cH-2}" x2="${cx}" y2="${PAD.t+cH}" stroke="${gridC}" stroke-width="2"/>`; return; }
+    totalReadings += c.n;
+    const bull=c.cl>=c.op, col=bull?'#22c55e':'#ef4444', colDim=bull?'rgba(34,197,94,0.20)':'rgba(239,68,68,0.20)';
+    const hiY=toY(c.hi), loY=toY(c.lo), opY=toY(c.op), clY=toY(c.cl);
+    const bTop=Math.min(opY,clY), bH=Math.max(2,Math.abs(clY-opY));
+    svg += `<rect x="${cx-bodyW/2-2}" y="${bTop-2}" width="${bodyW+4}" height="${bH+4}" fill="${colDim}" rx="3"/>`;
+    svg += `<line x1="${cx}" y1="${hiY}" x2="${cx}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-linecap="round"/>`;
+    svg += `<rect x="${cx-bodyW/2}" y="${bTop}" width="${bodyW}" height="${bH}" fill="${col}" rx="2"/>`;
+    svg += `<circle cx="${cx}" cy="${toY(c.avg)}" r="2" fill="${m.color}" fill-opacity="0.6"/>`;
+  });
+
+  if (CONFIG.forecastEnabled&&hasDat) {
+    const fSlotW=forecastW/3;
+    svg += `<line x1="${PAD.l+actualW}" y1="${PAD.t}" x2="${PAD.l+actualW}" y2="${PAD.t+cH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>`;
+    svg += `<text x="${PAD.l+actualW+6}" y="${PAD.t+14}" font-size="9" fill="var(--accent)" font-weight="700" font-family="Sarabun,sans-serif">🔮 คาดการณ์</text>`;
+    predCandles.forEach((c,j) => {
+      const slotX=PAD.l+actualW+j*fSlotW, cx=slotX+fSlotW/2;
+      const unitL=periodKey==='today'?'ชม.':periodKey==='month'?'วัน':'ด.';
+      svg += `<text x="${cx}" y="${H-8}" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700" font-family="Inter,sans-serif">+${j+1} ${unitL}</text>`;
+      const bull=c.cl>=c.op, col=bull?'#22c55e':'#ef4444';
+      const hiY=toY(c.hi), loY=toY(c.lo), opY=toY(c.op), clY=toY(c.cl);
+      const bTop=Math.min(opY,clY), bH=Math.max(2,Math.abs(clY-opY));
+      svg += `<line x1="${cx}" y1="${hiY}" x2="${cx}" y2="${loY}" stroke="${col}" stroke-width="${wickW}" stroke-dasharray="3,3" opacity="0.75"/>`;
+      svg += `<rect x="${cx-bodyW/2}" y="${bTop}" width="${bodyW}" height="${bH}" fill="none" stroke="${col}" stroke-width="1.5" stroke-dasharray="3,2" rx="2"/>`;
     });
   }
 
-  // Y scale range
-  const allValsForPrimary = [...pdata];
-  if (CONFIG.forecastEnabled && predictions[pk]) allValsForPrimary.push(...predictions[pk]);
-
-  const pHi = Math.max(...allValsForPrimary);
-  const pLo = Math.min(...allValsForPrimary);
-  const pSpread = pHi - pLo || 1;
-  const yMax = pHi + pSpread * 0.15;
-  const yMin = Math.max(0, pLo - pSpread * 0.10);
-  const yRange = yMax - yMin;
-  const toY = (v, mi, ma) => PAD.t + (1 - Math.max(0, Math.min(1, (v - mi) / (ma - mi)))) * cH;
-
-  let svg = `<defs>`;
-  activeKeys.forEach(k => {
-    const mc = CHART_METRICS[k].color;
-    svg += `<linearGradient id="sg_${k}" x1="0" y1="0" x2="0" y2="1">`
-         + `<stop offset="0%" stop-color="${mc}" stop-opacity="0.3"/>`
-         + `<stop offset="85%" stop-color="${mc}" stop-opacity="0.02"/>`
-         + `<stop offset="100%" stop-color="${mc}" stop-opacity="0"/>`
-         + `</linearGradient>`;
-  });
-  svg += `<clipPath id="chartClip"><rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}"/></clipPath>`;
-  svg += `</defs>`;
-  
-  svg += `<rect x="0" y="0" width="${W}" height="${H}" fill="${bgColor}"/>`;
-  svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${actualW}" height="${cH}" fill="url(#sg_${pk})" opacity="0.5"/>`;
-
-  // Draw forecast background area
-  if (CONFIG.forecastEnabled) {
-    svg += `<rect x="${PAD.l + actualW}" y="${PAD.t}" width="${forecastW}" height="${cH}" fill="${pm.color}" fill-opacity="0.02"/>`;
+  const lastC=[...candles,...predCandles].reverse().find(Boolean);
+  if (lastC) {
+    const unit=primaryKey==='pm'?'µg':primaryKey==='temp'?'°':primaryKey==='hum'?'%':'';
+    const lvy=toY(lastC.cl);
+    svg += `<line x1="${PAD.l}" y1="${lvy}" x2="${W-PAD.r}" y2="${lvy}" stroke="${m.color}" stroke-width="1" stroke-dasharray="4,3" opacity="0.5"/>`;
+    svg += `<rect x="${W-PAD.r+2}" y="${lvy-9}" width="${PAD.r-4}" height="18" fill="${m.color}" rx="3"/>`;
+    svg += `<text x="${W-PAD.r/2}" y="${lvy+4}" text-anchor="middle" font-size="9" font-weight="700" fill="#000" font-family="Inter,sans-serif">${lastC.cl.toFixed(1)}</text>`;
   }
-
-  // Horizontal grid lines
-  const gLines = 5;
-  for (let i = 0; i <= gLines; i++) {
-    const val = yMin + yRange * (1 - i/gLines);
-    const y   = PAD.t + (i/gLines) * cH;
-    svg += `<line x1="${PAD.l}" y1="${y}" x2="${W-PAD.r}" y2="${y}" stroke="${gridColor}" stroke-width="1"/>`;
-    svg += `<text x="${W-PAD.r+30}" y="${y+4}" text-anchor="middle" font-size="9" fill="${textColor}" font-family="Inter,sans-serif">${val.toFixed(1)}</text>`;
-  }
-
-  // X labels (time)
-  const step = Math.max(1, Math.floor(n/6));
-  for (let i = 0; i < n; i += step) {
-    const x = PAD.l + (i / (n-1)) * actualW;
-    const t = STATE.h.time[i] || '';
-    svg += `<text x="${x}" y="${H-6}" text-anchor="middle" font-size="9" fill="${textColor}" font-family="Inter,sans-serif">${t.slice(-5)}</text>`;
-  }
-
-  // X labels (forecast relative time)
-  if (CONFIG.forecastEnabled) {
-    // Divider
-    svg += `<line x1="${PAD.l + actualW}" y1="${PAD.t}" x2="${PAD.l + actualW}" y2="${PAD.t + cH}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6"/>`;
-    svg += `<text x="${PAD.l + actualW + 6}" y="${PAD.t + 14}" font-size="9" fill="var(--accent)" font-weight="700" font-family="Sarabun,sans-serif">🔮 คาดการณ์</text>`;
-
-    for (let j = 1; j <= forecastSteps; j++) {
-      const x = PAD.l + actualW + (j / forecastSteps) * forecastW;
-      svg += `<text x="${x}" y="${H-6}" text-anchor="middle" font-size="9" fill="var(--accent)" font-weight="700" font-family="Inter,sans-serif">${formatRelativeTime(j)}</text>`;
-    }
-  }
-
-  // Lines + fills (clipped)
-  svg += `<g clip-path="url(#chartClip)">`;
-  activeKeys.forEach((k, ki) => {
-    const mc = CHART_METRICS[k];
-    const d  = STATE.h[k];
-    if (d.length < 2) return;
-    const mi2 = mc.min, ma2 = mc.max;
-
-    // Actual path points
-    const pts = d.map((v, i) => ({
-      x: PAD.l + (i / (d.length-1)) * actualW,
-      y: toY(v, mi2, ma2),
-      v
-    }));
-
-    const linePath = catmullPath(pts);
-    const last  = pts[pts.length-1];
-    const first = pts[0];
-    const fillPath = linePath + ` L${last.x},${PAD.t+cH} L${first.x},${PAD.t+cH} Z`;
-
-    if (ki === 0) {
-      svg += `<path d="${fillPath}" fill="url(#sg_${k})" stroke="none"/>`;
-    }
-    // Line glow + main line
-    svg += `<path d="${linePath}" fill="none" stroke="${mc.color}" stroke-width="4" stroke-linecap="round" opacity="0.15"/>`;
-    svg += `<path d="${linePath}" fill="none" stroke="${mc.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
-
-    // Forecast line
-    if (CONFIG.forecastEnabled && predictions[k]) {
-      const predPts = predictions[k].map((v, idx) => ({
-        x: PAD.l + actualW + ((idx + 1) / forecastSteps) * forecastW,
-        y: toY(v, mi2, ma2),
-        v
-      }));
-
-      // Connect last actual point to forecast points
-      let predD = `M${last.x},${last.y}`;
-      predPts.forEach(p => { predD += ` L${p.x},${p.y}`; });
-
-      svg += `<path d="${predD}" fill="none" stroke="${mc.color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,4" opacity="0.9"/>`;
-      
-      // Connection glow
-      svg += `<path d="${predD}" fill="none" stroke="${mc.color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="5,4" opacity="0.1"/>`;
-
-      // End forecast point indicator
-      const endP = predPts[predPts.length - 1];
-      svg += `<circle cx="${endP.x}" cy="${endP.y}" r="4" fill="${mc.color}" stroke="${bgColor}" stroke-width="1.5"/>`;
-    }
-
-    // Last-value horizontal dashed line
-    svg += `<line x1="${PAD.l}" y1="${last.y}" x2="${W-PAD.r}" y2="${last.y}" stroke="${mc.color}" stroke-width="1" stroke-dasharray="5,4" opacity="0.45"/>`;
-
-    // Animated last-point
-    svg += `<circle cx="${last.x}" cy="${last.y}" r="14" fill="${mc.color}" fill-opacity="0.08"/>`;
-    svg += `<circle cx="${last.x}" cy="${last.y}" r="5" fill="${mc.color}" stroke="${bgColor}" stroke-width="2.5"/>`;
-
-    // Right Y-axis callout
-    const lastValForLabel = CONFIG.forecastEnabled && predictions[k] ? predictions[k][forecastSteps - 1] : last.v;
-    const labelY = CONFIG.forecastEnabled && predictions[k] ? toY(lastValForLabel, mi2, ma2) : last.y;
-    svg += `<rect x="${W-PAD.r+2}" y="${labelY-9}" width="${PAD.r-4}" height="18" fill="${mc.color}" rx="3"/>`;
-    svg += `<text x="${W-PAD.r/2}" y="${labelY+4}" text-anchor="middle" font-size="9" font-weight="700" fill="#000" font-family="Inter,sans-serif">${lastValForLabel.toFixed(1)}</text>`;
-  });
-  svg += `</g>`;
 
   svg += `<rect x="${PAD.l}" y="${PAD.t}" width="${cW}" height="${cH}" fill="none" stroke="${borderC}" stroke-width="1"/>`;
-
-  svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svgEl.setAttribute('width', W);
-  svgEl.setAttribute('height', H);
+  svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`); svgEl.setAttribute('width',W); svgEl.setAttribute('height',H);
   svgEl.innerHTML = svg;
-
-  initStockCrosshair(wrap, W, H, PAD, n, activeKeys, actualW, forecastW, forecastSteps, predictions, toY);
+  updatePeriodMeta(periodKey, totalReadings, groups, activeKeys);
 }
 
-function initStockCrosshair(wrap, W, H, PAD, n, activeKeys, actualW, forecastW, forecastSteps, predictions, toY) {
-  const tooltip = document.getElementById('chartTooltip');
-  const cursor  = document.getElementById('chartCursor');
-  const cW = W - PAD.l - PAD.r;
-  const cH = H - PAD.t - PAD.b;
-  const svgEl = document.getElementById('chartSvg');
-  const totalSnapSteps = CONFIG.forecastEnabled ? n + forecastSteps : n;
+function updatePeriodMeta(periodKey, totalReadings, groups, activeKeys) {
+  const pd = $('periodDataCount');
+  if (pd) pd.textContent = totalReadings > 0 ? `${totalReadings} การวัด` : 'ยังไม่มีข้อมูล';
+  const now = new Date();
+  const infoMap = { today:`📅 ${now.getDate()} ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`, month:`📆 ${TH_MONTHS[now.getMonth()]} ${now.getFullYear()+543}`, year:`📊 ปี ${now.getFullYear()+543}` };
+  const pit = $('periodInfoText'); if(pit) pit.textContent = (infoMap[periodKey]||'') + ' · บันทึกทุก 1 นาที';
 
-  function onMove(e) {
-    const rect = wrap.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const scaleX = rect.width / W;
-    const scaleY = rect.height / H;
-    const svgMx = mx / scaleX;
-    const svgMy = my / scaleY;
-
-    if (svgMx < PAD.l || svgMx > W-PAD.r || svgMy < PAD.t || svgMy > PAD.t+cH || n < 2) {
-      tooltip.style.display='none'; cursor.style.display='none';
-      const ov = svgEl.querySelector('#crosshairOverlay');
-      if (ov) ov.remove();
-      return;
-    }
-
-    let ci = 0;
-    let snapX = 0;
-    let isForecast = false;
-    let forecastIdx = 0;
-
-    if (svgMx <= PAD.l + actualW) {
-      const t = (svgMx - PAD.l) / actualW;
-      const idx = Math.round(t * (n-1));
-      ci = Math.max(0, Math.min(idx, n-1));
-      snapX = PAD.l + (ci / (n-1)) * actualW;
-    } else {
-      const t = (svgMx - PAD.l - actualW) / forecastW;
-      forecastIdx = Math.max(1, Math.min(Math.round(t * forecastSteps), forecastSteps));
-      ci = n - 1 + forecastIdx;
-      isForecast = true;
-      snapX = PAD.l + actualW + (forecastIdx / forecastSteps) * forecastW;
-    }
-
-    const snapXpx = snapX * scaleX;
-
-    // Get Y coordinates for primary metric
-    const pk = activeKeys[0];
-    const pm2 = CHART_METRICS[pk];
-    const pv = isForecast ? predictions[pk][forecastIdx - 1] : STATE.h[pk][ci];
-    const snapY = toY(pv, pm2.min, pm2.max);
-    const snapYpx = snapY * scaleY;
-
-    let ov = svgEl.querySelector('#crosshairOverlay');
-    if (!ov) { ov = document.createElementNS('http://www.w3.org/2000/svg','g'); ov.id='crosshairOverlay'; svgEl.appendChild(ov); }
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-    const xhColor = isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)';
-    
-    ov.innerHTML =
-      `<line id="xhV" x1="${snapX}" y1="${PAD.t}" x2="${snapX}" y2="${PAD.t+cH}" stroke="${xhColor}" stroke-width="1" stroke-dasharray="4,3"/>`
-    + `<line id="xhH" x1="${PAD.l}" y1="${snapY}" x2="${W-PAD.r}" y2="${snapY}" stroke="${xhColor}" stroke-width="1" stroke-dasharray="4,3"/>`
-    + `<circle cx="${snapX}" cy="${snapY}" r="4" fill="${pm2.color}" stroke="rgba(0,0,0,0.5)" stroke-width="1.5"/>`;
-
-    // Tooltip content
-    const time = isForecast ? `พยากรณ์ (${formatRelativeTime(forecastIdx)})` : (STATE.h.time[ci] || '--');
-    let html = `<div class="tt-time">🕐 ${time}</div>`;
-    
-    activeKeys.forEach(k => {
-      const mc = CHART_METRICS[k];
-      const v  = isForecast ? predictions[k][forecastIdx - 1] : STATE.h[k][ci];
-      const unit = k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
-      
-      let arrow = '';
-      if (!isForecast) {
-        const prev = STATE.h[k][Math.max(0, ci-1)];
-        arrow = v > prev ? ' <span style="color:#22c55e">▲</span>' : v < prev ? ' <span style="color:#ef4444">▼</span>' : '';
-      } else {
-        const prevVal = forecastIdx === 1 ? STATE.h[k][n-1] : predictions[k][forecastIdx - 2];
-        arrow = v > prevVal ? ' <span style="color:#22c55e">▲</span>' : v < prevVal ? ' <span style="color:#ef4444">▼</span>' : '';
-      }
-      
-      const forecastTag = isForecast ? ' <span style="color:var(--accent);font-size:9px">[คาดการณ์]</span>' : '';
-      html += `<div class="tt-row">
-        <span class="tt-label"><span class="tt-dot" style="background:${mc.color}"></span>${mc.label}${forecastTag}</span>
-        <span class="tt-val">${v !== undefined ? v.toFixed(1) : '--'} ${unit}${arrow}</span>
-      </div>`;
-    });
-    tooltip.innerHTML = html;
-
-    cursor.style.left = snapXpx + 'px';
-    cursor.style.display = 'block';
-    
-    let tx = mx + 14;
-    if (tx + 155 > rect.width) tx = mx - 167;
-    tooltip.style.left = tx + 'px';
-    tooltip.style.top  = Math.max(8, snapYpx - 30) + 'px';
-    tooltip.style.display = 'block';
-  }
-
-  wrap.onmousemove = onMove;
-  wrap.onmouseleave = () => {
-    tooltip.style.display='none';
-    cursor.style.display='none';
-    const ov = svgEl.querySelector('#crosshairOverlay');
-    if (ov) ov.remove();
-  };
+  let chips='';
+  activeKeys.forEach(k => {
+    const allVals = groups.flatMap(g=>g.map(r=>r[k])).filter(v=>v!==undefined&&!isNaN(v));
+    if (!allVals.length) return;
+    const avg=allVals.reduce((a,b)=>a+b,0)/allVals.length;
+    const unit=k==='pm'?'µg/m³':k==='temp'?'°C':k==='hum'?'%':'';
+    chips+=`<div class="p-chip"><span class="pc-dot" style="background:${CHART_METRICS[k].color}"></span><span style="color:${CHART_METRICS[k].color}">${CHART_METRICS[k].label}</span> เฉลี่ย <strong>${avg.toFixed(1)}</strong>${unit} · สูงสุด <strong style="color:#22c55e">${Math.max(...allVals).toFixed(1)}</strong> · ต่ำสุด <strong style="color:#ef4444">${Math.min(...allVals).toFixed(1)}</strong></div>`;
+  });
+  const pc=$('periodChips'); if(pc) pc.innerHTML=chips;
 }
 
-
-
-function toggleChart(key, btn) {
-  CONFIG.chart[key] = !CONFIG.chart[key];
-  btn.classList.toggle('active', CONFIG.chart[key]);
-  saveConfig(); renderChart();
-}
-
-function clearHistoryData() {
-  if (!confirm('ลบข้อมูลประวัติทั้งหมดออกจาก localStorage?')) return;
-  DataStore.clearAll();
-  alert('ลบข้อมูลเรียบร้อยแล้ว');
-  renderChart();
+/* ============================================================
+   WEATHER MAP
+   ============================================================ */
+function switchMap(type, btn) {
+  document.querySelectorAll('.map-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const iframe = $('weatherMapIframe');
+  if (!iframe) return;
+  const base = "https://embed.windy.com/embed.html?lat=16.822&lon=100.266&zoom=8&level=surface";
+  const suf  = "&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1";
+  const ov   = type==='rain'?'rain':type==='pm25'?'pm25':type==='temp'?'temp':'wind';
+  iframe.src = `${base}&overlay=${ov}${suf}`;
 }
 
 /* ============================================================
@@ -2200,73 +2403,123 @@ function clearHistoryData() {
    ============================================================ */
 function startCountdown(total) {
   clearInterval(STATE.cTimer);
-  STATE.countdown = Math.floor(total/1000);
-  const prog = document.getElementById('cProg');
-  const cNum = document.getElementById('cNum');
-  const circ = 100;
-
-  prog.style.strokeDashoffset = 0;
-  cNum.textContent = STATE.countdown;
-
+  const totalSec = Math.floor(total/1000);
+  STATE.countdown = totalSec;
+  const prog = $('cProg'), cNum = $('cNum');
+  if (prog) prog.style.strokeDashoffset = 0;
+  if (cNum) cNum.textContent = totalSec;
   STATE.cTimer = setInterval(() => {
     STATE.countdown--;
-    if (STATE.countdown < 0) STATE.countdown = Math.floor(total/1000);
-    const used = (Math.floor(total/1000) - STATE.countdown) / Math.floor(total/1000);
-    prog.style.strokeDashoffset = used * circ;
-    cNum.textContent = Math.max(0, STATE.countdown);
+    if (STATE.countdown < 0) STATE.countdown = totalSec;
+    const used = (totalSec - STATE.countdown) / totalSec;
+    if (prog) prog.style.strokeDashoffset = used * 100;
+    if (cNum) cNum.textContent = Math.max(0, STATE.countdown);
   }, 1000);
 }
 
 /* ============================================================
-   FETCH
+   FETCH — WITH ABORT CONTROLLER + EXPONENTIAL BACKOFF
    ============================================================ */
+const FETCH_TIMEOUT = 8000; // 8s timeout
+const MAX_RETRIES   = 3;
+const BACKOFF_BASE  = 5000; // 5s, 10s, 20s
+
 async function fetchData() {
   const spin = document.querySelector('.spin-icon');
   if (spin) spin.style.animationPlayState = 'running';
+  const sd = $('statusDot'), sl = $('statusLabel');
+  if (sd) sd.className = 'status-dot loading';
+  if (sl) sl.textContent = STATE.retryCount > 0 ? `กำลังลองใหม่ (${STATE.retryCount}/${MAX_RETRIES})...` : 'กำลังดึงข้อมูล...';
+
+  const controller = new AbortController();
+  const timeoutId  = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
   try {
-    const res = await fetch(API_URL);
+    const res  = await fetch(API_URL, { signal: controller.signal });
+    clearTimeout(timeoutId);
     const data = await res.json();
     if (data && !data.error) {
       DataStore.add(data);
       updateDashboard(data);
-      STATE.errCount = 0;
+      STATE.errCount   = 0;
+      STATE.retryCount = 0;
+    } else {
+      throw new Error('API error: ' + (data?.error || 'unknown'));
     }
   } catch (e) {
+    clearTimeout(timeoutId);
     STATE.errCount++;
-    document.getElementById('statusDot').className = 'status-dot err';
-    document.getElementById('statusLabel').textContent = `ไม่มีสัญญาณ (${STATE.errCount})`;
-    if (STATE.errCount >= 3) document.getElementById('errsBadge').classList.add('show');
-    console.warn('Fetch error:', e);
+
+    const isAborted = e.name === 'AbortError';
+    const errMsg = isAborted ? `หมดเวลา (>8 วิ)` : 'ไม่มีสัญญาณ';
+
+    if (sd) sd.className = STATE.errCount >= 3 ? 'status-dot err' : 'status-dot warn';
+    if (sl) sl.textContent = `${errMsg} (${STATE.errCount})`;
+    if (STATE.errCount >= 3) $('errsBadge')?.classList.add('show');
+
+    // Exponential backoff retry
+    if (STATE.retryCount < MAX_RETRIES) {
+      STATE.retryCount++;
+      const delay = BACKOFF_BASE * STATE.retryCount; // 5s, 10s, 15s
+      clearTimeout(STATE.refreshTimer);
+      STATE.refreshTimer = setTimeout(fetchData, delay);
+      startCountdown(delay);
+      console.warn(`Fetch retry ${STATE.retryCount}/${MAX_RETRIES} in ${delay/1000}s:`, e.message);
+      return;
+    }
+
+    // Exhausted retries, fall back to normal schedule
+    STATE.retryCount = 0;
+    console.error('Fetch failed after max retries:', e.message);
   } finally {
     if (spin) {
       spin.style.animationPlayState = 'paused';
-      setTimeout(() => { spin.style.animationPlayState = 'running'; }, 200);
+      setTimeout(() => { if(spin) spin.style.animationPlayState='running'; }, 300);
     }
-    // Schedule next fetch and start countdown
-    startCountdown(CONFIG.refreshInterval);
-    clearTimeout(STATE.refreshTimer);
-    STATE.refreshTimer = setTimeout(fetchData, CONFIG.refreshInterval);
+    // Schedule next regular fetch
+    if (STATE.retryCount === 0) {
+      startCountdown(CONFIG.refreshInterval);
+      clearTimeout(STATE.refreshTimer);
+      STATE.refreshTimer = setTimeout(fetchData, CONFIG.refreshInterval);
+    }
   }
+}
+
+/* ============================================================
+   FORECAST TOGGLE
+   ============================================================ */
+function toggleForecast(btn) {
+  CONFIG.forecastEnabled = !CONFIG.forecastEnabled;
+  saveConfig();
+  const t = $('forecastToggle'); if(t) t.checked = CONFIG.forecastEnabled;
+  if (CONFIG.forecastEnabled) {
+    btn.style.cssText = 'background:var(--accent);border-color:var(--accent);color:#000';
+    btn.textContent = '🔮 พยากรณ์: เปิด';
+  } else {
+    btn.style.cssText = 'background:var(--bg-secondary);border-color:rgba(167,139,250,0.3);color:var(--text-1)';
+    btn.textContent = '🔮 พยากรณ์: ปิด';
+  }
+  renderChart();
+}
+
+function formatRelativeTime(steps) {
+  const sec = Math.round(CONFIG.refreshInterval/1000*steps);
+  return sec>=60?`+${Math.floor(sec/60)}น${sec%60>0?sec%60+'ว':''}`:`+${sec}ว`;
 }
 
 /* ============================================================
    SETTINGS FUNCTIONS
    ============================================================ */
-function openSettings()  { document.getElementById('settingsSidebar').classList.add('open'); document.getElementById('settingsOverlay').classList.add('open'); }
-function closeSettings() { document.getElementById('settingsSidebar').classList.remove('open'); document.getElementById('settingsOverlay').classList.remove('open'); }
+function openSettings()  { $('settingsSidebar')?.classList.add('open'); $('settingsOverlay')?.classList.add('open'); }
+function closeSettings() { $('settingsSidebar')?.classList.remove('open'); $('settingsOverlay')?.classList.remove('open'); }
 
 function applyTheme(t, btn) {
   CONFIG.theme = t;
   const html = document.documentElement;
-  if (t === 'auto') {
-    html.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  } else {
-    html.setAttribute('data-theme', t);
-  }
+  html.setAttribute('data-theme', t==='auto'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t);
   document.querySelectorAll('.seg-ctrl .seg-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  saveConfig();
-  setTimeout(renderChart, 100); // re-render chart for new theme colors
+  saveConfig(); setTimeout(renderChart, 100);
 }
 
 function applyAccent(a, btn) {
@@ -2279,25 +2532,10 @@ function applyAccent(a, btn) {
 
 function applyRefreshInterval(v) {
   CONFIG.refreshInterval = +v;
-  const heroInt = document.getElementById('heroInterval');
-  if (heroInt) heroInt.textContent = `ทุก ${+v >= 60000 ? '1 นาที' : (+v/1000) + ' วินาที'}`;
+  const hi = $('heroInterval'); if(hi) hi.textContent = `ทุก ${+v>=60000?Math.round(+v/60000)+' นาที':(+v/1000)+' วินาที'}`;
   clearTimeout(STATE.refreshTimer);
-  STATE.refreshTimer = setTimeout(fetchData, CONFIG.refreshInterval);
-  startCountdown(CONFIG.refreshInterval);
-  saveConfig();
-}
-
-function applySchoolName() {
-  const v = document.getElementById('schoolNameIn').value;
-  CONFIG.schoolName = v;
-  document.getElementById('navSchoolName').textContent = v;
-  document.title = `UV Monitor | ${v}`;
-  saveConfig();
-}
-function applySchoolSub() {
-  const v = document.getElementById('schoolSubIn').value;
-  CONFIG.schoolSubtitle = v;
-  document.getElementById('navSubtitle').textContent = v;
+  startCountdown(+v);
+  STATE.refreshTimer = setTimeout(fetchData, +v);
   saveConfig();
 }
 
@@ -2306,8 +2544,7 @@ function resetSession() {
   STATE.h = { uv:[], pm:[], temp:[], hum:[], time:[] };
   STATE.stats = { uv:{min:Infinity,max:-Infinity,sum:0,n:0}, pm:{min:Infinity,max:-Infinity,sum:0,n:0}, temp:{min:Infinity,max:-Infinity,sum:0,n:0}, hum:{min:Infinity,max:-Infinity,sum:0,n:0} };
   STATE.count = 0; STATE.sessionStart = new Date();
-  renderStats(); renderChart();
-  closeSettings();
+  resetExposureTimer(); renderStats(); renderChart(); closeSettings();
 }
 
 /* ============================================================
@@ -2315,33 +2552,34 @@ function resetSession() {
    ============================================================ */
 function exportCSV() {
   const h = STATE.h;
-  if (h.time.length === 0) { alert('ยังไม่มีข้อมูลที่จะส่งออก'); return; }
+  if (!h.time.length) { alert('ยังไม่มีข้อมูลที่จะส่งออก'); return; }
   let csv = 'เวลา,UV Index,PM2.5 (µg/m³),อุณหภูมิ (°C),ความชื้น (%)\n';
-  h.time.forEach((t,i) => {
-    csv += `${t},${h.uv[i]||''},${h.pm[i]||''},${h.temp[i]||''},${h.hum[i]||''}\n`;
-  });
-  const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href=url; a.download=`uv_data_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click(); URL.revokeObjectURL(url);
+  h.time.forEach((t,i) => csv += `${t},${h.uv[i]||''},${h.pm[i]||''},${h.temp[i]||''},${h.hum[i]||''}\n`);
+  dl(csv, `uv_session_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
 function exportAllCSV() {
   const all = DataStore.getAll();
-  if (all.length === 0) { alert('ยังไม่มีข้อมูลประวัติใน Database'); return; }
-  let csv = 'Timestamp,วันที่,เวลา,UV Index,PM2.5 (µg/m³),อุณหภูมิ (°C),ความชื้น (%)\n';
+  if (!all.length) { alert('ยังไม่มีข้อมูลประวัติ'); return; }
+  let csv = 'Timestamp,วันที่,เวลา,UV Index,PM2.5 (µg/m³),อุณหภูมิ (°C),ความชื้น (%),Heat Index (°C)\n';
   all.forEach(r => {
     const d = new Date(r.t);
-    const date = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()+543}`;
-    const time = d.toTimeString().slice(0,8);
-    csv += `${r.t},${date},${time},${r.uv},${r.pm},${r.temp},${r.hum}\n`;
+    const hi = calcHeatIndex(r.temp, r.hum);
+    csv += `${r.t},${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()+543},${d.toTimeString().slice(0,8)},${r.uv},${r.pm},${r.temp},${r.hum},${hi}\n`;
   });
+  dl(csv, `uv_history_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+function dl(csv, name) {
   const blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'});
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href=url; a.download=`uv_history_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click(); URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+}
+
+function clearHistoryData() {
+  if (!confirm('ลบประวัติทั้งหมด? ไม่สามารถกู้คืนได้')) return;
+  DataStore.clearAll(); alert('ลบข้อมูลทั้งหมดแล้ว'); closeSettings();
 }
 
 /* ============================================================
@@ -2350,89 +2588,95 @@ function exportAllCSV() {
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
     document.documentElement.requestFullscreen().catch(()=>{});
-    document.getElementById('fsBtn').textContent = '⊡';
+    const fb=$('fsBtn'); if(fb) fb.textContent='⊡';
   } else {
     document.exitFullscreen();
-    document.getElementById('fsBtn').textContent = '⛶';
   }
 }
-document.addEventListener('fullscreenchange', () => {
-  document.getElementById('fsBtn').textContent = document.fullscreenElement ? '⊡' : '⛶';
+document.addEventListener('fullscreenchange', () => { const fb=$('fsBtn'); if(fb) fb.textContent=document.fullscreenElement?'⊡':'⛶'; });
+window.addEventListener('keydown', e => {
+  if (e.key==='f'||e.key==='F') toggleFullscreen();
+  if (e.key==='Escape') { exitKiosk(); closeSettings(); }
+  if (e.key==='k'||e.key==='K') enterKiosk();
 });
-window.addEventListener('keydown', e => { if (e.key==='f'||e.key==='F') toggleFullscreen(); });
+
+/* ============================================================
+   SKIN MODAL
+   ============================================================ */
+function showSkinModal() { $('skinOverlay')?.classList.add('open'); $('skinModal')?.classList.add('open'); }
+function hideSkinModal() { $('skinOverlay')?.classList.remove('open'); $('skinModal')?.classList.remove('open'); }
+function selectSkinType(type) {
+  CONFIG.skinType = type; saveConfig(); hideSkinModal(); updateSkinDisplay();
+  if (STATE.lastData) updateDashboard(STATE.lastData);
+}
+function updateSkinDisplay() {
+  const el = $('settingsSkinDisplay');
+  if (el) { const s=SKIN_TYPES[CONFIG.skinType]; el.textContent = s ? `ผิวของคุณ: ${s.label}` : 'ผิวของคุณ: ยังไม่เลือก 👤'; }
+}
 
 /* ============================================================
    APPLY CONFIG ON LOAD
    ============================================================ */
 function applyConfigToUI() {
-  // Theme
   const html = document.documentElement;
-  if (CONFIG.theme === 'auto') {
-    html.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (CONFIG.theme==='auto') {
+    html.setAttribute('data-theme', window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
   } else {
     html.setAttribute('data-theme', CONFIG.theme);
   }
   html.setAttribute('data-accent', CONFIG.accent);
 
-  // Accent dots
   document.querySelectorAll('.c-dot').forEach(b => b.classList.toggle('active', b.classList.contains(CONFIG.accent)));
 
-  // Theme seg buttons
-  const themeLabels = {dark:'🌙 มืด', light:'☀️ สว่าง', auto:'🖥️ อัตโนมัติ'};
+  const themeLabels = { dark:'🌙 มืด', light:'☀️ สว่าง', auto:'🖥️ อัตโนมัติ' };
   document.querySelectorAll('.seg-ctrl .seg-btn').forEach(b => {
-    const matches = b.textContent.trim() === themeLabels[CONFIG.theme];
-    b.classList.toggle('active', matches);
+    b.classList.toggle('active', b.textContent.trim() === themeLabels[CONFIG.theme]);
   });
 
-  // Refresh
-  document.getElementById('refreshSel').value = CONFIG.refreshInterval;
-  document.getElementById('histSel').value = CONFIG.historyMax;
-  document.getElementById('heroInterval').textContent = `ทุก ${CONFIG.refreshInterval >= 60000 ? '1 นาที' : CONFIG.refreshInterval/1000 + ' วินาที'}`;
+  // Sync select values
+  const rs = $('refreshSel'); if(rs) rs.value = CONFIG.refreshInterval;
+  const hs = $('histSel');    if(hs) hs.value = CONFIG.historyMax;
 
-  // Alerts
-  document.getElementById('alertMaster').checked = CONFIG.alertsEnabled;
-  document.getElementById('animToggle').checked   = CONFIG.animations;
-  document.getElementById('forecastToggle').checked = CONFIG.forecastEnabled;
-  document.getElementById('uvAlertOn').checked   = CONFIG.alerts.uv.enabled;
-  document.getElementById('pmAlertOn').checked   = CONFIG.alerts.pm.enabled;
-  document.getElementById('tempAlertOn').checked = CONFIG.alerts.temp.enabled;
-  document.getElementById('humAlertOn').checked  = CONFIG.alerts.hum.enabled;
-  document.getElementById('uvThresh').value   = CONFIG.alerts.uv.threshold;
-  document.getElementById('pmThresh').value   = CONFIG.alerts.pm.threshold;
-  document.getElementById('tempThresh').value = CONFIG.alerts.temp.threshold;
-  document.getElementById('humThresh').value  = CONFIG.alerts.hum.threshold;
+  // Toggles
+  const at = $('alertMaster');   if(at)  at.checked  = CONFIG.alertsEnabled;
+  const anim = $('animToggle');  if(anim) anim.checked = CONFIG.animations;
+  const snd = $('soundToggle');  if(snd) snd.checked   = CONFIG.soundEnabled;
+  const ast = $('autoSpeechToggle'); if(ast) ast.checked = CONFIG.autoSpeechEnabled;
+  const fc = $('forecastToggle'); if(fc) fc.checked    = CONFIG.forecastEnabled;
+  const ua = $('uvAlertOn');    if(ua) ua.checked   = CONFIG.alerts.uv.enabled;
+  const pa = $('pmAlertOn');    if(pa) pa.checked   = CONFIG.alerts.pm.enabled;
+  const ta = $('tempAlertOn');  if(ta) ta.checked   = CONFIG.alerts.temp.enabled;
+  const ha = $('humAlertOn');   if(ha) ha.checked   = CONFIG.alerts.hum.enabled;
+  const ut = $('uvThresh');     if(ut) ut.value     = CONFIG.alerts.uv.threshold;
+  const pt = $('pmThresh');     if(pt) pt.value     = CONFIG.alerts.pm.threshold;
+  const tt = $('tempThresh');   if(tt) tt.value     = CONFIG.alerts.temp.threshold;
+  const ht = $('humThresh');    if(ht) ht.value     = CONFIG.alerts.hum.threshold;
 
-  // School (Fixed for school only)
-  document.getElementById('navSchoolName').textContent = "โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก";
-  document.getElementById('navSubtitle').textContent   = "PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม";
+  // School fixed
+  const ns = $('navSchoolName'), ns2 = $('navSubtitle');
+  if(ns)  ns.textContent  = 'โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก';
+  if(ns2) ns2.textContent = 'PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม';
 
   // Chart toggles
   Object.keys(CONFIG.chart).forEach(k => {
-    const btn = document.getElementById('ct' + k.charAt(0).toUpperCase() + k.slice(1));
+    const btn = $('ct' + k.charAt(0).toUpperCase() + k.slice(1));
     if (btn) btn.classList.toggle('active', CONFIG.chart[k]);
   });
 
-  // Forecast button initialization
-  const fcBtn = document.getElementById('pBtn-fc');
+  // Forecast button
+  const fcBtn = $('pBtn-fc');
   if (fcBtn) {
     if (CONFIG.forecastEnabled) {
-      fcBtn.style.borderColor = 'var(--accent)';
-      fcBtn.style.color = '#000';
-      fcBtn.style.backgroundColor = 'var(--accent)';
-      fcBtn.textContent = '🔮 พยากรณ์อนาคต: เปิด';
+      fcBtn.style.cssText = 'background:var(--accent);border-color:var(--accent);color:#000;margin-left:auto';
+      fcBtn.textContent = '🔮 พยากรณ์: เปิด';
     } else {
-      fcBtn.style.borderColor = 'var(--border)';
-      fcBtn.style.color = 'var(--text-1)';
-      fcBtn.style.backgroundColor = 'var(--bg-secondary)';
-      fcBtn.textContent = '🔮 พยากรณ์อนาคต: ปิด';
+      fcBtn.style.cssText = 'background:var(--bg-secondary);border-color:rgba(167,139,250,0.3);color:var(--text-1);margin-left:auto';
+      fcBtn.textContent = '🔮 พยากรณ์: ปิด';
     }
   }
 
-  // Skin tone display
   updateSkinDisplay();
-  if (!CONFIG.skinType) {
-    setTimeout(showSkinModal, 800);
-  }
+  if (!CONFIG.skinType) setTimeout(showSkinModal, 800);
 }
 
 /* ============================================================
@@ -2442,13 +2686,10 @@ loadConfig();
 applyConfigToUI();
 fetchData();
 
-// Re-render chart on resize
 let resizeTimer;
 window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer=setTimeout(renderChart,150); });
-
-// System theme change
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  if (CONFIG.theme === 'auto') document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+  if (CONFIG.theme==='auto') document.documentElement.setAttribute('data-theme', e.matches?'dark':'light');
 });
 </script>
 </body>
