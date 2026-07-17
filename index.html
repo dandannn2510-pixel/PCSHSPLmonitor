@@ -114,6 +114,7 @@ nav{
 .nav-logo img{width:100%;height:100%;object-fit:contain;transition:transform 0.3s ease}
 .nav-logo:hover{transform:scale(1.08) rotate(5deg);box-shadow:0 4px 16px rgba(0,0,0,0.18), 0 0 0 4px var(--accent-g)}
 .nav-logo:hover img{transform:scale(1.12)}
+.nav-text{min-width:0;flex:1}
 .nav-text h1{font-size:13px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px}
 .nav-text p{font-size:10px;color:var(--text-2);letter-spacing:.05em;white-space:nowrap}
 .nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
@@ -484,6 +485,23 @@ footer{background:var(--bg-card);border:1px solid var(--border);border-radius:va
 @keyframes popIn{0%{transform:scale(0.8);opacity:0}80%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
 .pop-in{animation:popIn .35s cubic-bezier(.34,1.56,.64,1) forwards}
 
+/* Touch and selection improvements for chart */
+#chartWrap {
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+/* Hide main and settings overlays in kiosk mode to prevent leakage */
+body.kiosk-mode main {
+  display: none !important;
+}
+body.kiosk-mode .settings-sidebar,
+body.kiosk-mode .settings-overlay,
+body.kiosk-mode #skinOverlay,
+body.kiosk-mode #skinModal {
+  display: none !important;
+}
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */
@@ -497,12 +515,149 @@ footer{background:var(--bg-card);border:1px solid var(--border);border-radius:va
   .live-clock-wrap{justify-content:center}
 }
 @media(max-width:600px){
-  .sensor-grid{grid-template-columns:repeat(2,1fr)}
+  .sensor-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .settings-sidebar{width:100vw}
-  .stats-strip{grid-template-columns:repeat(2,1fr)}
+  .stats-strip{grid-template-columns:repeat(2,1fr);gap:10px}
   .chart-toggles{justify-content:flex-start}
-  .aqi-strip{gap:8px}
   .kiosk-grid{grid-template-columns:1fr}
+
+  /* Navbar Optimization on Mobile */
+  #tvBtn, #fsBtn {
+    display: none !important;
+  }
+  .status-label {
+    display: none !important;
+  }
+  .status-row {
+    padding: 6px;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+  }
+  .nav-text {
+    min-width: 0;
+    flex: 1;
+  }
+  .nav-text h1 {
+    max-width: 140px;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .nav-text p {
+    font-size: 9px;
+    max-width: 140px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .nav-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .nav-inner {
+    gap: 8px;
+  }
+  .nav-actions {
+    gap: 6px;
+  }
+
+  /* Map Height Optimization */
+  .map-iframe-wrap {
+    height: 280px;
+  }
+
+  /* Sensor Card Mobile Layout */
+  .sensor-card {
+    padding: 14px 12px;
+    gap: 6px;
+  }
+  .sensor-card .s-val {
+    font-size: 26px;
+  }
+  .sensor-card .s-name {
+    font-size: 9px;
+  }
+  .sensor-card .s-sub {
+    font-size: 9px;
+  }
+  .sensor-card .s-status {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+  .sensor-card .s-icon {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  /* Live Clock & Update Chip Alignment Fix */
+  .live-clock-wrap {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+  }
+  .live-clock-wrap > div:last-child {
+    margin-left: 0 !important;
+    margin-top: 4px;
+  }
+
+  /* AQI Strip Scaling */
+  .aqi-strip {
+    padding: 12px 10px;
+    gap: 6px;
+  }
+  .aqi-block {
+    padding: 8px 4px;
+    min-width: 75px;
+  }
+  .aqi-value {
+    font-size: 18px;
+  }
+  .aqi-name {
+    font-size: 9px;
+  }
+  .aqi-badge {
+    font-size: 9px;
+  }
+
+  /* Kiosk Mode Mobile Optimization */
+  body.kiosk-mode .kiosk-overlay {
+    padding: 24px 16px;
+    gap: 20px;
+  }
+  .kiosk-grid {
+    gap: 16px;
+  }
+  .kiosk-card {
+    padding: 24px 16px;
+    gap: 8px;
+  }
+  .kiosk-val {
+    font-size: clamp(48px, 15vw, 64px);
+  }
+  .kiosk-icon {
+    font-size: 36px;
+  }
+  .kiosk-header h1 {
+    font-size: 18px;
+  }
+  .kiosk-clock {
+    font-size: 32px;
+    margin-top: 4px;
+  }
+  .kiosk-exit-btn {
+    position: static;
+    margin: 0 auto;
+    width: fit-content;
+    padding: 8px 16px;
+  }
 }
 @media(max-width:400px){
   .sensor-grid{grid-template-columns:1fr}
@@ -2259,8 +2414,11 @@ function initRealtimeTooltip(svgEl, wrap, W, H, PAD, cW, cH, n, activeKeys) {
   }
 
   wrap.onmousemove = onMove;
-  wrap.ontouchmove = e => { e.preventDefault(); onMove(e); };
   wrap.onmouseleave = () => { tooltip.style.display='none'; cursor.style.display='none'; };
+  wrap.ontouchstart = e => { onMove(e); };
+  wrap.ontouchmove = e => { onMove(e); };
+  wrap.ontouchend = () => { tooltip.style.display='none'; cursor.style.display='none'; };
+  wrap.ontouchcancel = () => { tooltip.style.display='none'; cursor.style.display='none'; };
 }
 
 /* ============================================================
@@ -2285,6 +2443,12 @@ function getCandleData(period) {
 function renderCandleChart(groups, labels, periodKey) {
   const svgEl = $('chartSvg'), wrap = $('chartWrap');
   if (!svgEl || !wrap) return;
+  wrap.onmousemove = null;
+  wrap.onmouseleave = null;
+  wrap.ontouchstart = null;
+  wrap.ontouchmove = null;
+  wrap.ontouchend = null;
+  wrap.ontouchcancel = null;
   const W = wrap.clientWidth||800, H = 320;
   const PAD = { t:30, r:56, b:46, l:56 };
   const cW = W-PAD.l-PAD.r, cH = H-PAD.t-PAD.b;
@@ -2328,7 +2492,7 @@ function renderCandleChart(groups, labels, periodKey) {
   if (!allHi.length) {
     svgEl.innerHTML=`<rect width="${W}" height="${H}" fill="${bgC}"/><text x="${W/2}" y="${H/2}" text-anchor="middle" font-size="14" fill="${textC}" font-family="Sarabun,sans-serif">ยังไม่มีข้อมูลในช่วงนี้</text>`;
     svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`); svgEl.setAttribute('width',W); svgEl.setAttribute('height',H);
-    updatePeriodMeta(periodKey,0,groups,activeKeys); wrap.onmousemove=null; return;
+    updatePeriodMeta(periodKey,0,groups,activeKeys); return;
   }
 
   const dataHi=Math.max(...allHi), dataLo=Math.min(...allLo);
@@ -2718,8 +2882,15 @@ loadConfig();
 applyConfigToUI();
 fetchData();
 
+let lastWidth = window.innerWidth;
 let resizeTimer;
-window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer=setTimeout(renderChart,150); });
+window.addEventListener('resize', () => {
+  if (window.innerWidth !== lastWidth) {
+    lastWidth = window.innerWidth;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(renderChart, 150);
+  }
+});
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
   if (CONFIG.theme==='auto') document.documentElement.setAttribute('data-theme', e.matches?'dark':'light');
 });
