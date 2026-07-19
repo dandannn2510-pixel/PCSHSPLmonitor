@@ -235,6 +235,43 @@ nav{
 .skin-opt-card .skin-info span{font-size:12px;color:var(--text-2);line-height:1.5}
 
 /* =========================================================
+   ADMIN MODAL & LOCK OVERLAYS
+   ========================================================= */
+.admin-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity 0.4s ease}
+.admin-overlay.open{opacity:1;pointer-events:auto}
+.admin-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-45%) scale(0.95);width:90%;max-width:420px;z-index:3001;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);padding:28px;display:flex;flex-direction:column;gap:20px}
+.admin-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.admin-modal-hdr h2{font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.admin-modal-hdr p{font-size:12px;color:var(--text-2)}
+.admin-modal-body{display:flex;flex-direction:column;gap:16px}
+.admin-input-group{position:relative}
+.admin-input-group input{width:100%;background:var(--bg-secondary);border:1px solid var(--border-h);color:var(--text-1);border-radius:10px;padding:12px 14px;font-size:14px;font-family:inherit;font-weight:600;outline:none;transition:border-color .2s;text-align:center;box-sizing:border-box}
+.admin-input-group input:focus{border-color:var(--accent)}
+.admin-error-msg{font-size:12px;color:#ef4444;text-align:center;font-weight:600}
+.admin-modal-actions{display:flex;gap:12px;margin-top:4px}
+.admin-btn{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;transition:all .2s;cursor:pointer;border:1px solid transparent;text-align:center}
+.admin-btn.cancel{background:var(--bg-secondary);border-color:var(--border);color:var(--text-2)}
+.admin-btn.cancel:hover{background:var(--bg-card-h);color:var(--text-1)}
+.admin-btn.submit{background:var(--accent);color:#000}
+.admin-btn.submit:hover{transform:translateY(-1px);box-shadow:0 4px 12px var(--accent-g)}
+
+/* Lock Overlay for Cards/Sidebar */
+.admin-lock-overlay{position:absolute;inset:0;background:rgba(13,17,23,0.85);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;z-index:10;transition:opacity 0.3s,pointer-events 0.3s;border:1px dashed rgba(255,255,255,0.1)}
+[data-theme="light"] .admin-lock-overlay{background:rgba(240,244,248,0.85);border:1px dashed rgba(0,0,0,0.1)}
+.admin-lock-overlay.unlocked{opacity:0;pointer-events:none}
+.lock-content{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px;text-align:center}
+.lock-icon{font-size:28px;animation:floatLock 3s ease-in-out infinite}
+.lock-text{font-size:12px;color:var(--text-2);font-weight:600}
+.lock-btn{background:var(--accent-s);border:1px solid var(--accent-g);color:var(--accent);padding:8px 18px;font-weight:700;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.lock-btn:hover{background:var(--accent);color:#000;transform:scale(1.03)}
+@keyframes floatLock{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes shake{
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-52%, -50%) scale(1); }
+  20%, 40%, 60%, 80% { transform: translate(-48%, -50%) scale(1); }
+}
+
+/* =========================================================
    MAIN LAYOUT
    ========================================================= */
 main{max-width:1280px;margin:0 auto;padding:28px 24px 56px;position:relative;z-index:1;display:flex;flex-direction:column;gap:20px}
@@ -405,6 +442,307 @@ main{max-width:1280px;margin:0 auto;padding:28px 24px 56px;position:relative;z-i
 .map-btn:hover:not(.active){border-color:var(--border-h);color:var(--text-1)}
 .map-iframe-wrap{position:relative;width:100%;height:420px;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--border);background:var(--bg-secondary)}
 .map-iframe-wrap iframe{width:100%;height:100%;border:none}
+
+/* =========================================================
+   PHYSICS-INFORMED REGRESSION MODEL
+   ========================================================= */
+.regression-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.regression-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.regression-hdr h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+.regression-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.regression-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.regression-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.formula-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-h);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  text-align: center;
+  font-family: 'Inter', 'Sarabun', monospace;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--accent);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.formula-math {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: 0.02em;
+}
+.formula-math span {
+  transition: color 0.3s;
+}
+.formula-math .coef-val {
+  color: var(--accent);
+}
+.preset-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.preset-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-primary);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+  cursor: pointer;
+}
+.preset-btn.active {
+  background: var(--accent-s);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-s);
+}
+.preset-btn:hover:not(.active) {
+  border-color: var(--border-h);
+  color: var(--text-1);
+}
+.sliders-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.slider-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 65px;
+  align-items: center;
+  gap: 12px;
+}
+.slider-label {
+  font-size: 12px;
+  color: var(--text-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.slider-input-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-primary);
+  outline: none;
+}
+.slider-input-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.slider-input-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+.slider-num-input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-h);
+  color: var(--text-1);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  width: 100%;
+}
+.slider-num-input:focus {
+  border-color: var(--accent);
+}
+.compare-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.compare-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+.compare-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-3);
+  letter-spacing: 0.05em;
+}
+.compare-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-1);
+}
+.compare-val.sensor {
+  color: #a78bfa;
+}
+.compare-val.model {
+  color: var(--accent);
+}
+.compare-val.diff-good {
+  color: #34d399;
+}
+.compare-val.diff-warn {
+  color: #fbbf24;
+}
+.compare-val.diff-bad {
+  color: #ef4444;
+}
+.accuracy-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  align-self: center;
+  margin-top: 4px;
+}
+
+/* Accordion */
+.physics-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.acc-item {
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+.acc-hdr {
+  width: 100%;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-1);
+  cursor: pointer;
+  background: transparent;
+  text-align: left;
+}
+.acc-hdr:hover {
+  background: rgba(255,255,255,0.02);
+}
+.acc-hdr-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.acc-arrow {
+  transition: transform 0.3s;
+  font-size: 10px;
+  color: var(--text-3);
+}
+.acc-item.open .acc-arrow {
+  transform: rotate(180deg);
+}
+.acc-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+  padding: 0 14px;
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.acc-item.open .acc-content {
+  max-height: 300px;
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 0px;
+  padding-top: 12px;
+}
+.linest-code-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-h);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: 'Inter', monospace;
+  font-size: 11px;
+  color: #34d399;
+  overflow-x: auto;
+  margin: 6px 0;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+}
+.linest-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-top: 8px;
+}
+.linest-table th, .linest-table td {
+  border: 1px solid var(--border);
+  padding: 6px 8px;
+  text-align: center;
+}
+.linest-table th {
+  background: rgba(255,255,255,0.03);
+  color: var(--text-1);
+}
 
 /* =========================================================
    UV SCALE
@@ -753,6 +1091,25 @@ body.kiosk-mode #skinModal {
   </div>
 </div>
 
+<!-- ADMIN LOGIN MODAL -->
+<div class="admin-overlay" id="adminOverlay" onclick="hideAdminLoginModal()"></div>
+<div class="admin-modal" id="adminModal">
+  <div class="admin-modal-hdr">
+    <h2>🔐 เข้าสู่ระบบผู้ดูแล (Admin Login)</h2>
+    <p>กรุณากรอกรหัสผ่านเพื่อตั้งค่าระบบและสัมประสิทธิ์โมเดล</p>
+  </div>
+  <div class="admin-modal-body">
+    <div class="admin-input-group">
+      <input type="password" id="adminPasswordInput" placeholder="รหัสผ่านผู้ดูแล..." onkeydown="if(event.key==='Enter') submitAdminPassword()">
+    </div>
+    <div id="adminLoginError" class="admin-error-msg" style="display:none">⚠️ รหัสผ่านไม่ถูกต้อง ลองอีกครั้ง</div>
+    <div class="admin-modal-actions">
+      <button class="admin-btn cancel" onclick="hideAdminLoginModal()">ยกเลิก</button>
+      <button class="admin-btn submit" onclick="submitAdminPassword()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+</div>
+
 <!-- SETTINGS OVERLAY -->
 <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
 <div class="settings-sidebar" id="settingsSidebar">
@@ -789,9 +1146,38 @@ body.kiosk-mode #skinModal {
       </div>
     </div>
 
-    <!-- Data -->
+    <!-- Skin Tone -->
     <div class="s-section">
-      <div class="s-section-title">📡 ข้อมูล & กราฟ</div>
+      <div class="s-section-title">👤 โปรไฟล์สีผิวของคุณ</div>
+      <div class="s-row col" style="gap:8px">
+        <div id="settingsSkinDisplay" style="font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);text-align:center;width:100%;box-sizing:border-box">ผิวของคุณ: --</div>
+        <button class="btn-export" style="background:var(--accent);color:#000;font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
+      </div>
+    </div>
+
+    <!-- Export -->
+    <div class="s-section">
+      <div class="s-section-title">💾 ส่งออกข้อมูล</div>
+      <button class="btn-export" onclick="exportCSV()">⬇️ ดาวน์โหลด CSV (Session)</button>
+      <button class="btn-export" style="margin-top:0" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.25);color:#a78bfa" onclick="shareSnapshot()">📤 แชร์ / บันทึกสแนปช็อต</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.25);color:#34d399" onclick="downloadSnapshotCard()">🖼️ ดาวน์โหลดรูปภาพการ์ดสรุป (PNG)</button>
+    </div>
+
+    <!-- Admin Settings Section -->
+    <div class="s-section" id="adminSettingsSection" style="position: relative; border-bottom: none; padding-bottom: 24px;">
+      <!-- Lock Overlay for Admin Settings -->
+      <div class="admin-lock-overlay" id="settingsAdminLockOverlay" style="border-radius: 0 0 var(--r-lg) var(--r-lg);">
+        <div class="lock-content" style="padding: 10px;">
+          <span class="lock-icon" style="font-size: 24px;">🔒</span>
+          <span class="lock-text" style="font-size: 11px; margin-bottom: 6px;">ระบบตั้งค่าเชิงลึกสำหรับแอดมินถูกล็อก</span>
+          <button class="lock-btn" onclick="showAdminLoginModal()" style="padding: 6px 12px; font-size: 11px;">🔓 ปลดล็อก</button>
+        </div>
+      </div>
+      
+      <div class="s-section-title">⚙️ ตั้งค่าระบบ (แอดมิน)</div>
+      
+      <!-- Refresh Interval -->
       <div class="s-row">
         <span class="s-label">อัปเดตทุก</span>
         <select class="s-select" id="refreshSel" onchange="applyRefreshInterval(this.value)" style="width:auto">
@@ -803,6 +1189,8 @@ body.kiosk-mode #skinModal {
           <option value="300000">5 นาที</option>
         </select>
       </div>
+      
+      <!-- Points Count -->
       <div class="s-row">
         <span class="s-label">จุดในกราฟ</span>
         <select class="s-select" id="histSel" onchange="CONFIG.historyMax=+this.value;saveConfig()" style="width:auto">
@@ -812,15 +1200,17 @@ body.kiosk-mode #skinModal {
           <option value="50">50 จุด</option>
         </select>
       </div>
+      
+      <!-- Forecast Toggle -->
       <div class="s-row">
         <span class="s-label">🔮 พยากรณ์แนวโน้ม</span>
         <label class="toggle"><input type="checkbox" id="forecastToggle" onchange="CONFIG.forecastEnabled=this.checked;saveConfig();renderChart()"><span class="t-slider"></span></label>
       </div>
-    </div>
 
-    <!-- Alerts -->
-    <div class="s-section">
-      <div class="s-section-title">🔔 การแจ้งเตือน</div>
+      <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;">
+        <div class="s-section-title" style="margin-bottom: 12px;">🔔 การแจ้งเตือน & เกณฑ์</div>
+      </div>
+
       <div class="s-row">
         <span class="s-label">เปิดการแจ้งเตือน</span>
         <label class="toggle"><input type="checkbox" id="alertMaster" checked onchange="CONFIG.alertsEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
@@ -861,26 +1251,53 @@ body.kiosk-mode #skinModal {
           <label class="toggle"><input type="checkbox" id="humAlertOn" onchange="CONFIG.alerts.hum.enabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
         </div>
       </div>
-    </div>
 
-    <!-- Skin Tone -->
-    <div class="s-section">
-      <div class="s-section-title">👤 โปรไฟล์สีผิวของคุณ</div>
-      <div class="s-row col" style="gap:8px">
-        <div id="settingsSkinDisplay" style="font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);text-align:center">ผิวของคุณ: --</div>
-        <button class="btn-export" style="background:var(--accent);color:#000;font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
+      <!-- Model Regression Parameters -->
+      <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;" id="adminRegressionSection">
+        <div class="s-section-title" style="margin-bottom: 12px;">🔮 สัมประสิทธิ์โมเดล (Regression)</div>
       </div>
-    </div>
+      
+      <!-- Presets -->
+      <div class="preset-group" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px;">
+        <button class="preset-btn" id="presetWinter" onclick="applyRegressionPreset('winter')" style="padding: 6px; font-size: 11px;">❄️ ฤดูหนาว</button>
+        <button class="preset-btn" id="presetSummer" onclick="applyRegressionPreset('summer')" style="padding: 6px; font-size: 11px;">☀️ ฤดูร้อน</button>
+        <button class="preset-btn" id="presetRainy" onclick="applyRegressionPreset('rainy')" style="padding: 6px; font-size: 11px;">🌧️ ฤดูฝน</button>
+        <button class="preset-btn active" id="presetCustom" onclick="applyRegressionPreset('custom')" style="padding: 6px; font-size: 11px;">✏️ กำหนดเอง</button>
+      </div>
 
-    <!-- Export -->
-    <div class="s-section">
-      <div class="s-section-title">💾 ส่งออกข้อมูล</div>
-      <button class="btn-export" onclick="exportCSV()">⬇️ ดาวน์โหลด CSV (Session)</button>
-      <button class="btn-export" style="margin-top:0" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
-      <button class="btn-export" style="margin-top:0;background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.25);color:#a78bfa" onclick="shareSnapshot()">📤 แชร์ / บันทึกสแนปช็อต</button>
-      <button class="btn-export" style="margin-top:0;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.25);color:#34d399" onclick="downloadSnapshotCard()">🖼️ ดาวน์โหลดรูปภาพการ์ดสรุป (PNG)</button>
+      <!-- Sliders -->
+      <div class="sliders-group" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+        <!-- Constant (a) -->
+        <div class="slider-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span class="slider-label" style="font-size: 11px; width: 85px;" title="ค่าคงที่พื้นฐาน (Intercept)">ค่าคงที่ a (Base)</span>
+          <input type="range" class="slider-input-range" id="regRangeA" min="-100" max="100" step="0.1" value="18.5" oninput="onRegressionSliderInput('a', this.value)" style="flex: 1; height: 4px;">
+          <input type="number" class="slider-num-input" id="regInputA" step="0.1" value="18.5" onchange="onRegressionNumInput('a', this.value)" style="width: 50px; font-size: 11px; padding: 3px 5px; text-align: center;">
+        </div>
+        <!-- Temp Coefficient (b) -->
+        <div class="slider-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span class="slider-label" style="font-size: 11px; width: 85px;" title="สัมประสิทธิ์ของอุณหภูมิ (Temperature Coeff)">สัมประสิทธิ์ b (Temp)</span>
+          <input type="range" class="slider-input-range" id="regRangeB" min="-5" max="5" step="0.01" value="-0.45" oninput="onRegressionSliderInput('b', this.value)" style="flex: 1; height: 4px;">
+          <input type="number" class="slider-num-input" id="regInputB" step="0.01" value="-0.45" onchange="onRegressionNumInput('b', this.value)" style="width: 50px; font-size: 11px; padding: 3px 5px; text-align: center;">
+        </div>
+        <!-- RH Coefficient (c) -->
+        <div class="slider-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span class="slider-label" style="font-size: 11px; width: 85px;" title="สัมประสิทธิ์ความชื้นสัมพัทธ์ (Humidity Coeff)">สัมประสิทธิ์ c (RH)</span>
+          <input type="range" class="slider-input-range" id="regRangeC" min="-5" max="5" step="0.01" value="0.12" oninput="onRegressionSliderInput('c', this.value)" style="flex: 1; height: 4px;">
+          <input type="number" class="slider-num-input" id="regInputC" step="0.01" value="0.12" onchange="onRegressionNumInput('c', this.value)" style="width: 50px; font-size: 11px; padding: 3px 5px; text-align: center;">
+        </div>
+        <!-- UV Coefficient (d) -->
+        <div class="slider-row" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+          <span class="slider-label" style="font-size: 11px; width: 85px;" title="สัมประสิทธิ์ของดัชนี UV (UV Coeff)">สัมประสิทธิ์ d (UV)</span>
+          <input type="range" class="slider-input-range" id="regRangeD" min="-10" max="10" step="0.01" value="1.55" oninput="onRegressionSliderInput('d', this.value)" style="flex: 1; height: 4px;">
+          <input type="number" class="slider-num-input" id="regInputD" step="0.01" value="1.55" onchange="onRegressionNumInput('d', this.value)" style="width: 50px; font-size: 11px; padding: 3px 5px; text-align: center;">
+        </div>
+      </div>
+
+      <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;">
+        <div class="s-section-title" style="margin-bottom: 12px;">🗑️ ล้างข้อมูลระบบ</div>
+      </div>
       <button class="btn-reset" onclick="resetSession()">🗑️ ล้างข้อมูล Session</button>
-      <button class="btn-reset" style="margin-top:4px" onclick="clearHistoryData()">🗑️ ลบประวัติทั้งหมด (DB)</button>
+      <button class="btn-reset" style="margin-top:8px" onclick="clearHistoryData()">🗑️ ลบประวัติทั้งหมด (DB)</button>
     </div>
 
   </div>
@@ -1099,6 +1516,137 @@ body.kiosk-mode #skinModal {
     </div>
   </section>
 
+  <!-- PHYSICS-INFORMED REGRESSION MODEL -->
+  <section class="regression-section">
+    <div class="regression-hdr">
+      <div>
+        <div class="section-label" style="margin-bottom:4px">🔮 แบบจำลองถดถอยเชิงฟิสิกส์</div>
+        <h3>แบบจำลอง PM2.5 อิงหลักฟิสิกส์บรรยากาศ (Physics-Informed Regression)</h3>
+      </div>
+    </div>
+
+    <div class="regression-grid">
+      <!-- LEFT COLUMN: MODEL RESULTS DISPLAY (PUBLIC) -->
+      <div class="regression-card">
+        <div class="regression-card-title">
+          <span>📊 ผลลัพธ์จากแบบจำลองประเมิน PM2.5</span>
+        </div>
+        
+        <!-- Formula Display Widget -->
+        <div class="formula-box">
+          <div style="font-size:11px;color:var(--text-2);margin-bottom:4px;font-weight:600;letter-spacing:0.05em">สมการประเมินค่าฝุ่นปัจจุบัน (Current Formula)</div>
+          <div class="formula-math" id="formulaMath" style="font-size: clamp(14px, 1.8vw, 18px); font-weight: 700; color: var(--accent); padding: 8px 0;">
+            PM2.5 = <span id="eqA">0</span> 
+            <span id="eqBSign">+</span> <span id="eqB">0</span>(T) 
+            <span id="eqCSign">+</span> <span id="eqC">0</span>(RH) 
+            <span id="eqDSign">+</span> <span id="eqD">0</span>(UV)
+          </div>
+        </div>
+
+        <!-- Real-time Comparison -->
+        <div class="compare-container" style="margin-top: 16px;">
+          <div class="compare-box">
+            <span class="compare-label">ฝุ่นจากเซนเซอร์จริง</span>
+            <span class="compare-val sensor" id="regActualPM">--</span>
+            <span style="font-size:10px;color:var(--text-2);font-weight:600;margin-top:4px">µg/m³</span>
+          </div>
+          <div class="compare-box">
+            <span class="compare-label">ประเมินจากสมการฟิสิกส์</span>
+            <span class="compare-val model" id="regPredictPM">--</span>
+            <span style="font-size:10px;color:var(--text-2);font-weight:600;margin-top:4px">µg/m³</span>
+          </div>
+          <div class="compare-box">
+            <span class="compare-label">ความถูกต้องเชิงสถิติ</span>
+            <span class="compare-val" id="regDiffPM" style="font-family:'Inter',sans-serif;font-weight:800">--</span>
+            <span class="accuracy-badge" id="regAccuracyBadge" style="margin-top:4px">--</span>
+          </div>
+        </div>
+        
+        <!-- Admin Shortcut -->
+        <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+          <span style="font-size: 11px; color: var(--text-2); font-weight: 500;">สัมประสิทธิ์โมเดลถูกควบคุมโดยผู้ดูแลระบบ</span>
+          <button class="lock-btn" onclick="openSettingsAndShowAdmin()" style="padding: 6px 12px; font-size: 11px; margin: 0; background: var(--accent-s); border: 1px solid var(--accent-g); color: var(--accent); border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">🛠️ ปรับแต่งสัมประสิทธิ์</button>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: ATMOSPHERIC PHYSICS GUIDE & GS LINEST -->
+      <div class="regression-card">
+        <div class="regression-card-title">
+          <span>📚 ทฤษฎีฟิสิกส์บรรยากาศ & วิธีคำนวณหาค่าสมการจริง</span>
+        </div>
+
+        <div class="physics-accordion">
+          <!-- Temperature -->
+          <div class="acc-item" id="accTemp">
+            <button class="acc-hdr" onclick="toggleAccordion('accTemp')">
+              <span class="acc-hdr-title">🌡️ อุณหภูมิ (T) กับการจม/ลอยตัวของฝุ่น</span>
+              <span class="acc-arrow">▼</span>
+            </button>
+            <div class="acc-content">
+              เมื่ออุณหภูมิผิวโลกสูงขึ้น อากาศบริเวณนั้นจะขยายตัวและลอยตัวขึ้นสู่เบื้องบนในแนวดิ่ง (Convection) พัดพาเอาฝุ่นละออง PM2.5 ให้ลอยขึ้นไปกระจายตัวในบรรยากาศด้านบน ทำให้ความหนาแน่นบริเวณพื้นดินลดลง <strong>(สัมประสิทธิ์ b จึงมักมีค่าเป็นลบ)</strong> ในทางกลับกัน หากอุณหภูมิต่ำ (เช่น ช่วงเช้าฤดูหนาว) จะเกิดสภาวะอุณหภูมิผกผัน (Atmospheric Inversion) อากาศอุ่นกดทับอากาศเย็นด้านล่าง ทำให้ฝุ่นละอองถูกกักขังระบายไม่ได้ ค่าฝุ่นจึงพุ่งสูงขึ้นมาก
+            </div>
+          </div>
+
+          <!-- Relative Humidity -->
+          <div class="acc-item" id="accHum">
+            <button class="acc-hdr" onclick="toggleAccordion('accHum')">
+              <span class="acc-hdr-title">💧 ความชื้น (RH) กับการรวมตัว & เคมีแสง</span>
+              <span class="acc-arrow">▼</span>
+            </button>
+            <div class="acc-content">
+              <strong>ทฤษฎีมี 2 มุมมองหลัก:</strong><br>
+              1) <strong>การชะล้าง/การตกตะกอน (Wet Deposition/Coagulation)</strong>: ในสภาวะความชื้นสูงมากๆ ไอน้ำในอากาศจะเข้าไปเกาะอนุภาคฝุ่นขนาดเล็ก ทำให้ฝุ่นขนาดโตขึ้นและหนักขึ้นจนตกลงสู่พื้นได้ง่ายขึ้น (สัมประสิทธิ์ c จะเป็นลบ)<br>
+              2) <strong>การเกิดฝุ่นทุติยภูมิ (Secondary Inorganic Aerosol)</strong>: ไอน้ำทำปฏิกิริยากับก๊าซมลพิษในอากาศ เกิดการรวมตัวทางเคมีเป็นฝุ่นก๊าซทุติยภูมิ ซึ่งมักเกิดขึ้นเด่นชัดในฤดูหนาว (สัมประสิทธิ์ c จะเป็นบวก)
+            </div>
+          </div>
+
+          <!-- UV Radiation -->
+          <div class="acc-item" id="accUv">
+            <button class="acc-hdr" onclick="toggleAccordion('accUv')">
+              <span class="acc-hdr-title">☀️ รังสี UV กับปฏิกิริยาเคมีแสง (Photochemical)</span>
+              <span class="acc-arrow">▼</span>
+            </button>
+            <div class="acc-content">
+              รังสี UV ทำหน้าที่เป็นตัวเร่งปฏิกิริยาเคมีแสง (Photochemical Reaction) ระหว่างสารเคมีในอากาศ เช่น ออกไซด์ของไนโตรเจน (NOx) และสารประกอบอินทรีย์ระเหยง่าย (VOCs) เกิดเป็นโอโซนระดับผิวโลก และเหนี่ยวนำให้เกิดฝุ่นละอองทุติยภูมิประเภทสารอินทรีย์ (Secondary Organic Aerosols - SOA) ส่งผลให้ฝุ่น PM2.5 สะสมเพิ่มสูงขึ้นอย่างมีนัยสำคัญในช่วงแดดจัด <strong>(สัมประสิทธิ์ d จึงเป็นบวกเสมอ)</strong>
+            </div>
+          </div>
+
+          <!-- Google Sheets Guide -->
+          <div class="acc-item" id="accLinest">
+            <button class="acc-hdr" onclick="toggleAccordion('accLinest')">
+              <span class="acc-hdr-title">📊 วิธีหาค่าจริงด้วย LINEST ใน Google Sheets</span>
+              <span class="acc-arrow">▼</span>
+            </button>
+            <div class="acc-content">
+              คุณสามารถหาค่า $a, b, c, d$ ของโรงเรียนคุณจริงๆ ได้ง่ายๆ โดยเปิดประวัติเซนเซอร์ใน Google Sheets แล้วจัดเรียงให้ <strong>PM อยู่ในหนึ่งคอลัมน์</strong> (เช่น E) และ <strong>Temp, RH, UV อยู่ใน 3 คอลัมน์ที่ติดกัน</strong> (เช่น B, C, D) จากนั้นพิมพ์สูตร:
+              <div class="linest-code-box">=LINEST(E2:E100, B2:D100, TRUE, FALSE)</div>
+              เมื่อกด Enter ค่าจะกระจายออกมาเรียงจากซ้ายไปขวา ดังนี้:
+              <table class="linest-table">
+                <thead>
+                  <tr>
+                    <th>ค่าที่ 1 (ซ้ายสุด)</th>
+                    <th>ค่าที่ 2</th>
+                    <th>ค่า* 3</th>
+                    <th>ค่าที่ 4 (ขวาสุด)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>d</strong> (สัมประสิทธิ์ UV)</td>
+                    <td><strong>c</strong> (สัมประสิทธิ์ RH)</td>
+                    <td><strong>b</strong> (สัมประสิทธิ์ Temp)</td>
+                    <td><strong>a</strong> (ค่าคงที่ Intercept)</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="margin-top:8px;font-size:11px;color:var(--text-3)">*หมายเหตุ: สามารถแยกวิเคราะห์ 3 ชุดข้อมูลตามฤดูกาล เพื่อพิสูจน์ความเป็น Physics-informed Model ได้ดีที่สุด!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- TREND CHART -->
   <section class="chart-section">
     <div class="chart-hdr">
@@ -1262,6 +1810,8 @@ body.kiosk-mode #skinModal {
 <!-- ===== JAVASCRIPT ===== -->
 <script>
 'use strict';
+// cache-bust: 1
+
 
 /* ============================================================
    DOM HELPER
@@ -1283,7 +1833,8 @@ const DEFAULT_CONFIG = {
     temp: { enabled:true,  threshold:35 },
     hum:  { enabled:false, threshold:90 },
   },
-  chart: { uv:true, pm:true, temp:false, hum:false }
+  chart: { uv:true, pm:true, temp:false, hum:false },
+  regression: { a: 18.5, b: -0.45, c: 0.12, d: 1.55, season: 'custom' }
 };
 
 let CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
@@ -1299,6 +1850,9 @@ function loadConfig() {
         Object.keys(p.alerts).forEach(k => {
           if (CONFIG.alerts[k]) CONFIG.alerts[k] = { ...CONFIG.alerts[k], ...p.alerts[k] };
         });
+      }
+      if (p.regression) {
+        CONFIG.regression = { ...DEFAULT_CONFIG.regression, ...p.regression };
       }
       CONFIG.chart = { ...DEFAULT_CONFIG.chart, ...p.chart };
     }
@@ -2188,6 +2742,9 @@ function updateDashboard(data) {
       <div class="reco-body"><strong>${r.title}</strong>${r.body}</div>
     </div>`).join('');
 
+  // Update Physics-informed Regression UI
+  updateRegressionUI(data);
+
   // Chart & Alerts
   renderChart();
   checkAlerts(data);
@@ -2698,6 +3255,214 @@ function toggleForecast(btn) {
   renderChart();
 }
 
+/* ============================================================
+   PHYSICS-INFORMED REGRESSION MODEL FUNCTIONS
+   ============================================================ */
+const REG_PRESETS = {
+  winter: { a: 35.2, b: -0.85, c: 0.15,  d: 0.45 },
+  summer: { a: 18.4, b: -0.30, c: -0.05, d: 2.10 },
+  rainy:  { a: 12.5, b: -0.10, c: -0.35, d: 0.80 }
+};
+
+function initRegressionUI() {
+  const reg = CONFIG.regression || DEFAULT_CONFIG.regression;
+  
+  // Set values to inputs
+  ['a', 'b', 'c', 'd'].forEach(k => {
+    const range = $('regRange' + k.toUpperCase());
+    const input = $('regInput' + k.toUpperCase());
+    if (range) range.value = reg[k];
+    if (input) input.value = reg[k];
+  });
+  
+  // Update buttons
+  updatePresetButtons(reg.season);
+  updateRegressionFormula();
+}
+
+function updatePresetButtons(activeSeason) {
+  document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+  const btnId = 'preset' + activeSeason.charAt(0).toUpperCase() + activeSeason.slice(1);
+  const btn = $(btnId);
+  if (btn) btn.classList.add('active');
+}
+
+function applyRegressionPreset(season) {
+  CONFIG.regression.season = season;
+  
+  if (season !== 'custom' && REG_PRESETS[season]) {
+    const vals = REG_PRESETS[season];
+    Object.keys(vals).forEach(k => {
+      CONFIG.regression[k] = vals[k];
+      const range = $('regRange' + k.toUpperCase());
+      const input = $('regInput' + k.toUpperCase());
+      if (range) range.value = vals[k];
+      if (input) input.value = vals[k];
+    });
+  }
+  
+  updatePresetButtons(season);
+  updateRegressionFormula();
+  saveConfig();
+  
+  // Re-calculate with last data if available
+  if (STATE.lastData) {
+    updateRegressionUI(STATE.lastData);
+  }
+}
+
+function onRegressionSliderInput(coef, val) {
+  const numVal = parseFloat(val);
+  CONFIG.regression[coef] = numVal;
+  CONFIG.regression.season = 'custom';
+  updatePresetButtons('custom');
+  
+  const input = $('regInput' + coef.toUpperCase());
+  if (input) input.value = numVal;
+  
+  updateRegressionFormula();
+  saveConfig();
+  
+  if (STATE.lastData) {
+    updateRegressionUI(STATE.lastData);
+  }
+}
+
+function onRegressionNumInput(coef, val) {
+  let numVal = parseFloat(val);
+  if (isNaN(numVal)) numVal = DEFAULT_CONFIG.regression[coef];
+  
+  // Clamp value based on slider min/max
+  const range = $('regRange' + coef.toUpperCase());
+  if (range) {
+    const min = parseFloat(range.min);
+    const max = parseFloat(range.max);
+    numVal = Math.max(min, Math.min(max, numVal));
+    range.value = numVal;
+  }
+  
+  const input = $('regInput' + coef.toUpperCase());
+  if (input) input.value = numVal;
+  
+  CONFIG.regression[coef] = numVal;
+  CONFIG.regression.season = 'custom';
+  updatePresetButtons('custom');
+  
+  updateRegressionFormula();
+  saveConfig();
+  
+  if (STATE.lastData) {
+    updateRegressionUI(STATE.lastData);
+  }
+}
+
+function updateRegressionFormula() {
+  const reg = CONFIG.regression;
+  
+  const aVal = reg.a.toFixed(1);
+  const bVal = reg.b;
+  const cVal = reg.c;
+  const dVal = reg.d;
+  
+  // Intercept (a)
+  const aEl = $('eqA');
+  if (aEl) aEl.textContent = aVal;
+  
+  // Temp (b)
+  const bSignEl = $('eqBSign');
+  const bEl = $('eqB');
+  if (bSignEl && bEl) {
+    bSignEl.textContent = bVal >= 0 ? '+' : '-';
+    bEl.textContent = Math.abs(bVal).toFixed(2);
+  }
+  
+  // Humidity (c)
+  const cSignEl = $('eqCSign');
+  const cEl = $('eqC');
+  if (cSignEl && cEl) {
+    cSignEl.textContent = cVal >= 0 ? '+' : '-';
+    cEl.textContent = Math.abs(cVal).toFixed(2);
+  }
+  
+  // UV (d)
+  const dSignEl = $('eqDSign');
+  const dEl = $('eqD');
+  if (dSignEl && dEl) {
+    dSignEl.textContent = dVal >= 0 ? '+' : '-';
+    dEl.textContent = Math.abs(dVal).toFixed(2);
+  }
+}
+
+function updateRegressionUI(data) {
+  const { uv, pm, temp, hum } = data;
+  const actualPM = parseFloat(pm) || 0;
+  const uvNum = parseFloat(uv) || 0;
+  const tempNum = parseFloat(temp) || 0;
+  const humNum = parseFloat(hum) || 0;
+  
+  const reg = CONFIG.regression || DEFAULT_CONFIG.regression;
+  
+  // Formula: PM2.5 = a + b(Temp) + c(RH) + d(UV)
+  const predictedPM = Math.max(0, reg.a + (reg.b * tempNum) + (reg.c * humNum) + (reg.d * uvNum));
+  
+  // Calculate accuracy & diff
+  const diff = predictedPM - actualPM;
+  let accuracy = 0;
+  if (actualPM === 0) {
+    accuracy = predictedPM === 0 ? 100 : 0;
+  } else {
+    accuracy = Math.max(0, 100 - (Math.abs(diff) / actualPM) * 100);
+  }
+  
+  // Update elements
+  const actPMEl = $('regActualPM');
+  if (actPMEl) actPMEl.textContent = actualPM.toFixed(1);
+  
+  const predPMEl = $('regPredictPM');
+  if (predPMEl) predPMEl.textContent = predictedPM.toFixed(1);
+  
+  const diffPMEl = $('regDiffPM');
+  if (diffPMEl) {
+    diffPMEl.textContent = accuracy.toFixed(1) + '%';
+    
+    // Select styling for difference/accuracy
+    const badge = $('regAccuracyBadge');
+    if (badge) {
+      badge.textContent = accuracy >= 85 ? 'แม่นยำสูง' : accuracy >= 60 ? 'ปานกลาง' : 'แม่นยำต่ำ';
+      if (accuracy >= 85) {
+        diffPMEl.className = 'compare-val diff-good';
+        badge.style.background = '#34d39922';
+        badge.style.color = '#34d399';
+      } else if (accuracy >= 60) {
+        diffPMEl.className = 'compare-val diff-warn';
+        badge.style.background = '#fbbf2422';
+        badge.style.color = '#fbbf24';
+      } else {
+        diffPMEl.className = 'compare-val diff-bad';
+        badge.style.background = '#ef444422';
+        badge.style.color = '#ef4444';
+      }
+    }
+  }
+}
+
+function toggleAccordion(id) {
+  const item = $(id);
+  if (!item) return;
+  const isOpen = item.classList.contains('open');
+  
+  // Close all other items first (optional, but makes it cleaner)
+  document.querySelectorAll('.acc-item').forEach(el => {
+    if (el.id !== id) el.classList.remove('open');
+  });
+  
+  if (isOpen) {
+    item.classList.remove('open');
+  } else {
+    item.classList.add('open');
+  }
+}
+
 function formatRelativeTime(steps) {
   const sec = Math.round(CONFIG.refreshInterval/1000*steps);
   return sec>=60?`+${Math.floor(sec/60)}น${sec%60>0?sec%60+'ว':''}`:`+${sec}ว`;
@@ -2870,9 +3635,111 @@ function applyConfigToUI() {
       fcBtn.textContent = '🔮 พยากรณ์: ปิด';
     }
   }
-
+  initRegressionUI();
   updateSkinDisplay();
   if (!CONFIG.skinType) setTimeout(showSkinModal, 800);
+}
+
+/* ============================================================
+   ADMIN ACCESS SYSTEM
+   ============================================================ */
+function showAdminLoginModal() {
+  $('adminOverlay')?.classList.add('open');
+  $('adminModal')?.classList.add('open');
+  $('adminPasswordInput').value = '';
+  $('adminLoginError').style.display = 'none';
+  setTimeout(() => {
+    $('adminPasswordInput')?.focus();
+  }, 100);
+}
+
+function hideAdminLoginModal() {
+  $('adminOverlay')?.classList.remove('open');
+  $('adminModal')?.classList.remove('open');
+}
+
+function submitAdminPassword() {
+  const pwd = $('adminPasswordInput').value;
+  // Default password is admin123
+  if (pwd === 'admin123') {
+    sessionStorage.setItem('isAdmin', 'true');
+    unlockAdminFeatures();
+    hideAdminLoginModal();
+    // Scroll settings to the regression controls if settings is open
+    if ($('settingsSidebar')?.classList.contains('open')) {
+      setTimeout(() => {
+        $('adminRegressionSection')?.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  } else {
+    $('adminLoginError').style.display = 'block';
+    const modal = $('adminModal');
+    if (modal) {
+      modal.style.animation = 'none';
+      void modal.offsetWidth; // Trigger reflow to restart animation
+      modal.style.animation = 'shake 0.5s';
+    }
+  }
+}
+
+function unlockAdminFeatures() {
+  $('settingsAdminLockOverlay')?.classList.add('unlocked');
+  updateAdminUI();
+}
+
+function lockAdminFeatures() {
+  sessionStorage.removeItem('isAdmin');
+  $('settingsAdminLockOverlay')?.classList.remove('unlocked');
+  updateAdminUI();
+}
+
+function updateAdminUI() {
+  const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+  const navActions = document.querySelector('.nav-actions');
+  const existingLogout = $('adminLogoutBtn');
+  
+  if (isAdmin) {
+    if (!existingLogout && navActions) {
+      const logoutBtn = document.createElement('button');
+      logoutBtn.className = 'nav-btn';
+      logoutBtn.id = 'adminLogoutBtn';
+      logoutBtn.title = 'ออกจากระบบผู้ดูแล (🔒)';
+      logoutBtn.innerHTML = '🔒🚪';
+      logoutBtn.onclick = () => {
+        if(confirm('ต้องการออกจากระบบผู้ดูแลหรือไม่?')) {
+          lockAdminFeatures();
+        }
+      };
+      // Insert before the settings cog button
+      navActions.insertBefore(logoutBtn, navActions.lastElementChild);
+    }
+  } else {
+    if (existingLogout) {
+      existingLogout.remove();
+    }
+  }
+}
+
+function openSettingsAndShowAdmin() {
+  const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+  openSettings();
+  if (!isAdmin) {
+    showAdminLoginModal();
+  } else {
+    // Scroll to admin regression controls inside sidebar
+    setTimeout(() => {
+      $('adminRegressionSection')?.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  }
+}
+
+function initAdminState() {
+  const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+  if (isAdmin) {
+    unlockAdminFeatures();
+  } else {
+    lockAdminFeatures();
+  }
 }
 
 /* ============================================================
@@ -2880,6 +3747,7 @@ function applyConfigToUI() {
    ============================================================ */
 loadConfig();
 applyConfigToUI();
+initAdminState();
 fetchData();
 
 let lastWidth = window.innerWidth;
