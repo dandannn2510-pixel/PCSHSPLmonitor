@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">UV Monitor | โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</title>
-  <meta name="description" content="ระบบตรวจวัดสภาพแวดล้อม UV PM2.5 อุณหภูมิ ความชื้น โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก">
+  <title id="pageTitle">Environmental Monitor | โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</title>
+  <meta name="description" content="ระบบติดตามสภาพแวดล้อมแบบเรียลไทม์ ดัชนีรังสียูวี ฝุ่น PM2.5 อุณหภูมิ และความชื้นสัมพัทธ์ โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก">
   <meta name="theme-color" content="#0d1117">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -177,7 +177,7 @@ nav{
 }
 .settings-sidebar.open{transform:translateX(0)}
 .settings-hdr{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--border);flex-shrink:0}
-.settings-hdr h2{font-size:16px;font-weight:700;color:var(--text-1)}
+.settings-hdr h2{font-size:15px;font-weight:700;color:var(--text-1);letter-spacing:.02em}
 .settings-close{width:32px;height:32px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-2);font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .settings-close:hover{background:var(--bg-card-h);color:var(--text-1)}
 .settings-body{flex:1;overflow-y:auto;padding:12px 0}
@@ -186,7 +186,7 @@ nav{
 .settings-body::-webkit-scrollbar-thumb{background:var(--border-h);border-radius:4px}
 .s-section{padding:16px 24px;border-bottom:1px solid var(--border)}
 .s-section:last-child{border-bottom:none}
-.s-section-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px}
+.s-section-title{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .s-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
 .s-row:last-child{margin-bottom:0}
 .s-row.col{flex-direction:column;align-items:flex-start}
@@ -275,7 +275,11 @@ nav{
    MAIN LAYOUT
    ========================================================= */
 main{max-width:1280px;margin:0 auto;padding:28px 24px 56px;position:relative;z-index:1;display:flex;flex-direction:column;gap:20px}
-.section-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;
+  padding-left:10px;border-left:2px solid var(--accent);
+}
 
 /* =========================================================
    HERO
@@ -286,7 +290,13 @@ main{max-width:1280px;margin:0 auto;padding:28px 24px 56px;position:relative;z-i
   box-shadow:var(--shadow-lg);position:relative;overflow:hidden;
 }
 .hero::after{content:'';position:absolute;inset:0;border-radius:var(--r-xl);pointer-events:none;background:radial-gradient(ellipse 60% 80% at 80% 50%, color-mix(in srgb,var(--accent) 6%,transparent) 0%, transparent 70%)}
-.hero-sub{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.hero-sub{
+  font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:8px;
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--accent-g);background:var(--accent-s);
+  padding:3px 10px;border-radius:6px;
+}
 .hero h2{font-size:clamp(18px,2.5vw,26px);font-weight:800;color:var(--text-1);margin-bottom:4px;line-height:1.2}
 .hero-desc{font-size:13px;color:var(--text-2);margin-bottom:18px}
 .hero-meta{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -1015,10 +1025,10 @@ body.kiosk-mode #skinModal {
 
 <!-- KIOSK OVERLAY -->
 <div class="kiosk-overlay" id="kioskOverlay">
-  <button class="kiosk-exit-btn" onclick="exitKiosk()">✕ ออกจาก TV Mode</button>
+  <button class="kiosk-exit-btn" onclick="exitKiosk()">✕ ออกจากโหมดแสดงผล</button>
   <div class="kiosk-header">
-    <h1>🏫 โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
-    <p>ระบบตรวจวัดสภาพแวดล้อมแบบเรียลไทม์</p>
+    <h1>โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
+    <p>ระบบติดตามสภาพแวดล้อมแบบเรียลไทม์ · PCSHS Phitsanulok</p>
     <div class="live-clock-time kiosk-clock" id="kioskClock">--:--:--</div>
   </div>
   <div class="kiosk-grid">
@@ -1026,7 +1036,7 @@ body.kiosk-mode #skinModal {
       <div class="kiosk-icon">☀️</div>
       <div class="kiosk-label">UV Index</div>
       <div class="kiosk-val" id="kUvVal" style="color:#f59e0b">--</div>
-      <div class="kiosk-status-badge" id="kUvBadge" style="background:#34d399">กำลังโหลด</div>
+      <div class="kiosk-status-badge" id="kUvBadge" style="background:#34d399">กำลังรับข้อมูล</div>
     </div>
     <div class="kiosk-card kc-pm">
       <div class="kiosk-icon">🌫️</div>
@@ -1051,16 +1061,16 @@ body.kiosk-mode #skinModal {
     <div class="flag-icon-wrap" id="kioskFlagIcon">🟢</div>
     <div class="flag-info">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <div class="flag-title" id="kioskFlagTitle">ธงสีเขียว (ความปลอดภัยสูงสุด)</div>
+        <div class="flag-title" id="kioskFlagTitle">ระดับปลอดภัย — ธงเขียว</div>
         <button class="nav-btn" onclick="speakCurrentFlag()" title="ฟังเสียงประกาศ" style="width:36px;height:36px;font-size:16px;border-radius:8px;background:rgba(255,255,255,0.08)">🔊</button>
       </div>
-      <div class="flag-desc" id="kioskFlagDesc">นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ</div>
+      <div class="flag-desc" id="kioskFlagDesc">สภาพแวดล้อมอยู่ในเกณฑ์ปลอดภัย นักเรียนและบุคลากรสามารถปฏิบัติกิจกรรมกลางแจ้งได้ตามปกติ</div>
     </div>
   </div>
   <div style="font-size:12px; color:var(--text-3); text-align:center; margin-top:20px; width:100%; max-width:1100px; display:flex; justify-content:center; gap:24px; flex-wrap:wrap; flex-shrink:0">
-    <span>📊 แหล่งอ้างอิงเกณฑ์: WHO & กรมควบคุมมลพิษ</span>
-    <span>🗺️ แผนที่ลมและฝุ่น: Windy.com</span>
-    <span>📡 สถานีตรวจวัดสภาพแวดล้อม PCSHS Phitsanulok</span>
+    <span>เกณฑ์อ้างอิง: องค์การอนามัยโลก (WHO) และกรมควบคุมมลพิษ</span>
+    <span>แผนที่อุตุนิยมวิทยา: Windy.com</span>
+    <span>สถานีตรวจวัด: PCSHS Phitsanulok Environmental Station</span>
   </div>
 </div>
 
@@ -1068,8 +1078,8 @@ body.kiosk-mode #skinModal {
 <div class="skin-overlay" id="skinOverlay" onclick="hideSkinModal()"></div>
 <div class="skin-modal" id="skinModal">
   <div class="skin-modal-hdr">
-    <h2>🧬 เลือกประเภทสีผิว</h2>
-    <p>ข้อมูลนี้ช่วยให้ระบบคำนวณเวลาสูงสุดในการรับแสงแดดที่ปลอดภัยสำหรับคุณได้อย่างแม่นยำ</p>
+    <h2>ระบุประเภทสีผิว</h2>
+    <p>ข้อมูลดังกล่าวจะถูกใช้ในการคำนวณระยะเวลารับแสงยูวีสูงสุดที่ปลอดภัยสำหรับผู้ใช้งานแต่ละคน</p>
   </div>
   <div class="skin-modal-body">
     <div class="skin-opt-card" onclick="selectSkinType('type1')">
@@ -1095,17 +1105,17 @@ body.kiosk-mode #skinModal {
 <div class="admin-overlay" id="adminOverlay" onclick="hideAdminLoginModal()"></div>
 <div class="admin-modal" id="adminModal">
   <div class="admin-modal-hdr">
-    <h2>🔐 เข้าสู่ระบบผู้ดูแล (Admin Login)</h2>
-    <p>กรุณากรอกรหัสผ่านเพื่อตั้งค่าระบบและสัมประสิทธิ์โมเดล</p>
+    <h2>ระบบตรวจสอบสิทธิ์ผู้ดูแล</h2>
+    <p>กรุณากรอกรหัสผ่านเพื่อเข้าสู่โหมดจัดการระบบและปรับแต่งสัมประสิทธิ์ของแบบจำลอง</p>
   </div>
   <div class="admin-modal-body">
     <div class="admin-input-group">
-      <input type="password" id="adminPasswordInput" placeholder="รหัสผ่านผู้ดูแล..." onkeydown="if(event.key==='Enter') submitAdminPassword()">
+      <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่านผู้ดูแลระบบ" onkeydown="if(event.key==='Enter') submitAdminPassword()">
     </div>
-    <div id="adminLoginError" class="admin-error-msg" style="display:none">⚠️ รหัสผ่านไม่ถูกต้อง ลองอีกครั้ง</div>
+    <div id="adminLoginError" class="admin-error-msg" style="display:none">รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</div>
     <div class="admin-modal-actions">
       <button class="admin-btn cancel" onclick="hideAdminLoginModal()">ยกเลิก</button>
-      <button class="admin-btn submit" onclick="submitAdminPassword()">เข้าสู่ระบบ</button>
+      <button class="admin-btn submit" onclick="submitAdminPassword()">ยืนยันสิทธิ์</button>
     </div>
   </div>
 </div>
@@ -1114,20 +1124,20 @@ body.kiosk-mode #skinModal {
 <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
 <div class="settings-sidebar" id="settingsSidebar">
   <div class="settings-hdr">
-    <h2>⚙️ การตั้งค่าระบบ</h2>
+    <h2>การตั้งค่าระบบ</h2>
     <button class="settings-close" onclick="closeSettings()">✕</button>
   </div>
   <div class="settings-body">
 
     <!-- Display -->
     <div class="s-section">
-      <div class="s-section-title">🎨 การแสดงผล</div>
+      <div class="s-section-title">การแสดงผลและธีม</div>
       <div class="s-row">
         <span class="s-label">ธีม</span>
         <div class="seg-ctrl">
-          <button class="seg-btn active" onclick="applyTheme('dark',this)">🌙 มืด</button>
-          <button class="seg-btn" onclick="applyTheme('light',this)">☀️ สว่าง</button>
-          <button class="seg-btn" onclick="applyTheme('auto',this)">🖥️ อัตโนมัติ</button>
+          <button class="seg-btn active" onclick="applyTheme('dark',this)">มืด</button>
+          <button class="seg-btn" onclick="applyTheme('light',this)">สว่าง</button>
+          <button class="seg-btn" onclick="applyTheme('auto',this)">อัตโนมัติ</button>
         </div>
       </div>
       <div class="s-row">
@@ -1148,34 +1158,32 @@ body.kiosk-mode #skinModal {
 
     <!-- Skin Tone -->
     <div class="s-section">
-      <div class="s-section-title">👤 โปรไฟล์สีผิวของคุณ</div>
+      <div class="s-section-title">ข้อมูลประเภทสีผิว</div>
       <div class="s-row col" style="gap:8px">
-        <div id="settingsSkinDisplay" style="font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);text-align:center;width:100%;box-sizing:border-box">ผิวของคุณ: --</div>
-        <button class="btn-export" style="background:var(--accent);color:#000;font-weight:700" onclick="showSkinModal()">🔄 เปลี่ยนประเภทสีผิว</button>
+        <div id="settingsSkinDisplay" style="font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--bg-secondary);border:1px solid var(--border);text-align:center;width:100%;box-sizing:border-box">ประเภทสีผิว: ยังไม่ได้ระบุ</div>
+        <button class="btn-export" style="background:var(--accent);color:#000;font-weight:700" onclick="showSkinModal()">ระบุประเภทสีผิว</button>
       </div>
     </div>
 
     <!-- Export -->
     <div class="s-section">
-      <div class="s-section-title">💾 ส่งออกข้อมูล</div>
-      <button class="btn-export" onclick="exportCSV()">⬇️ ดาวน์โหลด CSV (Session)</button>
-      <button class="btn-export" style="margin-top:0" onclick="exportAllCSV()">⬇️ ดาวน์โหลด CSV (ทั้งหมด)</button>
-      <button class="btn-export" style="margin-top:0;background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.25);color:#a78bfa" onclick="shareSnapshot()">📤 แชร์ / บันทึกสแนปช็อต</button>
-      <button class="btn-export" style="margin-top:0;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.25);color:#34d399" onclick="downloadSnapshotCard()">🖼️ ดาวน์โหลดรูปภาพการ์ดสรุป (PNG)</button>
+      <div class="s-section-title">ส่งออกข้อมูล</div>
+      <button class="btn-export" onclick="exportCSV()">ดาวน์โหลด CSV (เฉพาะเซสชันนี้)</button>
+      <button class="btn-export" style="margin-top:0" onclick="exportAllCSV()">ดาวน์โหลด CSV (ข้อมูลทั้งหมด)</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(167,139,250,0.1);border-color:rgba(167,139,250,0.25);color:#a78bfa" onclick="shareSnapshot()">แชร์และบันทึกภาพรวม</button>
+      <button class="btn-export" style="margin-top:0;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.25);color:#34d399" onclick="downloadSnapshotCard()">บันทึกการ์ดสรุป (PNG)</button>
     </div>
 
     <!-- Admin Settings Section -->
     <div class="s-section" id="adminSettingsSection" style="position: relative; border-bottom: none; padding-bottom: 24px;">
-      <!-- Lock Overlay for Admin Settings -->
-      <div class="admin-lock-overlay" id="settingsAdminLockOverlay" style="border-radius: 0 0 var(--r-lg) var(--r-lg);">
-        <div class="lock-content" style="padding: 10px;">
-          <span class="lock-icon" style="font-size: 24px;">🔒</span>
-          <span class="lock-text" style="font-size: 11px; margin-bottom: 6px;">ระบบตั้งค่าเชิงลึกสำหรับแอดมินถูกล็อก</span>
-          <button class="lock-btn" onclick="showAdminLoginModal()" style="padding: 6px 12px; font-size: 11px;">🔓 ปลดล็อก</button>
+      <!-- Invisible lock overlay - no visible UI -->
+      <div class="admin-lock-overlay" id="settingsAdminLockOverlay" style="border-radius: 0 0 var(--r-lg) var(--r-lg); background:transparent; border:none; backdrop-filter:none; -webkit-backdrop-filter:none;">
+        <div class="lock-content" style="opacity:0; pointer-events:none;">
+          <span></span>
         </div>
       </div>
       
-      <div class="s-section-title">⚙️ ตั้งค่าระบบ (แอดมิน)</div>
+      <div class="s-section-title">การตั้งค่าระบบ (เฉพาะผู้ดูแล)</div>
       
       <!-- Refresh Interval -->
       <div class="s-row">
@@ -1203,12 +1211,12 @@ body.kiosk-mode #skinModal {
       
       <!-- Forecast Toggle -->
       <div class="s-row">
-        <span class="s-label">🔮 พยากรณ์แนวโน้ม</span>
+        <span class="s-label">แสดงการพยากรณ์แนวโน้ม</span>
         <label class="toggle"><input type="checkbox" id="forecastToggle" onchange="CONFIG.forecastEnabled=this.checked;saveConfig();renderChart()"><span class="t-slider"></span></label>
       </div>
 
       <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;">
-        <div class="s-section-title" style="margin-bottom: 12px;">🔔 การแจ้งเตือน & เกณฑ์</div>
+        <div class="s-section-title" style="margin-bottom: 12px;">การแจ้งเตือนและเกณฑ์ค่า</div>
       </div>
 
       <div class="s-row">
@@ -1216,11 +1224,11 @@ body.kiosk-mode #skinModal {
         <label class="toggle"><input type="checkbox" id="alertMaster" checked onchange="CONFIG.alertsEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
       </div>
       <div class="s-row">
-        <span class="s-label">🔊 เสียงแจ้งเตือน</span>
+        <span class="s-label">เสียงสัญญาณแจ้งเตือน</span>
         <label class="toggle"><input type="checkbox" id="soundToggle" onchange="CONFIG.soundEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
       </div>
       <div class="s-row">
-        <span class="s-label">📢 ประกาศเสียงพูดอัตโนมัติ</span>
+        <span class="s-label">ประกาศเสียงอัตโนมัติ (TTS)</span>
         <label class="toggle"><input type="checkbox" id="autoSpeechToggle" onchange="CONFIG.autoSpeechEnabled=this.checked;saveConfig()"><span class="t-slider"></span></label>
       </div>
       <div class="s-row">
@@ -1254,15 +1262,21 @@ body.kiosk-mode #skinModal {
 
       <!-- Model Regression Parameters -->
       <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;" id="adminRegressionSection">
-        <div class="s-section-title" style="margin-bottom: 12px;">🔮 สัมประสิทธิ์โมเดล (Regression)</div>
+        <div class="s-section-title" style="margin-bottom: 12px;">สัมประสิทธิ์แบบจำลองถดถอย</div>
       </div>
       
       <!-- Presets -->
       <div class="preset-group" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px;">
-        <button class="preset-btn" id="presetWinter" onclick="applyRegressionPreset('winter')" style="padding: 6px; font-size: 11px;">❄️ ฤดูหนาว</button>
-        <button class="preset-btn" id="presetSummer" onclick="applyRegressionPreset('summer')" style="padding: 6px; font-size: 11px;">☀️ ฤดูร้อน</button>
-        <button class="preset-btn" id="presetRainy" onclick="applyRegressionPreset('rainy')" style="padding: 6px; font-size: 11px;">🌧️ ฤดูฝน</button>
-        <button class="preset-btn active" id="presetCustom" onclick="applyRegressionPreset('custom')" style="padding: 6px; font-size: 11px;">✏️ กำหนดเอง</button>
+        <button class="preset-btn" id="presetWinter" onclick="applyRegressionPreset('winter')" style="padding: 6px; font-size: 11px;">ฤดูหนาว</button>
+        <button class="preset-btn" id="presetSummer" onclick="applyRegressionPreset('summer')" style="padding: 6px; font-size: 11px;">ฤดูร้อน</button>
+        <button class="preset-btn" id="presetRainy" onclick="applyRegressionPreset('rainy')" style="padding: 6px; font-size: 11px;">ฤดูฝน</button>
+        <button class="preset-btn" id="presetAuto" onclick="applyRegressionPreset('auto')" style="padding: 6px; font-size: 11px; background:var(--accent-s); border-color:var(--accent-g); color:var(--accent); font-weight:700;">⚡ อัตโนมัติ (OLS)</button>
+        <button class="preset-btn active" id="presetCustom" onclick="applyRegressionPreset('custom')" style="padding: 6px; font-size: 11px; grid-column: span 2;">กำหนดเอง</button>
+      </div>
+
+      <div class="s-row">
+        <span class="s-label">⚡ ปรับสมการอัตโนมัติเรียลไทม์</span>
+        <label class="toggle"><input type="checkbox" id="autoFitToggle" onchange="CONFIG.regression.autoFit=this.checked;if(this.checked)autoFitRegression(false);saveConfig()"><span class="t-slider"></span></label>
       </div>
 
       <!-- Sliders -->
@@ -1294,10 +1308,10 @@ body.kiosk-mode #skinModal {
       </div>
 
       <div style="margin: 16px 0 10px; border-top: 1px solid var(--border); padding-top: 12px;">
-        <div class="s-section-title" style="margin-bottom: 12px;">🗑️ ล้างข้อมูลระบบ</div>
+        <div class="s-section-title" style="margin-bottom: 12px;">ล้างข้อมูลระบบ</div>
       </div>
-      <button class="btn-reset" onclick="resetSession()">🗑️ ล้างข้อมูล Session</button>
-      <button class="btn-reset" style="margin-top:8px" onclick="clearHistoryData()">🗑️ ลบประวัติทั้งหมด (DB)</button>
+      <button class="btn-reset" onclick="resetSession()">ล้างข้อมูลเซสชันปัจจุบัน</button>
+      <button class="btn-reset" style="margin-top:8px" onclick="clearHistoryData()">ลบประวัติข้อมูลทั้งหมด</button>
     </div>
 
   </div>
@@ -1312,7 +1326,7 @@ body.kiosk-mode #skinModal {
       </div>
       <div class="nav-text">
         <h1 id="navSchoolName">โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</h1>
-        <p id="navSubtitle">PCSHS PHITSANULOK · ระบบตรวจวัดสภาพแวดล้อม</p>
+        <p id="navSubtitle">PCSHS Phitsanulok · ระบบติดตามสภาพแวดล้อม</p>
       </div>
     </div>
     <div class="nav-actions">
@@ -1320,11 +1334,11 @@ body.kiosk-mode #skinModal {
         <div class="status-dot loading" id="statusDot"></div>
         <span class="status-label" id="statusLabel">กำลังเชื่อมต่อ</span>
       </div>
-      <button class="nav-btn" id="tvBtn" onclick="enterKiosk()" title="TV / Kiosk Mode">📺</button>
+      <button class="nav-btn" id="tvBtn" onclick="enterKiosk()" title="โหมดแสดงผลสาธารณะ">📺</button>
       <button class="nav-btn" onclick="shareSnapshot()" title="แชร์ข้อมูล">📤</button>
-      <button class="nav-btn" id="fsBtn" onclick="toggleFullscreen()" title="เต็มจอ">⛶</button>
+      <button class="nav-btn" id="fsBtn" onclick="toggleFullscreen()" title="เต็มหน้าจอ">⛶</button>
       <button class="nav-btn" id="notifBtn" onclick="toggleAlertPanel()" title="การแจ้งเตือน">🔔<span class="notif-badge" id="notifBadge">0</span></button>
-      <button class="nav-btn" onclick="openSettings()" title="ตั้งค่า">⚙️</button>
+      <button class="nav-btn" onclick="openSettings()" title="การตั้งค่าระบบ">⚙️</button>
     </div>
   </div>
 </nav>
@@ -1338,9 +1352,9 @@ body.kiosk-mode #skinModal {
   <!-- HERO -->
   <section class="hero" id="heroSection">
     <div class="hero-info">
-      <p class="hero-sub">☀️ ค่า UV Index ปัจจุบัน</p>
-      <h2>ตรวจวัดสภาพแวดล้อมภายในโรงเรียน</h2>
-      <p class="hero-desc">ข้อมูลเซนเซอร์แบบเรียลไทม์เพื่อความปลอดภัยของนักเรียนและบุคลากร</p>
+      <p class="hero-sub">สถานีตรวจวัดสภาพแวดล้อม</p>
+      <h2>ระบบติดตามคุณภาพสิ่งแวดล้อมภายในโรงเรียน</h2>
+      <p class="hero-desc">ข้อมูลจากสถานีตรวจวัดแบบเรียลไทม์ เพื่อสนับสนุนการตัดสินใจด้านความปลอดภัยสำหรับนักเรียนและบุคลากร</p>
 
       <!-- Live Clock -->
       <div class="live-clock-wrap">
@@ -1349,7 +1363,7 @@ body.kiosk-mode #skinModal {
           <div class="live-clock-date" id="liveDate">-- -- --</div>
         </div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
-          <div class="hero-chip">⏰ อัปเดต: <strong id="heroTime">--:--:--</strong></div>
+          <div class="hero-chip">อัปเดตล่าสุด: <strong id="heroTime">--:--:--</strong></div>
           <div class="hero-chip refresh-chip" title="อัปเดตข้อมูลอัตโนมัติ"><span class="spin-icon">↻</span><span id="heroInterval" style="display:none"></span></div>
         </div>
       </div>
@@ -1359,19 +1373,19 @@ body.kiosk-mode #skinModal {
         <div class="flag-icon-wrap" id="flagIcon">🟢</div>
         <div class="flag-info">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-            <div class="flag-title" id="flagTitle">ธงสีเขียว (ความปลอดภัยสูงสุด)</div>
-            <button class="nav-btn" onclick="speakCurrentFlag()" title="ฟังเสียงประกาศ" style="width:28px;height:28px;font-size:12px;border-radius:6px;background:rgba(255,255,255,0.08);margin-top:-2px">🔊</button>
+            <div class="flag-title" id="flagTitle">ระดับปลอดภัย — ธงเขียว</div>
+            <button class="nav-btn" onclick="speakCurrentFlag()" title="ประกาศผ่านระบบเสียง" style="width:28px;height:28px;font-size:12px;border-radius:6px;background:rgba(255,255,255,0.08);margin-top:-2px">🔊</button>
           </div>
-          <div class="flag-desc" id="flagAdviceText">ดัชนี UV และค่าฝุ่นรวมอยู่ในระดับนี้ <strong>คำแนะนำ:</strong> นักเรียนสามารถร่วมกิจกรรมกลางแจ้งและออกกำลังกายได้ตามปกติ</div>
+          <div class="flag-desc" id="flagAdviceText">ค่าดัชนี UV และค่าฝุ่น PM2.5 อยู่ในเกณฑ์ที่กำหนด <strong>คำแนะนำ:</strong> นักเรียนและบุคลากรสามารถร่วมกิจกรรมกลางแจ้งได้ตามปกติ</div>
         </div>
       </div>
 
       <!-- UV Exposure Timer -->
       <div class="exposure-timer-card">
-        <span class="exp-label">⏱️ สะสมแสงแดด:</span>
+        <span class="exp-label">ระยะเวลารับแสง UV:</span>
         <div class="exp-bar-wrap"><div class="exp-bar" id="expBar" style="background:#34d399"></div></div>
         <span class="exp-pct" id="expPct">0%</span>
-        <button class="exp-timer-btn" id="expBtn" onclick="toggleExposureTimer()">▶ เริ่ม</button>
+        <button class="exp-timer-btn" id="expBtn" onclick="toggleExposureTimer()">▶ เริ่มจับเวลา</button>
         <span class="exp-elapsed" id="expElapsed">0:00 / -- นาที</span>
       </div>
     </div>
@@ -1389,13 +1403,13 @@ body.kiosk-mode #skinModal {
           <div class="gauge-unit">UV Index</div>
         </div>
       </div>
-      <div class="uv-badge" id="uvBadge" style="background:#34d399">กำลังโหลด</div>
+      <div class="uv-badge" id="uvBadge" style="background:#34d399">กำลังรับข้อมูล</div>
     </div>
   </section>
 
   <!-- AQI QUICK STRIP -->
   <section>
-    <div class="section-label">📊 ค่าสิ่งแวดล้อมด่วน</div>
+    <div class="section-label">ค่าสิ่งแวดล้อมปัจจุบัน</div>
     <div class="aqi-strip">
       <div class="aqi-block">
         <div class="aqi-icon">☀️</div>
@@ -1432,31 +1446,31 @@ body.kiosk-mode #skinModal {
 
   <!-- STATS STRIP -->
   <section>
-    <div class="section-label">📊 สถิติ Session ปัจจุบัน</div>
+    <div class="section-label">สถิติสรุปเซสชันปัจจุบัน</div>
     <div class="stats-strip">
       <div class="stat-card">
-        <div class="stat-metric-name">☀️ UV Index</div>
+        <div class="stat-metric-name">UV Index</div>
         <div class="stat-divider"></div>
         <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statUvMin">--</span></div>
         <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statUvMax">--</span></div>
         <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statUvAvg">--</span></div>
       </div>
       <div class="stat-card">
-        <div class="stat-metric-name">🌫️ PM2.5 (µg/m³)</div>
+        <div class="stat-metric-name">PM2.5 (µg/m³)</div>
         <div class="stat-divider"></div>
         <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statPmMin">--</span></div>
         <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statPmMax">--</span></div>
         <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statPmAvg">--</span></div>
       </div>
       <div class="stat-card">
-        <div class="stat-metric-name">🌡️ อุณหภูมิ (°C)</div>
+        <div class="stat-metric-name">อุณหภูมิ (°C)</div>
         <div class="stat-divider"></div>
         <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statTempMin">--</span></div>
         <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statTempMax">--</span></div>
         <div class="stat-row"><span class="stat-key">เฉลี่ย</span><span class="stat-val" id="statTempAvg">--</span></div>
       </div>
       <div class="stat-card">
-        <div class="stat-metric-name">💧 ความชื้น (%)</div>
+        <div class="stat-metric-name">ความชื้นสัมพัทธ์ (%)</div>
         <div class="stat-divider"></div>
         <div class="stat-row"><span class="stat-key">ต่ำสุด</span><span class="stat-val" id="statHumMin">--</span></div>
         <div class="stat-row"><span class="stat-key">สูงสุด</span><span class="stat-val accent" id="statHumMax">--</span></div>
@@ -1467,17 +1481,17 @@ body.kiosk-mode #skinModal {
 
   <!-- SENSOR GRID -->
   <section>
-    <div class="section-label">📡 ค่าเซนเซอร์ปัจจุบัน <span style="font-weight:400;color:var(--text-3)">· คลิกเพื่อคัดลอก</span></div>
+    <div class="section-label">ข้อมูลเซนเซอร์ปัจจุบัน <span style="font-weight:400;color:var(--text-3)">· คลิกเพื่อคัดลอกค่า</span></div>
     <div class="sensor-grid">
       <div class="sensor-card sc-uv" onclick="copySensorCard('uv')" title="คลิกเพื่อคัดลอก">
         <div class="s-top">
           <div class="s-icon">☀️</div>
           <div class="s-status" id="uvStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
         </div>
-        <div class="s-name">UV Radiation Index</div>
+        <div class="s-name">ดัชนีรังสีอัลตราไวโอเลต</div>
         <div class="s-val" id="uvVal">--</div>
         <div class="s-bar-wrap"><div class="s-bar" id="uvBar" style="width:1%;background:#f59e0b"></div></div>
-        <div class="s-sub">ดัชนีรังสี UV · มาตรฐาน WHO</div>
+        <div class="s-sub">UV Index · มาตรฐานองค์การอนามัยโลก (WHO)</div>
         <div class="copy-toast" id="copyToastUv">✓ คัดลอกแล้ว!</div>
       </div>
       <div class="sensor-card sc-pm" onclick="copySensorCard('pm')" title="คลิกเพื่อคัดลอก">
@@ -1485,10 +1499,10 @@ body.kiosk-mode #skinModal {
           <div class="s-icon">🌫️</div>
           <div class="s-status" id="pmStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
         </div>
-        <div class="s-name">PM2.5 ฝุ่นละออง</div>
+        <div class="s-name">ฝุ่นละอองขนาดไม่เกิน 2.5 ไมครอน</div>
         <div class="s-val" id="pmVal">-- <span class="unit">µg/m³</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="pmBar" style="width:1%;background:#a78bfa"></div></div>
-        <div class="s-sub">ฝุ่นละอองขนาด &lt; 2.5 ไมครอน</div>
+        <div class="s-sub">PM2.5 · มาตรฐานกรมควบคุมมลพิษ (PCD)</div>
         <div class="copy-toast" id="copyToastPm">✓ คัดลอกแล้ว!</div>
       </div>
       <div class="sensor-card sc-temp" onclick="copySensorCard('temp')" title="คลิกเพื่อคัดลอก">
@@ -1496,10 +1510,10 @@ body.kiosk-mode #skinModal {
           <div class="s-icon">🌡️</div>
           <div class="s-status" id="tempStat" style="background:rgba(52,211,153,.15);color:#34d399">--</div>
         </div>
-        <div class="s-name">อุณหภูมิอากาศ</div>
+        <div class="s-name">อุณหภูมิบรรยากาศ</div>
         <div class="s-val" id="tempVal">-- <span class="unit">°C</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="tempBar" style="width:1%;background:#fb7185"></div></div>
-        <div class="s-heat-index" id="heatIndexDisplay">🥵 รู้สึกร้อน: -- °C</div>
+        <div class="s-heat-index" id="heatIndexDisplay">ดัชนีความร้อน (Heat Index): -- °C</div>
         <div class="copy-toast" id="copyToastTemp">✓ คัดลอกแล้ว!</div>
       </div>
       <div class="sensor-card sc-hum" onclick="copySensorCard('hum')" title="คลิกเพื่อคัดลอก">
@@ -1510,7 +1524,7 @@ body.kiosk-mode #skinModal {
         <div class="s-name">ความชื้นสัมพัทธ์</div>
         <div class="s-val" id="humVal">-- <span class="unit">%</span></div>
         <div class="s-bar-wrap"><div class="s-bar" id="humBar" style="width:1%;background:#34d399"></div></div>
-        <div class="s-sub">ปริมาณไอน้ำในอากาศ</div>
+        <div class="s-sub">Relative Humidity · ปริมาณไอน้ำในอากาศ</div>
         <div class="copy-toast" id="copyToastHum">✓ คัดลอกแล้ว!</div>
       </div>
     </div>
@@ -1520,8 +1534,8 @@ body.kiosk-mode #skinModal {
   <section class="regression-section">
     <div class="regression-hdr">
       <div>
-        <div class="section-label" style="margin-bottom:4px">🔮 แบบจำลองถดถอยเชิงฟิสิกส์</div>
-        <h3>แบบจำลอง PM2.5 อิงหลักฟิสิกส์บรรยากาศ (Physics-Informed Regression)</h3>
+        <div class="section-label" style="margin-bottom:4px">แบบจำลองเชิงฟิสิกส์</div>
+        <h3>แบบจำลองพยากรณ์ PM2.5 อิงหลักฟิสิกส์บรรยากาศ</h3>
       </div>
     </div>
 
@@ -1529,12 +1543,12 @@ body.kiosk-mode #skinModal {
       <!-- LEFT COLUMN: MODEL RESULTS DISPLAY (PUBLIC) -->
       <div class="regression-card">
         <div class="regression-card-title">
-          <span>📊 ผลลัพธ์จากแบบจำลองประเมิน PM2.5</span>
+          <span>ผลการประเมินจากแบบจำลอง PM2.5</span>
         </div>
         
         <!-- Formula Display Widget -->
         <div class="formula-box">
-          <div style="font-size:11px;color:var(--text-2);margin-bottom:4px;font-weight:600;letter-spacing:0.05em">สมการประเมินค่าฝุ่นปัจจุบัน (Current Formula)</div>
+          <div style="font-size:11px;color:var(--text-2);margin-bottom:4px;font-weight:600;letter-spacing:0.05em">สมการถดถอยเชิงเส้นพหุคูณที่ใช้งานอยู่</div>
           <div class="formula-math" id="formulaMath" style="font-size: clamp(14px, 1.8vw, 18px); font-weight: 700; color: var(--accent); padding: 8px 0;">
             PM2.5 = <span id="eqA">0</span> 
             <span id="eqBSign">+</span> <span id="eqB">0</span>(T) 
@@ -1546,33 +1560,39 @@ body.kiosk-mode #skinModal {
         <!-- Real-time Comparison -->
         <div class="compare-container" style="margin-top: 16px;">
           <div class="compare-box">
-            <span class="compare-label">ฝุ่นจากเซนเซอร์จริง</span>
+            <span class="compare-label">ค่าจริงจากเซนเซอร์</span>
             <span class="compare-val sensor" id="regActualPM">--</span>
             <span style="font-size:10px;color:var(--text-2);font-weight:600;margin-top:4px">µg/m³</span>
           </div>
           <div class="compare-box">
-            <span class="compare-label">ประเมินจากสมการฟิสิกส์</span>
+            <span class="compare-label">ค่าประเมินจากแบบจำลอง</span>
             <span class="compare-val model" id="regPredictPM">--</span>
             <span style="font-size:10px;color:var(--text-2);font-weight:600;margin-top:4px">µg/m³</span>
           </div>
           <div class="compare-box">
-            <span class="compare-label">ความถูกต้องเชิงสถิติ</span>
+            <span class="compare-label">ความแม่นยำเชิงสถิติ</span>
             <span class="compare-val" id="regDiffPM" style="font-family:'Inter',sans-serif;font-weight:800">--</span>
             <span class="accuracy-badge" id="regAccuracyBadge" style="margin-top:4px">--</span>
           </div>
         </div>
         
-        <!-- Admin Shortcut -->
-        <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-          <span style="font-size: 11px; color: var(--text-2); font-weight: 500;">สัมประสิทธิ์โมเดลถูกควบคุมโดยผู้ดูแลระบบ</span>
-          <button class="lock-btn" onclick="openSettingsAndShowAdmin()" style="padding: 6px 12px; font-size: 11px; margin: 0; background: var(--accent-s); border: 1px solid var(--accent-g); color: var(--accent); border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s;">🛠️ ปรับแต่งสัมประสิทธิ์</button>
+        <!-- Self-Learning OLS Indicator -->
+        <div style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399; animation: pulseDot 2s infinite;"></span>
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-1);">ระบบเรียนรู้และปรับสมการอัตโนมัติ (Self-Calibrating OLS)</span>
+          </div>
+          <span id="regAutoBadge" style="font-size: 11px; font-weight: 600; color: #34d399;">✓ อัปเดตสมการอัตโนมัติเรียลไทม์</span>
+        </div>
+        <div style="font-size: 11px; color: var(--text-2); margin-top: 6px; line-height: 1.4;">
+          ระบบคำนวณและปรับแต่งค่าสัมประสิทธิ์ในสมการให้อัตโนมัติตลอดเวลาจากข้อมูลเซนเซอร์สะสม เพื่อลดค่าความคาดเคลื่อนให้ต่ำที่สุดโดยไม่ต้องดำเนินการใดๆ
         </div>
       </div>
 
       <!-- RIGHT COLUMN: ATMOSPHERIC PHYSICS GUIDE & GS LINEST -->
       <div class="regression-card">
         <div class="regression-card-title">
-          <span>📚 ทฤษฎีฟิสิกส์บรรยากาศ & วิธีคำนวณหาค่าสมการจริง</span>
+          <span>ทฤษฎีฟิสิกส์บรรยากาศและวิธีหาสัมประสิทธิ์จากข้อมูลจริง</span>
         </div>
 
         <div class="physics-accordion">
@@ -1614,7 +1634,7 @@ body.kiosk-mode #skinModal {
           <!-- Google Sheets Guide -->
           <div class="acc-item" id="accLinest">
             <button class="acc-hdr" onclick="toggleAccordion('accLinest')">
-              <span class="acc-hdr-title">📊 วิธีหาค่าจริงด้วย LINEST ใน Google Sheets</span>
+              <span class="acc-hdr-title">วิธีหาค่าสัมประสิทธิ์จริงด้วย LINEST ใน Google Sheets</span>
               <span class="acc-arrow">▼</span>
             </button>
             <div class="acc-content">
@@ -1651,8 +1671,8 @@ body.kiosk-mode #skinModal {
   <section class="chart-section">
     <div class="chart-hdr">
       <div>
-        <div class="section-label" style="margin-bottom:4px">📈 กราฟแนวโน้ม</div>
-        <h3 id="chartTitle">Trend Chart — เรียลไทม์</h3>
+        <div class="section-label" style="margin-bottom:4px">กราฟแนวโน้มค่าสิ่งแวดล้อม</div>
+        <h3 id="chartTitle">กราฟแสดงแนวโน้มแบบเรียลไทม์</h3>
       </div>
       <div class="chart-toggles">
         <button class="ct-btn active" id="ctUV" style="--ct-color:#f59e0b" onclick="toggleChart('uv',this)"><span class="ct-dot" style="background:#f59e0b"></span>UV Index</button>
@@ -1663,14 +1683,14 @@ body.kiosk-mode #skinModal {
     </div>
     <!-- Period Tabs -->
     <div class="period-tabs">
-      <button class="period-btn active" id="pBtn-rt" onclick="setPeriod('realtime',this)">⚡ เรียลไทม์</button>
-      <button class="period-btn" id="pBtn-day" onclick="setPeriod('today',this)">📅 วันนี้</button>
-      <button class="period-btn" id="pBtn-month" onclick="setPeriod('month',this)">📆 เดือนนี้</button>
-      <button class="period-btn" id="pBtn-year" onclick="setPeriod('year',this)">📊 ปีนี้</button>
-      <button class="period-btn" id="pBtn-fc" onclick="toggleForecast(this)" style="margin-left:auto;border-color:rgba(167,139,250,0.3)">🔮 พยากรณ์: ปิด</button>
+      <button class="period-btn active" id="pBtn-rt" onclick="setPeriod('realtime',this)">เรียลไทม์</button>
+      <button class="period-btn" id="pBtn-day" onclick="setPeriod('today',this)">วันนี้</button>
+      <button class="period-btn" id="pBtn-month" onclick="setPeriod('month',this)">เดือนนี้</button>
+      <button class="period-btn" id="pBtn-year" onclick="setPeriod('year',this)">ปีนี้</button>
+      <button class="period-btn" id="pBtn-fc" onclick="toggleForecast(this)" style="margin-left:auto;border-color:rgba(167,139,250,0.3)">พยากรณ์: ปิด</button>
     </div>
     <div class="period-info" id="periodInfo">
-      <span id="periodInfoText">⚡ กำลังแสดงข้อมูลเรียลไทม์ · อัปเดตอัตโนมัติ</span>
+      <span id="periodInfoText">กำลังแสดงข้อมูลแบบเรียลไทม์ · อัปเดตอัตโนมัติ</span>
       <span style="margin-left:auto;font-size:11px" id="periodDataCount"></span>
     </div>
     <div class="chart-wrap" id="chartWrap">
@@ -1680,7 +1700,7 @@ body.kiosk-mode #skinModal {
     </div>
     <div class="period-stat-chips" id="periodChips"></div>
     <div style="margin-top:10px;font-size:11px;color:var(--text-3)">
-      <span id="chartHint">ค่าบนกราฟเป็น % ของค่าสูงสุด (normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด</span>
+      <span id="chartHint">แกน Y แสดงค่าเป็นร้อยละของค่าสูงสุด (Normalized) · เลื่อนเมาส์บนกราฟเพื่อดูรายละเอียด</span>
     </div>
   </section>
 
@@ -1688,28 +1708,28 @@ body.kiosk-mode #skinModal {
   <section class="map-section">
     <div class="map-hdr">
       <div>
-        <div class="section-label" style="margin-bottom:4px">🗺️ แผนที่สิ่งแวดล้อม</div>
-        <h3>แผนที่สภาพอากาศและฝุ่นรอบโรงเรียน</h3>
+        <div class="section-label" style="margin-bottom:4px">แผนที่สิ่งแวดล้อม</div>
+        <h3>แผนที่สภาพอากาศและฝุ่นละอองบริเวณโรงเรียน</h3>
       </div>
       <div class="map-tabs">
-        <button class="map-btn active" onclick="switchMap('wind',this)">🌀 ลม & เมฆ</button>
-        <button class="map-btn" onclick="switchMap('rain',this)">🌧️ เรดาร์ฝน</button>
-        <button class="map-btn" onclick="switchMap('pm25',this)">🌫️ PM2.5</button>
-        <button class="map-btn" onclick="switchMap('temp',this)">🌡️ อุณหภูมิ</button>
+        <button class="map-btn active" onclick="switchMap('wind',this)">กระแสลมและเมฆ</button>
+        <button class="map-btn" onclick="switchMap('rain',this)">เรดาร์ตรวจวัดฝน</button>
+        <button class="map-btn" onclick="switchMap('pm25',this)">ฝุ่น PM2.5</button>
+        <button class="map-btn" onclick="switchMap('temp',this)">อุณหภูมิ</button>
       </div>
     </div>
     <div class="map-iframe-wrap">
       <iframe id="weatherMapIframe" src="https://embed.windy.com/embed.html?lat=16.822&lon=100.266&zoom=8&level=surface&overlay=wind&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=default&metricTemp=default&radarRange=-1" allowfullscreen></iframe>
     </div>
     <div style="font-size:11px;color:var(--text-3)">
-      แผนที่อินเตอร์แอคทีฟสนับสนุนโดย Windy · พิกัดโรงเรียน (ละติจูด 16.822, ลองจิจูด 100.266)
+      แผนที่อุตุนิยมวิทยาเชิงโต้ตอบ สนับสนุนโดย Windy.com · พิกัดอ้างอิง: 16.822°N, 100.266°E
     </div>
   </section>
 
   <!-- UV SCALE -->
   <section class="scale-section">
     <div class="scale-hdr">
-      <h3>📊 สเกล UV Index</h3>
+      <h3>มาตรวัดดัชนีรังสี UV</h3>
       <div class="scale-cur">ค่าปัจจุบัน: <span id="scaleCurVal">--</span></div>
     </div>
     <div style="position:relative;padding:16px 0 8px">
@@ -1722,11 +1742,11 @@ body.kiosk-mode #skinModal {
       </div>
     </div>
     <div class="uv-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>0–2 ต่ำ (ปลอดภัย)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>3–5 ปานกลาง</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>6–7 สูง</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>8–10 สูงมาก</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#9333ea"></div>11+ อันตราย</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>0–2 ระดับต่ำ (ปลอดภัย)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>3–5 ระดับปานกลาง</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>6–7 ระดับสูง</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>8–10 ระดับสูงมาก</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#9333ea"></div>11+ ระดับอันตราย</div>
     </div>
   </section>
 
@@ -1734,25 +1754,25 @@ body.kiosk-mode #skinModal {
   <section class="reco-section">
     <div class="reco-hdr">
       <div>
-        <h3>💡 คำแนะนำสุขภาพ</h3>
-        <p class="reco-headline" id="recoHeadline">กำลังวิเคราะห์ข้อมูล...</p>
+        <h3>คำแนะนำด้านสุขภาพและความปลอดภัย</h3>
+        <p class="reco-headline" id="recoHeadline">กำลังประมวลผลข้อมูล กรุณารอสักครู่</p>
       </div>
     </div>
     <div class="reco-grid" id="recoGrid">
-      <div class="reco-item"><div class="reco-icon">⏳</div><div class="reco-body"><strong>รอข้อมูล</strong>กำลังดึงข้อมูลจากเซนเซอร์</div></div>
+      <div class="reco-item"><div class="reco-icon">⏳</div><div class="reco-body"><strong>รอรับข้อมูล</strong>ระบบกำลังดึงข้อมูลจากสถานีตรวจวัด</div></div>
     </div>
   </section>
 
   <!-- INFO CARDS -->
   <section>
-    <div class="section-label">📚 ความรู้ด้านสิ่งแวดล้อม</div>
+    <div class="section-label">ความรู้และแนวปฏิบัติด้านสิ่งแวดล้อม</div>
     <div class="info-grid">
-      <div class="info-card"><h4>☀️ UV Index คืออะไร?</h4><p>ดัชนีรังสี UV มาตรฐาน WHO วัดความเข้มรังสีอัลตราไวโอเลตจากดวงอาทิตย์ ยิ่งสูงยิ่งอันตรายต่อผิวและดวงตา</p></div>
-      <div class="info-card"><h4>🛡️ ป้องกัน UV อย่างไร?</h4><p>UV ≥ 3: ทาครีม SPF 30+ · UV ≥ 6: สวมหมวก แว่ด UV · UV ≥ 8: หลีกเลี่ยงกลางแจ้ง 10:00–16:00</p></div>
-      <div class="info-card"><h4>🌫️ PM2.5 อันตรายแค่ไหน?</h4><p>≤25 µg/m³ ปลอดภัย · 25–50 ปานกลาง · 50–100 เริ่มมีผล · &gt;100 อันตราย ควรสวม N95</p></div>
-      <div class="info-card"><h4>🌡️ อุณหภูมิที่เหมาะสม</h4><p>22–26°C สบายที่สุด · &gt;32°C ควรลดกิจกรรมกลางแจ้ง · &gt;37°C เสี่ยง Heat Stroke</p></div>
-      <div class="info-card"><h4>🥵 Heat Index คืออะไร?</h4><p>ดัชนีความร้อน คำนวณจากอุณหภูมิ + ความชื้น บ่งบอกว่าร่างกายรู้สึกร้อนเท่าใด อาจสูงกว่าอุณหภูมิจริงหลายองศา</p></div>
-      <div class="info-card"><h4>💦 ป้องกัน Heat Stroke</h4><p>ดื่มน้ำ 250ml ทุก 30 นาที · หลีกเลี่ยงแสงแดดตรง · สวมเสื้อสีอ่อน · หยุดพักในที่ร่มทันทีที่รู้สึกเวียนหัว</p></div>
+      <div class="info-card"><h4>ดัชนีรังสียูวี (UV Index)</h4><p>ดัชนีรังสี UV ตามมาตรฐาน WHO วัดความเข้มของรังสีอัลตราไวโอเลตจากดวงอาทิตย์ ค่ายิ่งสูงยิ่งส่งผลต่อผิวหนังและดวงตา</p></div>
+      <div class="info-card"><h4>แนวทางป้องกันรังสี UV</h4><p>UV ≥ 3: ทาครีมกันแดด SPF 30+ · UV ≥ 6: สวมหมวกและแว่นกรองรังสี UV · UV ≥ 8: หลีกเลี่ยงกลางแจ้งช่วง 10:00–16:00 น.</p></div>
+      <div class="info-card"><h4>ผลกระทบของ PM2.5 ต่อสุขภาพ</h4><p>≤25 µg/m³ อยู่ในเกณฑ์ปลอดภัย · 25–50 เริ่มมีผลต่อกลุ่มเสี่ยง · 50–100 มีผลต่อสุขภาพ · &gt;100 อันตราย ควรสวมหน้ากาก N95</p></div>
+      <div class="info-card"><h4>เกณฑ์อุณหภูมิสำหรับกิจกรรมกลางแจ้ง</h4><p>22–26°C เหมาะสมที่สุด · &gt;32°C ควรลดกิจกรรมหนักกลางแจ้ง · &gt;37°C มีความเสี่ยงต่อโรคลมร้อน (Heat Stroke)</p></div>
+      <div class="info-card"><h4>ดัชนีความร้อน (Heat Index)</h4><p>ค่าที่แสดงความรู้สึกของร่างกายต่ออุณหภูมิ คำนวณจากอุณหภูมิและความชื้นสัมพัทธ์ อาจสูงกว่าอุณหภูมิจริงได้หลายองศาเซลเซียส</p></div>
+      <div class="info-card"><h4>การป้องกันโรคลมร้อน</h4><p>ดื่มน้ำ 250 มิลลิลิตรทุก 30 นาที · หลีกเลี่ยงแสงแดดโดยตรง · สวมเสื้อผ้าสีอ่อน · พักในที่ร่มทันทีที่มีอาการผิดปกติ</p></div>
     </div>
   </section>
 
@@ -1760,24 +1780,24 @@ body.kiosk-mode #skinModal {
   <section class="credits-section" style="opacity: 0.85; margin-bottom: -10px;">
     <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-lg); padding:20px 24px; font-size:12px; color:var(--text-2); line-height:1.7">
       <div style="font-weight:700; color:var(--text-1); margin-bottom:8px; display:flex; align-items:center; gap:6px">
-        ℹ️ แหล่งอ้างอิงข้อมูลและเครดิตระบบ (Data Sources & Credits)
+        แหล่งอ้างอิงข้อมูลและเครดิตระบบ
       </div>
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px">
         <div>
-          <strong>☀️ เกณฑ์ดัชนีรังสี UV</strong><br>
-          อ้างอิงตามมาตรฐานขององค์การอนามัยโลก (WHO) และกรมอุตุนิยมวิทยา
+          <strong>เกณฑ์ดัชนีรังสี UV</strong><br>
+          อ้างอิงตามมาตรฐานขององค์การอนามัยโลก (WHO) และกรมอุตุนิยมวิทยา กระทรวงดิจิทัลเพื่อเศรษฐกิจและสังคม
         </div>
         <div>
-          <strong>🌫️ เกณฑ์คุณภาพอากาศ PM2.5</strong><br>
-          อ้างอิงตามเกณฑ์ดัชนีคุณภาพอากาศของกรมควบคุมมลพิษ (PCD) ประเทศไทย
+          <strong>เกณฑ์คุณภาพอากาศ PM2.5</strong><br>
+          อ้างอิงตามดัชนีคุณภาพอากาศของกรมควบคุมมลพิษ (PCD) กระทรวงทรัพยากรธรรมชาติและสิ่งแวดล้อม
         </div>
         <div>
-          <strong>🗺️ แผนที่สภาพภูมิอากาศ</strong><br>
-          แผนที่ลม เรดาร์น้ำฝน และฝุ่นละออง สนับสนุนโดยบริการของ <a href="https://www.windy.com" target="_blank" style="color:var(--accent); text-decoration:underline">Windy.com</a>
+          <strong>แผนที่อุตุนิยมวิทยา</strong><br>
+          ข้อมูลกระแสลม เรดาร์ตรวจวัดฝน และการกระจายตัวของฝุ่นละออง สนับสนุนโดย <a href="https://www.windy.com" target="_blank" style="color:var(--accent); text-decoration:underline">Windy.com</a>
         </div>
         <div>
-          <strong>📡 ระบบโครงสร้างพื้นฐาน</strong><br>
-          พัฒนาโดยทีมโครงงานคอมพิวเตอร์ โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก
+          <strong>โครงสร้างพื้นฐานระบบ</strong><br>
+          พัฒนาโดยทีมนักเรียนโครงงานคอมพิวเตอร์ โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก
         </div>
       </div>
     </div>
@@ -1786,13 +1806,14 @@ body.kiosk-mode #skinModal {
   <!-- FOOTER -->
   <footer>
     <div class="footer-l">
-      <strong style="color:var(--text-1)">🏫 โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</strong><br>
-      ระบบตรวจวัดสภาพแวดล้อม · Arduino → Google Sheets → Web Dashboard
-      <span class="errs-badge" id="errsBadge">⚠ การเชื่อมต่อล้มเหลว</span>
+      <strong style="color:var(--text-1)">โรงเรียนวิทยาศาสตร์จุฬาภรณราชวิทยาลัย พิษณุโลก</strong><br>
+      ระบบติดตามสภาพแวดล้อม · Arduino &rarr; Google Sheets &rarr; Web Dashboard
+      <span class="errs-badge" id="errsBadge">การเชื่อมต่อขัดข้อง</span>
+      <span id="__v" onclick="showAdminLoginModal()" style="font-size:10px;color:var(--text-3);opacity:0.45;margin-left:2px;user-select:none;cursor:default;letter-spacing:.02em;">v2.1</span>
     </div>
     <div class="footer-r">
       <div class="countdown-wrap">
-        <span>อัปเดตใน</span>
+        <span>รับข้อมูลถัดไปใน</span>
         <div class="c-ring">
           <svg viewBox="0 0 36 36" width="38" height="38">
             <circle class="c-track" cx="18" cy="18" r="15.9"/>
@@ -1834,7 +1855,7 @@ const DEFAULT_CONFIG = {
     hum:  { enabled:false, threshold:90 },
   },
   chart: { uv:true, pm:true, temp:false, hum:false },
-  regression: { a: 18.5, b: -0.45, c: 0.12, d: 1.55, season: 'custom' }
+  regression: { a: 18.5, b: -0.45, c: 0.12, d: 1.55, season: 'auto', autoFit: true }
 };
 
 let CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
@@ -2742,8 +2763,12 @@ function updateDashboard(data) {
       <div class="reco-body"><strong>${r.title}</strong>${r.body}</div>
     </div>`).join('');
 
-  // Update Physics-informed Regression UI
-  updateRegressionUI(data);
+  // Update Physics-informed Regression UI automatically
+  if (!CONFIG.regression || CONFIG.regression.autoFit !== false) {
+    autoFitRegression(true);
+  } else {
+    updateRegressionUI(data);
+  }
 
   // Chart & Alerts
   renderChart();
@@ -3264,6 +3289,145 @@ const REG_PRESETS = {
   rainy:  { a: 12.5, b: -0.10, c: -0.35, d: 0.80 }
 };
 
+/* ============================================================
+   AUTOMATIC OLS REGRESSION OPTIMIZER
+   ============================================================ */
+function fitOLSModel(dataPoints) {
+  if (!dataPoints || dataPoints.length < 4) return null;
+
+  let M = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  let V = [0,0,0,0];
+
+  for (let i = 0; i < dataPoints.length; i++) {
+    const p = dataPoints[i];
+    const tempVal = parseFloat(p.temp);
+    const humVal = parseFloat(p.hum);
+    const uvVal = parseFloat(p.uv);
+    const pmVal = parseFloat(p.pm);
+    if (isNaN(tempVal) || isNaN(humVal) || isNaN(uvVal) || isNaN(pmVal)) continue;
+
+    const x = [1, tempVal, humVal, uvVal];
+    const y = pmVal;
+
+    for (let r = 0; r < 4; r++) {
+      V[r] += x[r] * y;
+      for (let c = 0; c < 4; c++) {
+        M[r][c] += x[r] * x[c];
+      }
+    }
+  }
+
+  const n = 4;
+  let A = M.map((row, r) => [...row, V[r]]);
+
+  for (let i = 0; i < n; i++) {
+    let maxEl = Math.abs(A[i][i]);
+    let maxRow = i;
+    for (let k = i + 1; k < n; k++) {
+      if (Math.abs(A[k][i]) > maxEl) {
+        maxEl = Math.abs(A[k][i]);
+        maxRow = k;
+      }
+    }
+    for (let k = i; k < n + 1; k++) {
+      let tmp = A[maxRow][k];
+      A[maxRow][k] = A[i][k];
+      A[i][k] = tmp;
+    }
+
+    if (Math.abs(A[i][i]) < 1e-9) return null;
+
+    for (let k = i + 1; k < n; k++) {
+      let c = -A[k][i] / A[i][i];
+      for (let j = i; j < n + 1; j++) {
+        if (i === j) {
+          A[k][j] = 0;
+        } else {
+          A[k][j] += c * A[i][j];
+        }
+      }
+    }
+  }
+
+  let xRes = [0, 0, 0, 0];
+  for (let i = n - 1; i >= 0; i--) {
+    xRes[i] = A[i][n] / A[i][i];
+    for (let k = i - 1; k >= 0; k--) {
+      A[k][n] -= A[k][i] * xRes[i];
+    }
+  }
+
+  return {
+    a: Math.round(xRes[0] * 100) / 100,
+    b: Math.round(xRes[1] * 100) / 100,
+    c: Math.round(xRes[2] * 100) / 100,
+    d: Math.round(xRes[3] * 100) / 100
+  };
+}
+
+function autoFitRegression(quiet = false) {
+  let points = [];
+  if (typeof DataStore !== 'undefined' && DataStore.getAll) {
+    points = DataStore.getAll().filter(r => !isNaN(r.temp) && !isNaN(r.hum) && !isNaN(r.uv) && !isNaN(r.pm));
+  }
+
+  if (!points || points.length < 4) {
+    const h = STATE.h;
+    if (h && h.time && h.time.length >= 4) {
+      points = [];
+      for (let i = 0; i < h.time.length; i++) {
+        points.push({ temp: h.temp[i], hum: h.hum[i], uv: h.uv[i], pm: h.pm[i] });
+      }
+    }
+  }
+
+  if (!points || points.length < 4) {
+    if (!quiet) {
+      alert(`ต้องการข้อมูลเซนเซอร์สะสมอย่างน้อย 4 ชุดขึ้นไป เพื่อปรับคำนวณสมการแบบอัตโนมัติ\n\n(ปัจจุบันมีข้อมูล ${points ? points.length : 0} ชุด - กำลังสะสมข้อมูล...)`);
+    }
+    return false;
+  }
+
+  const res = fitOLSModel(points);
+  if (!res) {
+    if (!quiet) alert('ไม่สามารถคำนวณค่าสมการได้ (ข้อมูลมีความแปรผันไม่เพียงพอ)');
+    return false;
+  }
+
+  CONFIG.regression.a = res.a;
+  CONFIG.regression.b = res.b;
+  CONFIG.regression.c = res.c;
+  CONFIG.regression.d = res.d;
+  CONFIG.regression.season = 'auto';
+
+  // Update UI sliders/inputs
+  ['a', 'b', 'c', 'd'].forEach(k => {
+    const range = $('regRange' + k.toUpperCase());
+    const input = $('regInput' + k.toUpperCase());
+    if (range) range.value = res[k];
+    if (input) input.value = res[k];
+  });
+
+  updatePresetButtons('auto');
+  updateRegressionFormula();
+  saveConfig();
+
+  if (STATE.lastData) {
+    updateRegressionUI(STATE.lastData);
+  }
+
+  const autoBadge = $('regAutoBadge');
+  if (autoBadge) {
+    autoBadge.style.display = 'inline-block';
+    autoBadge.textContent = `✓ อัปเดตสมการอัตโนมัติแล้ว (${points.length} ชุดข้อมูล)`;
+  }
+
+  if (!quiet) {
+    alert(`✓ ปรับแต่งสมการอัตโนมัติด้วย OLS เรียบร้อยแล้ว!\n\nคำนวณจากข้อมูลเซนเซอร์สะสม ${points.length} ชุด\n\nสมการใหม่:\nPM2.5 = ${res.a} ${res.b >= 0 ? '+' : ''}${res.b}(T) ${res.c >= 0 ? '+' : ''}${res.c}(RH) ${res.d >= 0 ? '+' : ''}${res.d}(UV)`);
+  }
+  return true;
+}
+
 function initRegressionUI() {
   const reg = CONFIG.regression || DEFAULT_CONFIG.regression;
   
@@ -3289,6 +3453,11 @@ function updatePresetButtons(activeSeason) {
 
 function applyRegressionPreset(season) {
   CONFIG.regression.season = season;
+  
+  if (season === 'auto') {
+    autoFitRegression(false);
+    return;
+  }
   
   if (season !== 'custom' && REG_PRESETS[season]) {
     const vals = REG_PRESETS[season];
@@ -3635,6 +3804,11 @@ function applyConfigToUI() {
       fcBtn.textContent = '🔮 พยากรณ์: ปิด';
     }
   }
+
+  // Auto-fit toggle
+  const afToggle = $('autoFitToggle');
+  if (afToggle) afToggle.checked = !!(CONFIG.regression && CONFIG.regression.autoFit);
+
   initRegressionUI();
   updateSkinDisplay();
   if (!CONFIG.skinType) setTimeout(showSkinModal, 800);
@@ -3643,6 +3817,9 @@ function applyConfigToUI() {
 /* ============================================================
    ADMIN ACCESS SYSTEM
    ============================================================ */
+// Hidden admin entry: the "v2.1" version badge in footer
+// No visible indication — just onclick on the span element
+
 function showAdminLoginModal() {
   $('adminOverlay')?.classList.add('open');
   $('adminModal')?.classList.add('open');
